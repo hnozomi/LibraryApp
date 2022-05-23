@@ -13,9 +13,18 @@ import { usePageTransition } from "../../hooks/usePageTransition";
 export const Admin = () => {
   const { pageTransition } = usePageTransition();
   const ListText = [
-    "書籍の登録を行う",
-    "書籍の削除を行う",
-    "ユーザーの役割を変更する",
+    {
+      text: "書籍の登録を行う",
+      url: "/home/admin/bookregister/",
+    },
+    {
+      text: "書籍の削除を行う",
+      url: "/home/admin/bookdelete/",
+    },
+    {
+      text: "ユーザーの役割を変更する",
+      url: "/home/admin/rolechange/",
+    },
   ];
   return (
     <>
@@ -26,8 +35,8 @@ export const Admin = () => {
         >
           {ListText.map((value) => (
             <ListItem
-              onClick={() => pageTransition("/home/admin/bookregster/")}
-              key={value}
+              onClick={() => pageTransition(`${value.url}`)}
+              key={value.url}
               disableGutters
               secondaryAction={
                 <IconButton aria-label="arrow">
@@ -35,7 +44,7 @@ export const Admin = () => {
                 </IconButton>
               }
             >
-              <ListItemText primary={`${value}`} />
+              <ListItemText primary={`${value.text}`} />
             </ListItem>
           ))}
         </List>

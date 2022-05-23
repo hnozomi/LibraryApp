@@ -4,9 +4,12 @@ import { Admin } from "../components/pages/Admin";
 import { BookRegister } from "../components/pages/BookRegister";
 import { Home } from "../components/pages/Home";
 import { Login } from "../components/pages/Login";
+import { RoleChange } from "../components/pages/RoleChange";
 import { Signup } from "../components/pages/Signup";
 import { Toppage } from "../components/pages/Toppage";
 import { AuthProvider } from "../provider/LoginUserProvider";
+import { PrivateRoutes } from "./PrivateRoutes";
+import { PublicRoutes } from "./PublicRoutes";
 
 export const Router: FC = () => {
   console.log("Router実行");
@@ -14,22 +17,67 @@ export const Router: FC = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Toppage />} />
-        </Routes>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-        </Routes>
-        <Routes>
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-        </Routes>
-        <Routes>
-          <Route path="/home/admin" element={<Admin />} />
-        </Routes>
-        <Routes>
-          <Route path="/home/admin/bookregster/" element={<BookRegister />} />
+          <Route
+            path="/"
+            element={
+              <PublicRoutes>
+                <Toppage />
+              </PublicRoutes>
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <PublicRoutes>
+                <Login />
+              </PublicRoutes>
+            }
+          />
+
+          <Route
+            path="/signup"
+            element={
+              <PublicRoutes>
+                <Signup />
+              </PublicRoutes>
+            }
+          />
+
+          <Route
+            path="/home"
+            element={
+              <PrivateRoutes>
+                <Home />
+              </PrivateRoutes>
+            }
+          />
+
+          <Route
+            path="/home/admin"
+            element={
+              <PrivateRoutes>
+                <Admin />
+              </PrivateRoutes>
+            }
+          />
+
+          <Route
+            path="/home/admin/bookregister/"
+            element={
+              <PrivateRoutes>
+                <BookRegister />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/home/admin/rolechange/"
+            element={
+              <PrivateRoutes>
+                <RoleChange />
+              </PrivateRoutes>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
