@@ -10,12 +10,14 @@ type Props = {
 
 export const PublicRoutes: FC<Props> = memo((props) => {
   const { children } = props;
-  const { userinfo } = useContext(AuthContext);
+  const {
+    userinfo: { user_id },
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    userinfo && navigate("/home");
-  }, [userinfo]);
+    user_id && navigate("/home");
+  }, [user_id]);
 
   return <>{children}</>;
 });

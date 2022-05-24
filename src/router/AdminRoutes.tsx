@@ -1,25 +1,23 @@
-import { ReactNode } from "react";
 import { FC } from "react";
+import { ReactNode } from "react";
 import { memo, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import AuthContext from "../provider/LoginUserProvider";
 
 type Props = {
   children: ReactNode;
 };
 
-export const PrivateRoutes: FC<Props> = memo((props: any) => {
+export const AdminRoutes: FC<Props> = memo((props) => {
   const { children } = props;
   const {
-    userinfo: { user_id },
+    userinfo: { role },
   } = useContext(AuthContext);
-  console.log(user_id);
   const navigate = useNavigate();
 
   useEffect(() => {
-    user_id === "" && navigate("/");
-  }, [user_id]);
+    role !== "admin" && navigate("/home");
+  }, [role]);
 
   return <>{children}</>;
 });

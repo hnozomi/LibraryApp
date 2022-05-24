@@ -1,3 +1,6 @@
+import { useState, FC } from "react";
+import axios from "axios";
+
 import {
   Box,
   SelectChangeEvent,
@@ -8,19 +11,29 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
+
 import { Header } from "../organisms/Header";
-import { FC } from "react";
-import { useState } from "react";
-import axios from "axios";
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const RoleChange: FC = () => {
+  const { pageTransition } = usePageTransition();
   const [role, setRole] = useState("");
   const [mail, setMail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [result, setResult] = useState({ status: "", message: "" });
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target.value);
     setRole(event.target.value as string);
   };
 
@@ -36,19 +49,37 @@ export const RoleChange: FC = () => {
 
     const roleSplit = role.split("/");
 
-    const result = await axios.post(
-      "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/change_role",
-      {
-        e_mail: mail,
-        previousRole: roleSplit[0],
-        nextRole: roleSplit[1],
-      },
-      options
-    );
-    console.log(result);
-    setRole("");
-    setMail("");
-    setLoading(false);
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/change_role",
+        {
+          e_mail: mail,
+          previousRole: roleSplit[0],
+          nextRole: roleSplit[1],
+        },
+        options
+      )
+      .then((res) => {
+        console.log(res, "OK");
+        setResult({
+          ...result,
+          message: res.data.message,
+          status: res.data.status,
+        });
+        setLoading(false);
+        setRole("");
+        setMail("");
+      })
+      .catch((err) => {
+        console.log(err, "err");
+        setLoading(false);
+      })
+      .finally(() => {
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+        }, 3000);
+      });
   };
 
   if (loading) {
@@ -66,6 +97,19 @@ export const RoleChange: FC = () => {
           <Typography sx={{ mt: 1 }}>変更中</Typography>
         </Box>
       </Backdrop>
+    );
+  }
+
+  if (open) {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {result.message}
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     );
   }
 
@@ -110,6 +154,7 @@ export const RoleChange: FC = () => {
               marginTop: "0.5em",
               marginBottom: "0.5em",
             }}
+            onClick={() => pageTransition("/home/admin")}
           >
             キャンセル
           </Button>

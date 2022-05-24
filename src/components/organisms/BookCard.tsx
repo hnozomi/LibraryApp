@@ -6,6 +6,7 @@ import { CardActionArea } from "@mui/material";
 
 import { BookType } from "../../types/types";
 import { FC } from "react";
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
   book: BookType;
@@ -13,15 +14,15 @@ type Props = {
 
 export const BookCard: FC<Props> = (props) => {
   const { book } = props;
+  const { pageTransition } = usePageTransition();
+  const handleClick = () => {};
   return (
     <Card sx={{ height: "200px", width: "110px" }}>
-      <CardActionArea>
+      <CardActionArea onClick={() => pageTransition("/home/bookcontext")}>
         <CardMedia
           component="img"
           height="120"
-          src={
-            "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/2933/9784480432933.jpg"
-          }
+          src={book.image_url}
           // src={book.image_url}
           alt="green iguana"
           sx={{ objectFit: "fill" }}

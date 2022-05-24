@@ -3,14 +3,27 @@ import "./book.css";
 import Quagga from "@ericblade/quagga2";
 import axios from "axios";
 import { Header } from "../organisms/Header";
-import { Box, Button, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Typography,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import { CardActionArea } from "@mui/material";
+
 import UUID from "uuidjs";
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const BookRegister = () => {
+  const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [startStatus, setStartStatus] = useState(false);
@@ -21,10 +34,11 @@ export const BookRegister = () => {
     category: "",
     url: "",
   });
+  const { pageTransition } = usePageTransition();
 
-  useEffect(() => {
-    status && getBookInformation(barcode);
-  }, [status]);
+  // useEffect(() => {
+  //   status && getBookInformation(barcode);
+  // }, [status]);
 
   const getBookInformation = async (isbn: string) => {
     const param = {
@@ -37,19 +51,19 @@ export const BookRegister = () => {
           { params: param }
         )
         .then((res) => {
-          setStatus(true);
+          // setStatus(true);
         })
         .catch((err) => {
           console.log(err);
-          setStatus(true);
+          // setStatus(true);
         });
     }
   };
 
   const test = async () => {
     // パソコンでバーコードをなぜか読めないため、ボタンを設置した
-    // let isbn = "9784815610722"; //じゃけぇさんのほん
-    let isbn = "9784480432933"; //横井さんの本
+    let isbn = "9784815610722"; //じゃけぇさんのほん
+    // let isbn = "9784480432933"; //横井さんの本
     const param = {
       isbn: isbn,
     };
@@ -67,6 +81,7 @@ export const BookRegister = () => {
           author: res.data[1],
           url: res.data[3],
         });
+        setOpen(true);
         setStatus(true);
       })
       .catch((err) => {
@@ -144,6 +159,60 @@ export const BookRegister = () => {
     Quagga.stop();
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  if (open) {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <Card sx={{ height: "400px", width: "250px" }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="280"
+              src={books.url}
+              // src={book.image_url}
+              alt="green iguana"
+              sx={{ objectFit: "fill" }}
+            />
+            <CardContent>
+              <Typography gutterBottom component="p" sx={{ fontSize: "12px" }}>
+                {books.title}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ fontSize: "12px" }}
+              >
+                {books.author}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ fontSize: "10px" }}
+              >
+                {"↑上記の登録を行います"}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <Box
+          sx={{ display: "flex", justifyContent: "flex-end", padding: "0.6em" }}
+        >
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            sx={{ marginRight: "0.4em" }}
+          >
+            キャンセル
+          </Button>
+          <Button variant="outlined">登録</Button>
+        </Box>
+      </Dialog>
+    );
+  }
+
   return (
     <>
       <Header></Header>
@@ -169,41 +238,12 @@ export const BookRegister = () => {
         ) : (
           <div id="preview"></div>
         )}
-
-        {status && (
-          <>
-            <Typography>取得した情報</Typography>
-            <Divider />
-            <Card sx={{ display: "flex", marginTop: "1em" }}>
-              <CardMedia
-                component="img"
-                sx={{ width: 151 }}
-                src={books.url}
-                alt="本の画像"
-              />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography sx={{ fontSize: "8px" }} component="div">
-                    {books.title}
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: "8px" }}
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                  >
-                    {books.author}
-                  </Typography>
-                </CardContent>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}
-                ></Box>
-              </Box>
-            </Card>
-          </>
-        )}
         <Box sx={{ textAlign: "right", marginTop: "1em" }}>
-          <Button sx={{ marginRight: "5px" }} variant="contained">
+          <Button
+            onClick={() => pageTransition("/home/admin")}
+            sx={{ marginRight: "5px" }}
+            variant="contained"
+          >
             キャンセル
           </Button>
           <Button onClick={insertBooksTable} variant="contained">
