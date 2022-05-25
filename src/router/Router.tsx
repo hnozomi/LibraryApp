@@ -9,6 +9,7 @@ import { Mypage } from "../components/pages/Mypage";
 import { RoleChange } from "../components/pages/RoleChange";
 import { Signup } from "../components/pages/Signup";
 import { Toppage } from "../components/pages/Toppage";
+import { BookProvider } from "../provider/BookInformationProvider";
 import { AuthProvider } from "../provider/LoginUserProvider";
 import { AdminRoutes } from "./AdminRoutes";
 import { PrivateRoutes } from "./PrivateRoutes";
@@ -46,7 +47,6 @@ export const Router: FC = () => {
               </PublicRoutes>
             }
           />
-
           <Route
             path="/home"
             element={

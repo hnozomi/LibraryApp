@@ -5,33 +5,36 @@ import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { BookType } from "../../types/types";
 import { BookCard } from "../organisms/BookCard";
+import { useContext } from "react";
+import BookContext from "../../provider/BookInformationProvider";
 
 export const Home = () => {
-  const [books, setBooks] = useState<BookType[]>();
-  const options = {
-    headers: { "Content-Type": "text/plain" },
-  };
+  const { books } = useContext(BookContext);
+  // const [books, setBooks] = useState<BookType[]>();
+  // const options = {
+  //   headers: { "Content-Type": "text/plain" },
+  // };
 
-  useEffect(() => {
-    const getBooksTable = async () => {
-      await axios
-        .get<BookType[]>(
-          "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_books",
-          options
-        )
-        .then((res) => {
-          console.log(res.data);
-          setBooks(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+  // useEffect(() => {
+  //   const getBooksTable = async () => {
+  //     await axios
+  //       .get<BookType[]>(
+  //         "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_books",
+  //         options
+  //       )
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         setBooks(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   };
 
-    getBooksTable();
-  }, []);
+  //   getBooksTable();
+  // }, []);
 
-  console.log(books);
+  // console.log(books);
 
   return (
     <Box>

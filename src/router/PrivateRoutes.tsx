@@ -4,6 +4,7 @@ import { memo, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AuthContext from "../provider/LoginUserProvider";
+import { BookProvider } from "../provider/BookInformationProvider";
 
 type Props = {
   children: ReactNode;
@@ -21,5 +22,5 @@ export const PrivateRoutes: FC<Props> = memo((props: any) => {
     user_id === "" && navigate("/");
   }, [user_id]);
 
-  return <>{children}</>;
+  return <BookProvider>{children}</BookProvider>;
 });
