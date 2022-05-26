@@ -15,8 +15,6 @@ type Props = {
 export const BookCard: FC<Props> = (props) => {
   const { book } = props;
   const { pageTransition } = usePageTransition();
-  const handleClick = () => {};
-  console.log(book);
   return (
     <Card sx={{ height: "200px", width: "110px" }}>
       <CardActionArea onClick={() => pageTransition("/home/bookcontext", book)}>

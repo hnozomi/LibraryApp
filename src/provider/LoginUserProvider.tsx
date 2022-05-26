@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user: any) => {
+      console.log(user);
       user?.uid &&
         (await axios
           .get<UserType>(

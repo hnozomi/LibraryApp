@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import BookContext from "../../provider/BookInformationProvider";
-import { BookType } from "../../types/types";
+import { BookType, ReservationType } from "../../types/types";
 import { Review } from "../organisms/Review";
 
 import FullCalendar from "@fullcalendar/react";
@@ -35,6 +35,8 @@ import { useCallback } from "react";
 import axios from "axios";
 import AuthContext from "../../provider/LoginUserProvider";
 import UUID from "uuidjs";
+import { useEffect } from "react";
+import { ReservationCulensder } from "../organisms/ReservationCulender";
 
 type Props = {};
 
@@ -46,78 +48,65 @@ export const BookContents: FC<Props> = () => {
   const [date, setDate] = useState({ start: "", end: "" });
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [resDate, setresDate] = useState({ start: "", end: "" });
+  const [culenderLoading, setCulenderLoading] = useState(false);
+  // const [resDate, setresDate] = useState({ start: "", end: "" });
+  const [resDate, setresDate] = useState<ReservationType[]>([]);
+  const [status, setStatus] = useState("評価");
 
   const { book_id, title, author, category, image_url } =
     location.state as BookType;
 
-  const handleDateClick = useCallback(
-    (arg: DateClickArg) => {
-      if (date.start === date.end) {
-        setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
-      } else if (date.start < arg.dateStr) {
-        setDate((prevState) => ({ ...prevState, end: arg.dateStr }));
-      } else if (date.start > arg.dateStr) {
-        setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
-      }
-    },
-    [date]
-  );
-
-  const reservation = [
-    {
-      start: resDate.start,
-      end: resDate.end,
-    },
-  ];
-
-  const handleClick = () => {
-    if (date.start === "" || date.end === "") {
-      alert("予約日付を選択してください");
-      return;
-    }
-    setOpen(true);
-    insertReservationRecord();
+  const changeStatus = (status: string) => {
+    setStatus(status);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClick = () => {
+  //   if (date.start === "" || date.end === "") {
+  //     alert("予約日付を選択してください");
+  //     return;
+  //   }
+  //   setOpen(true);
+  //   insertReservationRecord();
+  // };
 
-  const insertReservationRecord = async () => {
-    setLoading(true);
-    const options = {
-      headers: { "Content-Type": "text/plain" },
-    };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
-    const ID = UUID.generate();
+  // const insertReservationRecord = async () => {
+  //   setLoading(true);
+  //   const options = {
+  //     headers: { "Content-Type": "text/plain" },
+  //   };
 
-    await axios
-      .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_bookReservation",
-        {
-          reservation_id: ID,
-          user_id: user_id,
-          book_id: book_id,
-          start_day: date.start,
-          end_day: date.end,
-        },
-        options
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-        setOpen(false);
-      });
-  };
+  //   const ID = UUID.generate();
+
+  //   await axios
+  //     .post(
+  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_bookReservation",
+  //       {
+  //         reservation_id: ID,
+  //         user_id: user_id,
+  //         book_id: book_id,
+  //         start_day: date.start,
+  //         end_day: date.end,
+  //       },
+  //       options
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //       setOpen(false);
+  //     });
+  // };
 
   const getReservationRecord = async () => {
-    setLoading(true);
+    setCulenderLoading(true);
 
     await axios
       .get(
@@ -131,74 +120,74 @@ export const BookContents: FC<Props> = () => {
       )
       .then((res) => {
         console.log(res.data[0]);
-        setresDate({
-          ...resDate,
-          start: res.data[0].start_day,
-          end: res.data[0].end_day,
-        });
+        setresDate(res.data);
+        // setresDate({
+        //   ...resDate
+        //   start: res.data[0].start_day,
+        //   end: res.data[0].end_day,
+        // });
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setLoading(false);
+        setCulenderLoading(false);
         setOpen(false);
       });
   };
 
-  if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Backdrop sx={{ color: "#fff" }} open={true}>
+  //       <Box
+  //         sx={{
+  //           display: "flex",
+  //           flexFlow: "column",
+  //           justifyContent: "center",
+  //           alignItems: "center",
+  //         }}
+  //       >
+  //         <CircularProgress color="inherit" />
+  //         <Typography sx={{ mt: 1 }}>変更中</Typography>
+  //       </Box>
+  //     </Backdrop>
+  //   );
+  // }
 
-  if (open) {
-    return (
-      <Dialog open={open} onClose={handleClose}>
-        <Box>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {`予約開始日：${date.start}`}
-            </DialogContentText>
-            <DialogContentText id="alert-dialog-description">
-              {`予約終了日：${date.end}`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              上記の日程で予約しますか
-            </DialogContentText>
-          </DialogContent>
-        </Box>
-        <Box
-          sx={{ display: "flex", justifyContent: "flex-end", padding: "0.6em" }}
-        >
-          <Button
-            onClick={handleClose}
-            variant="outlined"
-            sx={{ marginRight: "0.4em" }}
-          >
-            キャンセル
-          </Button>
-          <Button variant="outlined">登録</Button>
-        </Box>
-      </Dialog>
-    );
-  }
+  // if (open) {
+  //   return (
+  //     <Dialog open={open} onClose={handleClose}>
+  //       <Box>
+  //         <DialogContent>
+  //           <DialogContentText id="alert-dialog-description">
+  //             {`予約開始日：${date.start}`}
+  //           </DialogContentText>
+  //           <DialogContentText id="alert-dialog-description">
+  //             {`予約終了日：${date.end}`}
+  //           </DialogContentText>
+  //         </DialogContent>
+  //         <DialogContent>
+  //           <DialogContentText id="alert-dialog-description">
+  //             上記の日程で予約しますか
+  //           </DialogContentText>
+  //         </DialogContent>
+  //       </Box>
+  //       <Box
+  //         sx={{ display: "flex", justifyContent: "flex-end", padding: "0.6em" }}
+  //       >
+  //         <Button
+  //           onClick={handleClose}
+  //           variant="outlined"
+  //           sx={{ marginRight: "0.4em" }}
+  //         >
+  //           キャンセル
+  //         </Button>
+  //         <Button variant="outlined">登録</Button>
+  //       </Box>
+  //     </Dialog>
+  //   );
+  // }
 
-  console.log(reservation);
   return (
     <>
       <Header></Header>
@@ -228,28 +217,24 @@ export const BookContents: FC<Props> = () => {
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
             <Typography variant="h5" sx={{ marginRight: "auto" }}>
-              評価
+              {status}
             </Typography>
             <Box sx={{ textAlign: "right" }}>
-              <Button>評価</Button>
-              <Button>予約</Button>
+              <Button onClick={() => changeStatus("評価")}>評価</Button>
+              <Button onClick={() => changeStatus("予約")}>予約</Button>
             </Box>
           </Box>
-          {/* <Review /> */}
-          <Box sx={{ marginTop: "1em" }}>
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              locale="ja" // 日本語化
-              dateClick={handleDateClick}
-              events={reservation}
-            />
-          </Box>
-          <Typography>{`予約開始日: ${date.start}`}</Typography>
+          {status === "評価" ? (
+            <Review />
+          ) : (
+            <ReservationCulensder book_id={book_id} user_id={user_id} />
+          )}
+
+          {/* <Typography>{`予約開始日: ${date.start}`}</Typography>
           <Typography>{`予約終了日: ${date.end}`}</Typography>
-          <Button onClick={getReservationRecord} variant="outlined">
+          <Button onClick={handleClick} variant="outlined">
             予約する
-          </Button>
+          </Button> */}
         </Box>
       </Container>
     </>
