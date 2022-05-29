@@ -8,15 +8,22 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
+import { FC } from "react";
 import { useState } from "react";
 
-export const Review = () => {
+type Props = {
+  reviews: any;
+};
+
+export const Review: FC<Props> = (props) => {
+  const { reviews } = props;
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  console.log(reviews[value].rate);
   return (
     <>
       <Tabs
@@ -26,20 +33,17 @@ export const Review = () => {
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
       >
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
-        <Tab label="Item Three" />
-        <Tab label="Item Four" />
-        <Tab label="Item Five" />
-        <Tab label="Item Six" />
-        <Tab label="Item Seven" />
+        {reviews.map((review: any, index: number) => (
+          <Tab label={index + 1} value={index} />
+        ))}
       </Tabs>
-      <Typography>投稿者</Typography>
-      <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+      <Typography>オススメ度</Typography>
+      <Rating name="half-rating" value={reviews[value].rate} readOnly />
       <Typography>感想</Typography>
       <TextareaAutosize
         aria-label="empty textarea"
         placeholder="Empty"
+        value={reviews[value].text}
         minRows={15}
         style={{ width: "100%" }}
       />

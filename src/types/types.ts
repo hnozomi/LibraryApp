@@ -16,7 +16,8 @@ export type BookType = {
     title: string;
     author: string;
     category: string;
-    image_url: string
+    image_url: string;
+    review: []
 }
 
 export type ReservationType = {

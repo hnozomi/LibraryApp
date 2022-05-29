@@ -10,7 +10,6 @@ import {
   Grid,
 } from "@mui/material";
 import { Header } from "../organisms/Header";
-import axios from "axios";
 import { useState } from "react";
 import { useContext } from "react";
 import AuthContext from "../../provider/LoginUserProvider";
@@ -18,9 +17,14 @@ import { useEffect } from "react";
 import { BookType } from "../../types/types";
 import { BookCard } from "../organisms/BookCard";
 import { FormControlUnstyledContext } from "@mui/base";
+import axios from "axios";
+import UUID from "uuidjs";
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const Mypage = () => {
+  const { pageTransition } = usePageTransition();
   const [reservationsBook, setReservationsBook] = useState<BookType[]>();
+
   const [borrowedBook, setBorrowedBook] = useState<BookType[]>();
   const [loading, setLoading] = useState(false);
   const {
@@ -97,6 +101,30 @@ export const Mypage = () => {
       });
   };
 
+  const options = {
+    headers: { "Content-Type": "text/plain" },
+  };
+
+  const handleClick = async (book: any) => {
+    console.log(book);
+    const ID = UUID.generate();
+    setLoading(true);
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_bookReservation",
+        {
+          reservation_id: book.reservation_id,
+          achievement_id: ID,
+          user_id: book.user_id,
+          book_id: book.book_id,
+        },
+        options
+      )
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   if (loading) {
     return (
       <Backdrop sx={{ color: "#fff" }} open={true}>
@@ -125,7 +153,12 @@ export const Mypage = () => {
             <Typography>ユーザー名: nozomi</Typography>
             <Box sx={{ display: "flex" }}>
               <Typography>読んだ冊数: 10冊</Typography>
-              <Button sx={{ marginLeft: "5px", p: 0 }}>一覧で見る</Button>
+              <Button
+                onClick={() => pageTransition("/home/mypage/booklist")}
+                sx={{ marginLeft: "5px", p: 0 }}
+              >
+                一覧で見る
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -134,8 +167,9 @@ export const Mypage = () => {
           <Divider />
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {borrowedBook?.map((borrowed) => (
-              <Grid item xs={4} sx={{ height: "450px" }}>
+              <Grid key={borrowed.book_id} item xs={4} sx={{ height: "450px" }}>
                 <BookCard book={borrowed} />
+                <Button onClick={() => handleClick(borrowed)}>返却</Button>
               </Grid>
             ))}
           </Grid>
@@ -145,7 +179,12 @@ export const Mypage = () => {
           <Typography>予約中</Typography>
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {reservationsBook?.map((reservation) => (
-              <Grid item xs={4} sx={{ height: "450px" }}>
+              <Grid
+                key={reservation.book_id}
+                item
+                xs={4}
+                sx={{ height: "450px" }}
+              >
                 <BookCard book={reservation} />
               </Grid>
             ))}

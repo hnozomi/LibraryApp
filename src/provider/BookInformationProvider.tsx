@@ -31,6 +31,7 @@ export const BookProvider = ({ children }: Props) => {
           options
         )
         .then((res) => {
+          console.log(res.data);
           setScreenLoading(true);
           setBooks(res.data);
         })

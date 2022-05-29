@@ -44,7 +44,7 @@ export const Home = () => {
       ) : (
         <Grid container spacing={1} sx={{ marginTop: "1em" }}>
           {books.map((book) => (
-            <Grid item xs={4} sx={{ height: "500px" }}>
+            <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
               <BookCard book={book} />
             </Grid>
           ))}

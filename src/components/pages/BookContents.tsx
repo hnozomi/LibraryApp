@@ -38,9 +38,38 @@ import UUID from "uuidjs";
 import { useEffect } from "react";
 import { ReservationCulensder } from "../organisms/ReservationCulender";
 
-type Props = {};
+type Color =
+  | "inherit"
+  | "success"
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "warning"
+  | undefined;
 
-export const BookContents: FC<Props> = () => {
+type Props = {
+  active: string;
+  name: string;
+  onClick: () => void;
+};
+
+function TestButton(props: any) {
+  const { active, name, onClick } = props;
+  const color = active === name ? "primary" : "inherit";
+  return (
+    <Button
+      color={color}
+      sx={{ marginRight: "0.5em" }}
+      onClick={onClick}
+      variant="contained"
+    >
+      {name}
+    </Button>
+  );
+}
+
+export const BookContents: FC = () => {
   const location = useLocation();
   const {
     userinfo: { user_id },
@@ -53,7 +82,7 @@ export const BookContents: FC<Props> = () => {
   const [resDate, setresDate] = useState<ReservationType[]>([]);
   const [status, setStatus] = useState("評価");
 
-  const { book_id, title, author, category, image_url } =
+  const { book_id, title, author, category, image_url, review } =
     location.state as BookType;
 
   const changeStatus = (status: string) => {
@@ -188,6 +217,8 @@ export const BookContents: FC<Props> = () => {
   //   );
   // }
 
+  // function testButton(name: string, color: Color = "inherit") {
+
   return (
     <>
       <Header></Header>
@@ -220,12 +251,35 @@ export const BookContents: FC<Props> = () => {
               {status}
             </Typography>
             <Box sx={{ textAlign: "right" }}>
-              <Button onClick={() => changeStatus("評価")}>評価</Button>
-              <Button onClick={() => changeStatus("予約")}>予約</Button>
+              {/* <Button
+                color="primary"
+                sx={{ marginRight: "0.5em" }}
+                onClick={() => changeStatus("評価")}
+                variant="contained"
+              >
+                評価
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => changeStatus("予約")}
+                variant="contained"
+              >
+                予約
+              </Button> */}
+              <TestButton
+                active={status}
+                name="評価"
+                onClick={() => changeStatus("評価")}
+              />
+              <TestButton
+                active={status}
+                name="予約"
+                onClick={() => changeStatus("予約")}
+              />
             </Box>
           </Box>
           {status === "評価" ? (
-            <Review />
+            <Review reviews={review} />
           ) : (
             <ReservationCulensder book_id={book_id} user_id={user_id} />
           )}
