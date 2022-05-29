@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Achievement } from "../components/pages/Achievement";
 import { Admin } from "../components/pages/Admin";
 import { BookContents } from "../components/pages/BookContents";
+import { BookDelete } from "../components/pages/BookDelete";
 import { BookRegister } from "../components/pages/BookRegister";
 import { Home } from "../components/pages/Home";
 import { Login } from "../components/pages/Login";
@@ -107,6 +108,16 @@ export const Router: FC = () => {
               <PrivateRoutes>
                 <AdminRoutes>
                   <BookRegister />
+                </AdminRoutes>
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/home/admin/bookdelete/"
+            element={
+              <PrivateRoutes>
+                <AdminRoutes>
+                  <BookDelete />
                 </AdminRoutes>
               </PrivateRoutes>
             }

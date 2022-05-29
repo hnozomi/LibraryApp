@@ -21,20 +21,31 @@ import UUID from "uuidjs";
 
 type Rare = number | null;
 
+type LocationState = {
+  book_id?: string;
+  reviews_id?: string;
+  review_user_id?: string;
+  rate?: number;
+  text?: string;
+};
+
 export const ReviewForm = () => {
   const location = useLocation();
-  const [rate, setRate] = useState<Rare>(2.5);
-  const [text, setText] = useState("");
+  const {
+    book_id,
+    review_user_id,
+    reviews_id,
+    rate: pastRate = 2.5,
+    text: pastText,
+  } = location.state as LocationState;
+  const [rate, setRate] = useState<Rare>(pastRate);
+  const [text, setText] = useState(pastText);
   const [loading, setLoading] = useState(false);
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
 
-  const { book_id } = location.state as BookType;
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(rate);
-    console.log(event.target.value);
     setText(event.target.value);
   };
 
@@ -42,21 +53,48 @@ export const ReviewForm = () => {
     headers: { "Content-Type": "text/plain" },
   };
 
+  console.log(reviews_id);
+
   const handleClick = async () => {
     setLoading(true);
     const ID = UUID.generate();
-    console.log(book_id);
+    let url = "";
+    let params = {};
+
+    if (reviews_id) {
+      console.log("更新");
+      url =
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
+
+      params = {
+        review_id: reviews_id,
+        rate: rate,
+        text: text,
+      };
+    } else {
+      console.log("作成");
+      url =
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
+      params = {
+        review_id: ID,
+        book_id: book_id,
+        user_id: user_id,
+        rate: rate,
+        text: text,
+      };
+    }
 
     await axios
       .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review",
-        {
-          review_id: ID,
-          book_id: book_id,
-          user_id: user_id,
-          rate: rate,
-          text: text,
-        },
+        url,
+        params,
+        // {
+        //   review_id: ID,
+        //   book_id: book_id,
+        //   user_id: user_id,
+        //   rate: rate,
+        //   text: text,
+        // },
         options
       )
       .then((response) => {

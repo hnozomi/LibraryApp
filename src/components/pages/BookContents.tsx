@@ -218,6 +218,7 @@ export const BookContents: FC = () => {
   // }
 
   // function testButton(name: string, color: Color = "inherit") {
+  console.log(review);
 
   return (
     <>
@@ -279,7 +280,7 @@ export const BookContents: FC = () => {
             </Box>
           </Box>
           {status === "評価" ? (
-            <Review reviews={review} />
+            <Review reviews={review} user_id={user_id} />
           ) : (
             <ReservationCulensder book_id={book_id} user_id={user_id} />
           )}
