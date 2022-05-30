@@ -12,11 +12,11 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 
-import { useAuth } from "../../hooks/useAuth";
-import { useAuthForm } from "../../hooks/useAuthForm";
-import { usePageTransition } from "../../hooks/usePageTransition";
-import { ValidationAlert } from "../organisms/ValidationAlert";
-import { Header } from "../organisms/Header";
+import { useAuth } from "../../../hooks/useAuth";
+import { useAuthForm } from "../../../hooks/useAuthForm";
+import { usePageTransition } from "../../../hooks/usePageTransition";
+import { ValidationAlert } from "../../organisms/ValidationAlert";
+import { Header } from "../../organisms/Header";
 
 function Copyright(props: any) {
   return (

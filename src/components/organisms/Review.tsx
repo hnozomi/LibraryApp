@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  Container,
   Rating,
   Tab,
   Tabs,
@@ -11,7 +9,6 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 import { FC } from "react";
 import { useState } from "react";
@@ -24,11 +21,12 @@ type Props = {
 };
 
 export const Review: FC<Props> = (props) => {
-  const { pageTransition } = usePageTransition();
   const { reviews, user_id } = props;
-  console.log(reviews);
+
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const { pageTransition } = usePageTransition();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -48,9 +46,7 @@ export const Review: FC<Props> = (props) => {
 
     await axios
       .post(url, params, options)
-      .then((response) => {
-        console.log(response.data);
-      })
+      .then((response) => {})
       .finally(() => {
         // setLoading(false);
       });
@@ -88,7 +84,9 @@ export const Review: FC<Props> = (props) => {
           >
             キャンセル
           </Button>
-          <Button variant="outlined">削除</Button>
+          <Button onClick={handleClick} variant="outlined">
+            削除
+          </Button>
         </Box>
       </Dialog>
     );
@@ -108,7 +106,7 @@ export const Review: FC<Props> = (props) => {
             aria-label="scrollable auto tabs example"
           >
             {reviews.map((review: any, index: number) => (
-              <Tab label={index + 1} value={index} />
+              <Tab label={index + 1} value={index} key={review.review_id} />
             ))}
           </Tabs>
           <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>

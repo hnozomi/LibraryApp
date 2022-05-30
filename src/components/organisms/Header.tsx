@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+
+import { useLocation, useNavigate } from "react-router-dom";
+
 import {
   Box,
   AppBar,
@@ -6,35 +9,36 @@ import {
   IconButton,
   Typography,
   Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
+
 import MenuIcon from "@mui/icons-material/Menu";
-import { usePageTransition } from "../../hooks/usePageTransition";
-import { useLocation } from "react-router-dom";
-
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
+
 import { useAuth } from "../../hooks/useAuth";
 import AuthContext from "../../provider/LoginUserProvider";
-import { useContext } from "react";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const Header = () => {
-  const { pageTransition } = usePageTransition();
-  const { signout } = useAuth();
-  const { pathname } = useLocation();
-  const [open, setOpen] = useState(false);
   const {
     userinfo: { role },
   } = useContext(AuthContext);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const { pageTransition } = usePageTransition();
+  const { signout } = useAuth();
 
   const MenuArray = [
     {
@@ -67,7 +71,6 @@ export const Header = () => {
     MenuArray.splice(2, 1);
   }
 
-  console.log(pathname);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -78,7 +81,7 @@ export const Header = () => {
               edge="start"
               color="inherit"
               aria-label="menu"
-              onClick={() => pageTransition("/home")}
+              onClick={() => navigate(-1)}
             >
               <ArrowBackIosNewIcon sx={{ textAlign: "left" }} />
             </IconButton>

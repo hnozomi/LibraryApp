@@ -1,6 +1,4 @@
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,16 +7,16 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  Backdrop,
 } from "@mui/material";
-import { useState } from "react";
-import { useCallback } from "react";
-import { ReservationType } from "../../types/types";
-import { useEffect } from "react";
 import axios from "axios";
-import { FC } from "react";
 import UUID from "uuidjs";
+
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+
+import { ReservationType } from "../../types/types";
+import { LoadingScreen } from "./LoadingScreen";
 
 type Props = {
   book_id: string;
@@ -26,15 +24,13 @@ type Props = {
 };
 
 export const ReservationCulensder: FC<Props> = (props) => {
+  const { book_id, user_id } = props;
+
   const [culenderLoading, setCulenderLoading] = useState(false);
   const [date, setDate] = useState({ start: "", end: "" });
   const [resDate, setresDate] = useState<ReservationType[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const { book_id, user_id } = props;
-
-  console.log(date);
 
   useEffect(() => {
     const get = async () => {
@@ -58,8 +54,6 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   const handleDateClick = useCallback(
     (arg: DateClickArg) => {
-      console.log(arg);
-      console.log(date);
       if (date.start === date.end) {
         setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
       } else if (date.start < arg.dateStr) {
@@ -171,21 +165,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
   }
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"取得中"} />;
   }
 
   return (

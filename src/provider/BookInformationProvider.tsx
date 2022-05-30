@@ -44,6 +44,7 @@ export const BookProvider = ({ children }: Props) => {
     getBooksTable();
   }, []);
 
+  console.log(books);
   return (
     <BookContext.Provider
       value={{

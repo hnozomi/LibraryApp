@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { FC, useState, useContext } from "react";
 
 import {
   Box,
@@ -11,18 +11,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Backdrop,
-  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 
-import { Header } from "../organisms/Header";
-import { useContext } from "react";
-import BookContext from "../../provider/BookInformationProvider";
-import { BookType } from "../../types/types";
-import { BookCard } from "../organisms/BookCard";
+import BookContext from "../../../../provider/BookInformationProvider";
+import { BookType } from "../../../../types/types";
+import { BookCard } from "../../../organisms/BookCard";
+import { LoadingScreen } from "../../../organisms/LoadingScreen";
+import { memo } from "react";
+import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 
-export const BookDelete: FC = () => {
+export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
   const { books } = useContext(BookContext);
   const [bookName, setBookName] = useState<string>();
@@ -97,21 +96,7 @@ export const BookDelete: FC = () => {
   };
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"削除中"} />;
   }
 
   if (open) {
@@ -160,8 +145,7 @@ export const BookDelete: FC = () => {
 
   return (
     <>
-      <Header></Header>
-      <Box sx={{ width: "92%", margin: "0 auto" }}>
+      <BoxLayout>
         <Typography>削除する書籍を検索してください</Typography>
         <TextField
           sx={{ width: "100%", marginTop: "0.5em" }}
@@ -171,11 +155,11 @@ export const BookDelete: FC = () => {
           value={bookName}
           onChange={handleChange}
         />
-        <Box sx={{ textAlign: "right" }}>
+        <ButtonLayout>
           <Button variant="contained" onClick={handleClick}>
             検索する
           </Button>
-        </Box>
+        </ButtonLayout>
         <Box>
           <Typography>検索結果</Typography>
           <Divider />
@@ -188,7 +172,7 @@ export const BookDelete: FC = () => {
             ))}
           </Grid>
         </Box>
-      </Box>
+      </BoxLayout>
     </>
   );
-};
+});

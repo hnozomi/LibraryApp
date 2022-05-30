@@ -5,18 +5,18 @@ import { AdminRoutes } from "./AdminRoutes";
 import { PrivateRoutes } from "./PrivateRoutes";
 import { PublicRoutes } from "./PublicRoutes";
 
-import { Achievement } from "../components/pages/Achievement";
-import { Admin } from "../components/pages/Admin";
-import { BookContents } from "../components/pages/BookContents";
-import { BookDelete } from "../components/pages/BookDelete";
-import { BookRegister } from "../components/pages/BookRegister";
-import { Home } from "../components/pages/Home";
-import { Login } from "../components/pages/Login";
-import { Mypage } from "../components/pages/Mypage";
-import { ReviewForm } from "../components/pages/ReviewForm";
-import { RoleChange } from "../components/pages/RoleChange";
-import { Signup } from "../components/pages/Signup";
-import { Toppage } from "../components/pages/Toppage";
+import { Achievement } from "../components/pages/Private/Achievement";
+import { Admin } from "../components/pages/Private/Admin/Admin";
+import { BookContents } from "../components/pages/Private/BookContents";
+import { BookDelete } from "../components/pages/Private/Admin/BookDelete";
+import { BookRegister } from "../components/pages/Private/Admin/BookRegister";
+import { Home } from "../components/pages/Private/Home";
+import { Login } from "../components/pages/Public/Login";
+import { Mypage } from "../components/pages/Private/Mypage";
+import { ReviewForm } from "../components/pages/Private/ReviewForm";
+import { RoleChange } from "../components/pages/Private/Admin/RoleChange";
+import { Signup } from "../components/pages/Public/Signup";
+import { Toppage } from "../components/pages/Public/Toppage";
 import { AuthProvider } from "../provider/LoginUserProvider";
 
 export const Router: FC = () => {

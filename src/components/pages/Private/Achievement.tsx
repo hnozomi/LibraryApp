@@ -1,34 +1,27 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
-import { useEffect } from "react";
-import { Header } from "../organisms/Header";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useContext } from "react";
-import AuthContext from "../../provider/LoginUserProvider";
-import { useState } from "react";
-import { BookCard } from "../organisms/BookCard";
-import { BookType } from "../../types/types";
-import { usePageTransition } from "../../hooks/usePageTransition";
+
+import { Box, Button, Container, Grid } from "@mui/material";
+
+import { BookCard } from "../../organisms/BookCard";
+import AuthContext from "../../../provider/LoginUserProvider";
+import { usePageTransition } from "../../../hooks/usePageTransition";
+import { BookType } from "../../../types/types";
+import { LoadingScreen } from "../../organisms/LoadingScreen";
 
 export const Achievement = () => {
-  const [loading, setLoading] = useState(false);
-  const [books, setBooks] = useState<BookType[]>();
-  const { pageTransition } = usePageTransition();
-
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
 
+  const [loading, setLoading] = useState(false);
+  const [books, setBooks] = useState<BookType[]>();
+
+  const { pageTransition } = usePageTransition();
+
   useEffect(() => {
+    setLoading(true);
     const get = async () => {
-      setLoading(true);
       await axios
         .get(
           "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_achievement",
@@ -51,27 +44,11 @@ export const Achievement = () => {
   }, []);
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"取得中"} />;
   }
 
-  console.log(books);
   return (
     <>
-      <Header />
       <Container>
         <Box>
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>

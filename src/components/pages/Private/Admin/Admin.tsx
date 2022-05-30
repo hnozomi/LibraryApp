@@ -1,16 +1,12 @@
-import { Box } from "@mui/material";
-import { Header } from "../organisms/Header";
-
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import CommentIcon from "@mui/icons-material/Comment";
-import IconButton from "@mui/material/IconButton";
-
+import { Box, IconButton, List, ListItem, ListItemText } from "@mui/material";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
-import { usePageTransition } from "../../hooks/usePageTransition";
 
-export const Admin = () => {
+import { usePageTransition } from "../../../../hooks/usePageTransition";
+import { useMemo, memo } from "react";
+import { BoxLayout } from "../../../layout/BoxLayout";
+
+export const Admin = memo(() => {
+  console.log("Adminが実行されました");
   const { pageTransition } = usePageTransition();
   const ListText = [
     {
@@ -28,8 +24,7 @@ export const Admin = () => {
   ];
   return (
     <>
-      <Header></Header>
-      <Box sx={{ width: "90%", margin: "0 auto", padding: "1em" }}>
+      <BoxLayout>
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
@@ -48,7 +43,7 @@ export const Admin = () => {
             </ListItem>
           ))}
         </List>
-      </Box>
+      </BoxLayout>
     </>
   );
-};
+});

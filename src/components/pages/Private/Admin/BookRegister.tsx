@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, memo, useState } from "react";
 import axios from "axios";
 import Quagga from "@ericblade/quagga2";
 import {
@@ -15,10 +15,10 @@ import UUID from "uuidjs";
 
 import "./book.css";
 
-import { Header } from "../organisms/Header";
-import { usePageTransition } from "../../hooks/usePageTransition";
+import { usePageTransition } from "../../../../hooks/usePageTransition";
+import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 
-export const BookRegister = () => {
+export const BookRegister: FC = memo(() => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [barcode, setBarcode] = useState("");
@@ -187,15 +187,15 @@ export const BookRegister = () => {
 
   return (
     <>
-      <Header></Header>
-      <Box
+      {/* <Box
         sx={{
           width: "80%",
           margin: "0 auto",
           textAlign: "center",
           marginTop: "2em",
         }}
-      >
+      > */}
+      <BoxLayout>
         <div>バーコードをスキャンしてください</div>
         <Button disabled={startStatus} onClick={onStart}>
           START
@@ -210,7 +210,7 @@ export const BookRegister = () => {
         ) : (
           <div id="preview"></div>
         )}
-        <Box sx={{ textAlign: "right", marginTop: "1em" }}>
+        <ButtonLayout>
           <Button
             onClick={() => pageTransition("/home/admin")}
             sx={{ marginRight: "5px" }}
@@ -224,8 +224,9 @@ export const BookRegister = () => {
           <Button onClick={test} variant="contained">
             テスト
           </Button>
-        </Box>
-      </Box>
+        </ButtonLayout>
+      </BoxLayout>
+      {/* </Box> */}
     </>
   );
-};
+});

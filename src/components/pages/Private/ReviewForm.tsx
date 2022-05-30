@@ -13,8 +13,8 @@ import axios from "axios";
 import UUID from "uuidjs";
 import { useLocation } from "react-router-dom";
 
-import { Header } from "../organisms/Header";
-import AuthContext from "../../provider/LoginUserProvider";
+import AuthContext from "../../../provider/LoginUserProvider";
+import { LoadingScreen } from "../../organisms/LoadingScreen";
 
 type Rare = number | null;
 
@@ -27,6 +27,7 @@ type LocationState = {
 };
 
 export const ReviewForm = () => {
+  console.log("ReviewForm実行");
   const location = useLocation();
   const {
     book_id,
@@ -65,7 +66,6 @@ export const ReviewForm = () => {
         text: text,
       };
     } else {
-      console.log("作成");
       url =
         "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
       params = {
@@ -79,35 +79,18 @@ export const ReviewForm = () => {
 
     await axios
       .post(url, params, options)
-      .then((response) => {
-        console.log(response.data);
-      })
+      .then((response) => {})
       .finally(() => {
         setLoading(false);
       });
   };
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"投稿中"} />;
   }
 
   return (
     <>
-      <Header />
       <Container sx={{ width: "94%" }}>
         <form>
           <Typography>オススメ度</Typography>

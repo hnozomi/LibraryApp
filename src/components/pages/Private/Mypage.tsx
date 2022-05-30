@@ -7,18 +7,16 @@ import {
   Divider,
   Typography,
   Button,
-  Backdrop,
-  CircularProgress,
   Grid,
 } from "@mui/material";
 import axios from "axios";
 import UUID from "uuidjs";
 
-import { usePageTransition } from "../../hooks/usePageTransition";
-import { Header } from "../organisms/Header";
-import { BookCard } from "../organisms/BookCard";
-import AuthContext from "../../provider/LoginUserProvider";
-import { BookType } from "../../types/types";
+import { usePageTransition } from "../../../hooks/usePageTransition";
+import { BookCard } from "../../organisms/BookCard";
+import AuthContext from "../../../provider/LoginUserProvider";
+import { BookType } from "../../../types/types";
+import { LoadingScreen } from "../../organisms/LoadingScreen";
 
 export const Mypage = () => {
   console.log("Mypage実行");
@@ -93,7 +91,6 @@ export const Mypage = () => {
   };
 
   const handleClick = async (book: any) => {
-    console.log(book);
     const ID = UUID.generate();
     setLoading(true);
     await axios
@@ -113,26 +110,11 @@ export const Mypage = () => {
   };
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"取得中"} />;
   }
 
   return (
     <>
-      <Header></Header>
       <Container>
         <Box sx={{ display: "flex", p: "1.5em", alignItems: "center" }}>
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />

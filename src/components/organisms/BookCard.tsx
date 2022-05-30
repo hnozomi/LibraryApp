@@ -1,11 +1,15 @@
-import { Box, Grid, Typography } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
+import { FC } from "react";
+
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+} from "@mui/material";
 
 import { BookType } from "../../types/types";
-import { FC } from "react";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
@@ -15,6 +19,7 @@ type Props = {
 
 export const BookCard: FC<Props> = (props) => {
   const { book, displayContext } = props;
+
   const { pageTransition } = usePageTransition();
 
   const handleClick = () => {
@@ -31,8 +36,7 @@ export const BookCard: FC<Props> = (props) => {
           component="img"
           height="120"
           src={book.image_url}
-          // src={book.image_url}
-          alt="green iguana"
+          alt="書籍の情報"
           sx={{ objectFit: "fill" }}
         />
         <CardContent>

@@ -2,6 +2,7 @@ import { FC, ReactNode, memo, useContext, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import { Header } from "../../src/components/organisms/Header";
 import AuthContext from "../provider/LoginUserProvider";
 import { BookProvider } from "../provider/BookInformationProvider";
 
@@ -21,5 +22,10 @@ export const PrivateRoutes: FC<Props> = memo((props) => {
     user_id === "" && navigate("/");
   }, [user_id]);
 
-  return <BookProvider>{children}</BookProvider>;
+  return (
+    <BookProvider>
+      <Header></Header>
+      {children}
+    </BookProvider>
+  );
 });

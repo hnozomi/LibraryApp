@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { FC, memo, useState } from "react";
 import axios from "axios";
 
 import {
@@ -9,18 +9,17 @@ import {
   Select,
   MenuItem,
   Button,
-  Backdrop,
-  CircularProgress,
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
 
-import { Header } from "../organisms/Header";
-import { usePageTransition } from "../../hooks/usePageTransition";
+import { usePageTransition } from "../../../../hooks/usePageTransition";
+import { LoadingScreen } from "../../../organisms/LoadingScreen";
+import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 
-export const RoleChange: FC = () => {
+export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");
   const [role, setRole] = useState("");
   const [mail, setMail] = useState("");
@@ -84,21 +83,7 @@ export const RoleChange: FC = () => {
   };
 
   if (loading) {
-    return (
-      <Backdrop sx={{ color: "#fff" }} open={true}>
-        <Box
-          sx={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="inherit" />
-          <Typography sx={{ mt: 1 }}>変更中</Typography>
-        </Box>
-      </Backdrop>
-    );
+    return <LoadingScreen text={"変更中"}></LoadingScreen>;
   }
 
   if (open) {
@@ -116,8 +101,7 @@ export const RoleChange: FC = () => {
 
   return (
     <>
-      <Header />
-      <Box sx={{ width: "90%", margin: "0 auto", marginTop: "1em" }}>
+      <BoxLayout>
         <Box>
           <Typography sx={{ fontSize: "14px" }}>
             役割を変更するメールアドレスを入力してください
@@ -147,27 +131,21 @@ export const RoleChange: FC = () => {
             <MenuItem value={"admin/general"}>admin → general</MenuItem>
           </Select>
         </Box>
-        <Box sx={{ textAlign: "right" }}>
+        <ButtonLayout>
           <Button
             variant="contained"
             sx={{
               marginRight: "0.4em",
-              marginTop: "0.5em",
-              marginBottom: "0.5em",
             }}
             onClick={() => pageTransition("/home/admin")}
           >
             キャンセル
           </Button>
-          <Button
-            sx={{ marginTop: "0.5em", marginBottom: "0.5em" }}
-            variant="contained"
-            onClick={handleClick}
-          >
+          <Button variant="contained" onClick={handleClick}>
             変更
           </Button>
-        </Box>
-      </Box>
+        </ButtonLayout>
+      </BoxLayout>
     </>
   );
-};
+});
