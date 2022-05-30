@@ -1,3 +1,5 @@
+import { useContext, useEffect, useState } from "react";
+
 import {
   Avatar,
   Box,
@@ -9,27 +11,26 @@ import {
   CircularProgress,
   Grid,
 } from "@mui/material";
-import { Header } from "../organisms/Header";
-import { useState } from "react";
-import { useContext } from "react";
-import AuthContext from "../../provider/LoginUserProvider";
-import { useEffect } from "react";
-import { BookType } from "../../types/types";
-import { BookCard } from "../organisms/BookCard";
-import { FormControlUnstyledContext } from "@mui/base";
 import axios from "axios";
 import UUID from "uuidjs";
+
 import { usePageTransition } from "../../hooks/usePageTransition";
+import { Header } from "../organisms/Header";
+import { BookCard } from "../organisms/BookCard";
+import AuthContext from "../../provider/LoginUserProvider";
+import { BookType } from "../../types/types";
 
 export const Mypage = () => {
-  const { pageTransition } = usePageTransition();
-  const [reservationsBook, setReservationsBook] = useState<BookType[]>();
-
-  const [borrowedBook, setBorrowedBook] = useState<BookType[]>();
-  const [loading, setLoading] = useState(false);
+  console.log("Mypage実行");
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
+
+  const [reservationsBook, setReservationsBook] = useState<BookType[]>();
+  const [borrowedBook, setBorrowedBook] = useState<BookType[]>();
+  const [loading, setLoading] = useState(false);
+
+  const { pageTransition } = usePageTransition();
 
   useEffect(() => {
     const get = async () => {
@@ -48,30 +49,18 @@ export const Mypage = () => {
   };
 
   const check = (info: any) => {
-    // const date = new Date();
-    // // const day = `${date.getFullYear()}-${
-    // //   date.getMonth() + 1
-    // // }-${date.getDate()}`;
-    const res2222 = getNowYMD();
-
-    const test = info.filter((res: any) => {
-      return res.start_day < res2222 && res2222 < res.end_day;
-    });
+    const nowDate = getNowYMD();
 
     let reservation: any = [];
     let borrowd: any = [];
     info.forEach((res1: any) => {
-      if (res1.start_day < res2222 && res2222 < res1.end_day) {
-        console.log("範囲に含まれます");
+      if (res1.start_day < nowDate && nowDate < res1.end_day) {
         borrowd.push(res1);
       } else {
         reservation.push(res1);
-        console.log("範囲に含まれないです");
       }
     });
 
-    // console.log(reservation);
-    // console.log(borrowd);
     setReservationsBook(reservation);
     setBorrowedBook(borrowd);
   };
@@ -89,9 +78,7 @@ export const Mypage = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         check(res.data);
-        // setReservationsBook(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -168,12 +155,11 @@ export const Mypage = () => {
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {borrowedBook?.map((borrowed) => (
               <Grid key={borrowed.book_id} item xs={4} sx={{ height: "450px" }}>
-                <BookCard book={borrowed} />
+                <BookCard book={borrowed} displayContext={true} />
                 <Button onClick={() => handleClick(borrowed)}>返却</Button>
               </Grid>
             ))}
           </Grid>
-          {/* <Box sx={{ width: "300px", height: "400px" }}></Box> */}
         </Box>
         <Box>
           <Typography>予約中</Typography>
@@ -185,7 +171,7 @@ export const Mypage = () => {
                 xs={4}
                 sx={{ height: "450px" }}
               >
-                <BookCard book={reservation} />
+                <BookCard book={reservation} displayContext={true} />
               </Grid>
             ))}
           </Grid>

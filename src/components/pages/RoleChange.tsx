@@ -21,13 +21,14 @@ import { Header } from "../organisms/Header";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const RoleChange: FC = () => {
-  const { pageTransition } = usePageTransition();
+  console.log("RoleChange実行");
   const [role, setRole] = useState("");
   const [mail, setMail] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [result, setResult] = useState({ status: "", message: "" });
+
+  const { pageTransition } = usePageTransition();
 
   const handleClose = () => {
     setOpen(false);

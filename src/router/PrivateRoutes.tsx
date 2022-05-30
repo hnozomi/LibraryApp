@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
-import { FC } from "react";
-import { memo, useContext, useEffect } from "react";
+import { FC, ReactNode, memo, useContext, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import AuthContext from "../provider/LoginUserProvider";
@@ -10,12 +9,12 @@ type Props = {
   children: ReactNode;
 };
 
-export const PrivateRoutes: FC<Props> = memo((props: any) => {
+export const PrivateRoutes: FC<Props> = memo((props) => {
+  console.log("PrivateRoutes実行");
   const { children } = props;
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
-  console.log(user_id);
   const navigate = useNavigate();
 
   useEffect(() => {

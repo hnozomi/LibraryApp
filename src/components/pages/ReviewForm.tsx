@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import {
   Backdrop,
   Box,
@@ -5,19 +6,15 @@ import {
   CircularProgress,
   Container,
   Rating,
-  TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { setTextRange } from "typescript";
-import { Header } from "../organisms/Header";
 import axios from "axios";
-import AuthContext from "../../provider/LoginUserProvider";
-import { useContext } from "react";
-import { useLocation } from "react-router-dom";
-import { BookType } from "../../types/types";
 import UUID from "uuidjs";
+import { useLocation } from "react-router-dom";
+
+import { Header } from "../organisms/Header";
+import AuthContext from "../../provider/LoginUserProvider";
 
 type Rare = number | null;
 
@@ -33,7 +30,6 @@ export const ReviewForm = () => {
   const location = useLocation();
   const {
     book_id,
-    review_user_id,
     reviews_id,
     rate: pastRate = 2.5,
     text: pastText,
@@ -53,8 +49,6 @@ export const ReviewForm = () => {
     headers: { "Content-Type": "text/plain" },
   };
 
-  console.log(reviews_id);
-
   const handleClick = async () => {
     setLoading(true);
     const ID = UUID.generate();
@@ -62,7 +56,6 @@ export const ReviewForm = () => {
     let params = {};
 
     if (reviews_id) {
-      console.log("更新");
       url =
         "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
 
@@ -85,18 +78,7 @@ export const ReviewForm = () => {
     }
 
     await axios
-      .post(
-        url,
-        params,
-        // {
-        //   review_id: ID,
-        //   book_id: book_id,
-        //   user_id: user_id,
-        //   rate: rate,
-        //   text: text,
-        // },
-        options
-      )
+      .post(url, params, options)
       .then((response) => {
         console.log(response.data);
       })

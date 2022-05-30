@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { ReactNode } from "react";
-import { memo, useContext, useEffect } from "react";
+import { ReactNode, FC, memo, useContext, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import AuthContext from "../provider/LoginUserProvider";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const AdminRoutes: FC<Props> = memo((props) => {
+  console.log("AdminRoutes実行");
   const { children } = props;
   const {
     userinfo: { role },

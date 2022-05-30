@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+
 import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
+
 import { auth } from "../lib/Firebase/firebase";
 import { UserType } from "../types/types";
 
@@ -24,12 +26,13 @@ const initialUser = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
+  console.log("AuthProvider実行");
   const [userinfo, setUserInfo] = useState<UserType>(initialUser);
   const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
+    console.log("AuthProviderのuseEffect実行");
     onAuthStateChanged(auth, async (user: any) => {
-      console.log(user);
       user?.uid &&
         (await axios
           .get<UserType>(

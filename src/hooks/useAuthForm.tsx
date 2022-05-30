@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 type FormNotification = {
@@ -13,6 +14,7 @@ export const useAuthForm = () => {
     status: "",
     message: "",
   });
+
   const navigate = useNavigate();
 
   const handleClose = () => {

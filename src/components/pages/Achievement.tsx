@@ -50,7 +50,6 @@ export const Achievement = () => {
     get();
   }, []);
 
-  console.log(books);
   if (loading) {
     return (
       <Backdrop sx={{ color: "#fff" }} open={true}>
@@ -78,7 +77,7 @@ export const Achievement = () => {
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {books?.map((book) => (
               <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
-                <BookCard book={book} />
+                <BookCard book={book} displayContext={false} />
                 <Button
                   onClick={() =>
                     pageTransition("/home/mypage/reviewform", book)

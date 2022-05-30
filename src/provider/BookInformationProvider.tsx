@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+
 import axios from "axios";
-import { BookType, UserType } from "../types/types";
+
+import { BookType } from "../types/types";
 
 export type BookContextType = {
   books: BookType[] | undefined;
@@ -19,11 +21,12 @@ const options = {
 };
 
 export const BookProvider = ({ children }: Props) => {
+  console.log("BookProvider実行");
   // 初期値入れないとundefinedになるのはどうすればよい？
   const [books, setBooks] = useState<BookType[]>();
-  const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
+    console.log("BookProviderのuseEffect実行");
     const getBooksTable = async () => {
       await axios
         .get<BookType[]>(
@@ -31,18 +34,14 @@ export const BookProvider = ({ children }: Props) => {
           options
         )
         .then((res) => {
-          console.log(res.data);
-          setScreenLoading(true);
           setBooks(res.data);
         })
         .catch((err) => {
-          setScreenLoading(true);
           console.log(err);
         });
     };
 
     getBooksTable();
-    setScreenLoading(true);
   }, []);
 
   return (
@@ -52,7 +51,6 @@ export const BookProvider = ({ children }: Props) => {
       }}
     >
       {children}
-      {/* {screenLoading && children} */}
     </BookContext.Provider>
   );
 };

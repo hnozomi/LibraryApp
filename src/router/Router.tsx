@@ -1,5 +1,10 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import { AdminRoutes } from "./AdminRoutes";
+import { PrivateRoutes } from "./PrivateRoutes";
+import { PublicRoutes } from "./PublicRoutes";
+
 import { Achievement } from "../components/pages/Achievement";
 import { Admin } from "../components/pages/Admin";
 import { BookContents } from "../components/pages/BookContents";
@@ -12,11 +17,7 @@ import { ReviewForm } from "../components/pages/ReviewForm";
 import { RoleChange } from "../components/pages/RoleChange";
 import { Signup } from "../components/pages/Signup";
 import { Toppage } from "../components/pages/Toppage";
-import { BookProvider } from "../provider/BookInformationProvider";
 import { AuthProvider } from "../provider/LoginUserProvider";
-import { AdminRoutes } from "./AdminRoutes";
-import { PrivateRoutes } from "./PrivateRoutes";
-import { PublicRoutes } from "./PublicRoutes";
 
 export const Router: FC = () => {
   console.log("Router実行");

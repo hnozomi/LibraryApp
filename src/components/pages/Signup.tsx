@@ -1,22 +1,22 @@
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+
 import { useAuth } from "../../hooks/useAuth";
 import { useAuthForm } from "../../hooks/useAuthForm";
+import { usePageTransition } from "../../hooks/usePageTransition";
 import { ValidationAlert } from "../organisms/ValidationAlert";
 import { Header } from "../organisms/Header";
-import { useLocation } from "react-router-dom";
-import { usePageTransition } from "../../hooks/usePageTransition";
-
-import { styled } from "@mui/material/styles";
 
 function Copyright(props: any) {
   return (
@@ -49,7 +49,6 @@ const MyButton = styled("button")({
 export const Signup = () => {
   const { signup } = useAuth();
   const { authForm, open, handleClose } = useAuthForm();
-  const { pathname } = useLocation();
   const { pageTransition } = usePageTransition();
 
   return (

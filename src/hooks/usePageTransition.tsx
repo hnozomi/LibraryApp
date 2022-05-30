@@ -4,7 +4,6 @@ export const usePageTransition = () => {
   const navigate = useNavigate();
 
   const pageTransition = (page: string, state: any = "undeified") => {
-    console.log(state);
     navigate(page, { state: state });
   };
 

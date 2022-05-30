@@ -1,25 +1,21 @@
-import { useState, useEffect } from "react";
-import "./book.css";
-import Quagga from "@ericblade/quagga2";
+import { useState } from "react";
 import axios from "axios";
-import { Header } from "../organisms/Header";
+import Quagga from "@ericblade/quagga2";
 import {
   Box,
   Button,
-  Divider,
   Typography,
   Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
 } from "@mui/material";
-
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
-
 import UUID from "uuidjs";
+
+import "./book.css";
+
+import { Header } from "../organisms/Header";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
 export const BookRegister = () => {
@@ -35,30 +31,6 @@ export const BookRegister = () => {
     url: "",
   });
   const { pageTransition } = usePageTransition();
-
-  // useEffect(() => {
-  //   status && getBookInformation(barcode);
-  // }, [status]);
-
-  const getBookInformation = async (isbn: string) => {
-    const param = {
-      isbn: isbn,
-    };
-    if (status) {
-      await axios
-        .get(
-          "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/search_books",
-          { params: param }
-        )
-        .then((res) => {
-          // setStatus(true);
-        })
-        .catch((err) => {
-          console.log(err);
-          // setStatus(true);
-        });
-    }
-  };
 
   const test = async () => {
     // パソコンでバーコードをなぜか読めないため、ボタンを設置した

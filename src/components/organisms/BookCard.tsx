@@ -10,14 +10,23 @@ import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
   book: BookType;
+  displayContext: boolean;
 };
 
 export const BookCard: FC<Props> = (props) => {
-  const { book } = props;
+  const { book, displayContext } = props;
   const { pageTransition } = usePageTransition();
+
+  const handleClick = () => {
+    if (displayContext) {
+      pageTransition("/home/bookcontext", book);
+    }
+  };
+
   return (
     <Card sx={{ height: "200px", width: "110px" }}>
-      <CardActionArea onClick={() => pageTransition("/home/bookcontext", book)}>
+      {/* <CardActionArea onClick={() => pageTransition("/home/bookcontext", book)}> */}
+      <CardActionArea onClick={handleClick}>
         <CardMedia
           component="img"
           height="120"

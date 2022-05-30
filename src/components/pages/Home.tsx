@@ -1,40 +1,14 @@
-import { Box, Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { Header } from "../organisms/Header";
-import axios, { AxiosResponse } from "axios";
-import { useState } from "react";
-import { BookType } from "../../types/types";
-import { BookCard } from "../organisms/BookCard";
 import { useContext } from "react";
+
+import { Box, Grid, Typography } from "@mui/material";
+
+import { Header } from "../organisms/Header";
+import { BookCard } from "../organisms/BookCard";
+
 import BookContext from "../../provider/BookInformationProvider";
 
 export const Home = () => {
   const { books } = useContext(BookContext);
-  // const [books, setBooks] = useState<BookType[]>();
-  // const options = {
-  //   headers: { "Content-Type": "text/plain" },
-  // };
-
-  // useEffect(() => {
-  //   const getBooksTable = async () => {
-  //     await axios
-  //       .get<BookType[]>(
-  //         "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_books",
-  //         options
-  //       )
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         setBooks(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-
-  //   getBooksTable();
-  // }, []);
-
-  // console.log(books);
 
   return (
     <Box>
@@ -45,7 +19,7 @@ export const Home = () => {
         <Grid container spacing={1} sx={{ marginTop: "1em" }}>
           {books.map((book) => (
             <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
-              <BookCard book={book} />
+              <BookCard book={book} displayContext={true} />
             </Grid>
           ))}
         </Grid>

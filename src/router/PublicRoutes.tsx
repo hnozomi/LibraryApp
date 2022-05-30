@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { ReactNode } from "react";
-import { memo, useContext, useEffect } from "react";
+import { FC, ReactNode, memo, useContext, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import AuthContext from "../provider/LoginUserProvider";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const PublicRoutes: FC<Props> = memo((props) => {
+  console.log("PublicRoutes実行");
   const { children } = props;
   const {
     userinfo: { user_id },

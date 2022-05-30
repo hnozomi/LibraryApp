@@ -188,7 +188,6 @@ export const ReservationCulensder: FC<Props> = (props) => {
     );
   }
 
-  console.log(reservation);
   return (
     <Box sx={{ marginTop: "1em" }}>
       {culenderLoading ? (
