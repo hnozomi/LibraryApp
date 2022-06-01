@@ -17,7 +17,7 @@ import { Review } from "../../organisms/Review";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { BookType } from "../../../types/types";
 
-const TestButton = (props: any) => {
+const SwitchButton = (props: any) => {
   const { active, name, onClick } = props;
   const color = active === name ? "primary" : "inherit";
   return (
@@ -38,7 +38,7 @@ export const BookContents: FC = () => {
   } = useContext(AuthContext);
 
   const location = useLocation();
-  const { book_id, title, author, image_url, review } =
+  const { book_id, title, author, category, image_url, review } =
     location.state as BookType;
 
   const [status, setStatus] = useState("評価");
@@ -53,13 +53,13 @@ export const BookContents: FC = () => {
         <Card sx={{ display: "flex" }}>
           <CardMedia
             component="img"
-            sx={{ width: 151 }}
+            sx={{ width: 151, objectFit: "fill" }}
             src={image_url}
-            alt="Live from space album cover"
+            alt="本の表紙"
           />
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h5">
+              <Typography component="div" variant="h6">
                 {title}
               </Typography>
               <Typography
@@ -68,6 +68,13 @@ export const BookContents: FC = () => {
                 component="div"
               >
                 {author}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                component="div"
+              >
+                {category}
               </Typography>
             </CardContent>
           </Box>
@@ -78,12 +85,12 @@ export const BookContents: FC = () => {
               {status}
             </Typography>
             <Box sx={{ textAlign: "right" }}>
-              <TestButton
+              <SwitchButton
                 active={status}
                 name="評価"
                 onClick={() => changeStatus("評価")}
               />
-              <TestButton
+              <SwitchButton
                 active={status}
                 name="予約"
                 onClick={() => changeStatus("予約")}

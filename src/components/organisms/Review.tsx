@@ -1,3 +1,4 @@
+import { FC, useState } from "react";
 import {
   Box,
   Button,
@@ -10,10 +11,9 @@ import {
   DialogContent,
   DialogContentText,
 } from "@mui/material";
-import { FC } from "react";
-import { useState } from "react";
-import { usePageTransition } from "../../hooks/usePageTransition";
 import axios from "axios";
+
+import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
   reviews: any;
@@ -47,9 +47,7 @@ export const Review: FC<Props> = (props) => {
     await axios
       .post(url, params, options)
       .then((response) => {})
-      .finally(() => {
-        // setLoading(false);
-      });
+      .finally(() => {});
   };
 
   const handleClose = () => {
@@ -125,14 +123,15 @@ export const Review: FC<Props> = (props) => {
             )}
           </Box>
           <Rating name="half-rating" value={reviews[value].rate} readOnly />
-          <Typography>感想</Typography>
-          <TextareaAutosize
-            aria-label="empty textarea"
-            placeholder="Empty"
-            value={reviews[value].text}
-            minRows={15}
-            style={{ width: "100%" }}
-          />
+          <Box sx={{ width: "100%" }}>
+            <Typography>感想</Typography>
+            <TextareaAutosize
+              placeholder="Empty"
+              value={reviews[value].text}
+              minRows={13}
+              style={{ width: "100%", boxSizing: "border-box" }}
+            />
+          </Box>
         </>
       )}
     </>

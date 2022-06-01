@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   Grid,
+  Paper,
 } from "@mui/material";
 import axios from "axios";
 import UUID from "uuidjs";
@@ -113,6 +114,10 @@ export const Mypage = () => {
     return <LoadingScreen text={"取得中"} />;
   }
 
+  {
+    console.log(borrowedBook);
+  }
+
   return (
     <>
       <Container>
@@ -131,33 +136,30 @@ export const Mypage = () => {
             </Box>
           </Box>
         </Box>
-        <Box>
-          <Typography>借りてる本</Typography>
-          <Divider />
-          <Grid container spacing={1} sx={{ marginTop: "1em" }}>
-            {borrowedBook?.map((borrowed) => (
-              <Grid key={borrowed.book_id} item xs={4} sx={{ height: "450px" }}>
-                <BookCard book={borrowed} displayContext={true} />
-                <Button onClick={() => handleClick(borrowed)}>返却</Button>
-              </Grid>
-            ))}
-          </Grid>
+        <Box sx={{ mb: "1em" }}>
+          <Typography sx={{ marginBottom: "0.7em" }}>借りてる本</Typography>
+          {borrowedBook?.length === 0 ? (
+            <Paper sx={{ p: "1em" }}>実績がありません</Paper>
+          ) : (
+            <Grid container spacing={1}>
+              {borrowedBook?.map((borrowed) => (
+                <Grid key={borrowed.book_id} item xs={4}>
+                  <BookCard book={borrowed} displayContext={true} />
+                  <Button onClick={() => handleClick(borrowed)}>返却</Button>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
         <Box>
-          <Typography>予約中</Typography>
-          <Grid container spacing={1} sx={{ marginTop: "1em" }}>
+          <Typography sx={{ marginBottom: "0.7em" }}>予約中</Typography>
+          <Grid container spacing={1}>
             {reservationsBook?.map((reservation) => (
-              <Grid
-                key={reservation.book_id}
-                item
-                xs={4}
-                sx={{ height: "450px" }}
-              >
+              <Grid key={reservation.book_id} item xs={4}>
                 <BookCard book={reservation} displayContext={true} />
               </Grid>
             ))}
           </Grid>
-          <Divider />
         </Box>
       </Container>
     </>

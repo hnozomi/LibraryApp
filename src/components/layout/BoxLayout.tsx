@@ -9,7 +9,7 @@ type Props = {
 export const BoxLayout: FC<Props> = (props) => {
   const { children } = props;
   return (
-    <Box sx={{ width: "90%", margin: "0 auto", marginTop: "1em" }}>
+    <Box sx={{ width: "92%", margin: "0 auto", marginTop: "1em" }}>
       {children}
     </Box>
   );

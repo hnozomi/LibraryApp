@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
+  Divider,
 } from "@mui/material";
 import axios from "axios";
 import UUID from "uuidjs";
@@ -17,6 +18,7 @@ import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
 import { ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
+import { ButtonLayout } from "../layout/BoxLayout";
 
 type Props = {
   book_id: string;
@@ -192,11 +194,15 @@ export const ReservationCulensder: FC<Props> = (props) => {
           displayEventTime={false}
         />
       )}
-      <Typography>{`予約開始日: ${date.start}`}</Typography>
+      <Box sx={{ mt: "1em" }}>
+        <Typography>{`予約開始日: ${date.start}`}</Typography>
+      </Box>
       <Typography>{`予約終了日: ${date.end}`}</Typography>
-      <Button onClick={handleClick} variant="outlined">
-        予約する
-      </Button>
+      <ButtonLayout>
+        <Button onClick={handleClick} variant="outlined">
+          予約する
+        </Button>
+      </ButtonLayout>
     </Box>
   );
 };

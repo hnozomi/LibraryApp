@@ -11,6 +11,13 @@ import {
   CardMedia,
   CardActionArea,
 } from "@mui/material";
+
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+
 import UUID from "uuidjs";
 
 import "./book.css";
@@ -18,24 +25,29 @@ import "./book.css";
 import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 
+type Book = {
+  title: string;
+  author: string;
+  category: [];
+  url: string;
+};
+
 export const BookRegister: FC = memo(() => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [startStatus, setStartStatus] = useState(false);
   const [stopStatus, setStopStatus] = useState(true);
-  const [books, setbooks] = useState({
+  const [books, setbooks] = useState<Book>({
     title: "",
     author: "",
-    category: "",
+    category: [],
     url: "",
   });
+  const [category, setCategory] = useState("");
   const { pageTransition } = usePageTransition();
 
-  const test = async () => {
-    // パソコンでバーコードをなぜか読めないため、ボタンを設置した
-    let isbn = "9784815610722"; //じゃけぇさんのほん
-    // let isbn = "9784480432933"; //横井さんの本
+  const searchBooks = async (isbn: string) => {
     const param = {
       isbn: isbn,
     };
@@ -51,14 +63,13 @@ export const BookRegister: FC = memo(() => {
           ...books,
           title: res.data[0],
           author: res.data[1],
-          url: res.data[3],
+          category: res.data[2],
+          url: res.data[4],
         });
         setOpen(true);
-        setStatus(true);
       })
       .catch((err) => {
         console.log(err);
-        setStatus(true);
       });
   };
 
@@ -75,7 +86,7 @@ export const BookRegister: FC = memo(() => {
           book_id: ID,
           title: books.title,
           author: books.author,
-          category: "janru",
+          category: category,
           image_url: books.url,
         },
         options
@@ -85,6 +96,10 @@ export const BookRegister: FC = memo(() => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setStatus(true);
+        setOpen(false);
       });
   };
 
@@ -94,8 +109,9 @@ export const BookRegister: FC = memo(() => {
         const init = result.codeResult.code.slice(0, 3);
         if (init === "978" && status === false) {
           Quagga.stop();
-          setBarcode(result.codeResult.code);
-          setStatus(true);
+          // setStatus(true);
+          searchBooks(result.codeResult.code);
+          // setBarcode(result.codeResult.code);
         }
       }
     }
@@ -135,10 +151,15 @@ export const BookRegister: FC = memo(() => {
     setOpen(false);
   };
 
+  const handleChange = (data: string) => {
+    console.log(data);
+    setCategory(data);
+  };
+
   if (open) {
     return (
       <Dialog open={open} onClose={handleClose}>
-        <Card sx={{ height: "400px", width: "250px" }}>
+        <Card sx={{ height: "500px", width: "100%" }}>
           <CardActionArea>
             <CardMedia
               component="img"
@@ -159,13 +180,31 @@ export const BookRegister: FC = memo(() => {
               >
                 {books.author}
               </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ fontSize: "10px" }}
+              <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="female"
+                name="radio-buttons-group"
               >
-                {"↑上記の登録を行います"}
-              </Typography>
+                {books.category.length !== 0 &&
+                  books.category.map((data) => (
+                    <FormControlLabel
+                      value={data}
+                      control={<Radio />}
+                      label={data}
+                      onChange={() => handleChange(data)}
+                    />
+                  ))}
+              </RadioGroup>
+              <CardContent>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontSize: "10px" }}
+                >
+                  {"↑上記の登録を行います"}
+                </Typography>
+              </CardContent>
             </CardContent>
           </CardActionArea>
         </Card>
@@ -179,7 +218,9 @@ export const BookRegister: FC = memo(() => {
           >
             キャンセル
           </Button>
-          <Button variant="outlined">登録</Button>
+          <Button onClick={insertBooksTable} variant="outlined">
+            登録
+          </Button>
         </Box>
       </Dialog>
     );
@@ -221,9 +262,9 @@ export const BookRegister: FC = memo(() => {
           <Button onClick={insertBooksTable} variant="contained">
             登録
           </Button>
-          <Button onClick={test} variant="contained">
+          {/* <Button onClick={test} variant="contained">
             テスト
-          </Button>
+          </Button> */}
         </ButtonLayout>
       </BoxLayout>
       {/* </Box> */}

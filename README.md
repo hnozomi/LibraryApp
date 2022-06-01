@@ -29,6 +29,12 @@ hookの順序
 初期データの定義をまとめてした。
 useEffectはロジックが入るので、最後
 
+分割方法
+pages: 
+Layout: 
+Organismis:
+Parts: 
+
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
