@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { BoxLayout } from "../../layout/BoxLayout";
 
 export const Home = () => {
-  const { books } = useContext(BookContext);
+  const { books, loading } = useContext(BookContext);
   const [displayBooks, setDisplayBooks] = useState(books);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -37,7 +37,7 @@ export const Home = () => {
     setValue("");
   };
 
-  if (books === undefined) {
+  if (loading) {
     return <LoadingScreen text={"書籍情報取得中"}></LoadingScreen>;
   }
 
@@ -51,7 +51,6 @@ export const Home = () => {
     );
   }
 
-  console.log(displayBooks);
   return (
     <>
       <Paper

@@ -9,11 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { BookType } from "../../types/types";
+import { BookReservationType, BookType } from "../../types/types";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
-  book: BookType;
+  book: BookType | BookReservationType;
   displayContext: boolean;
 };
 
@@ -28,7 +28,6 @@ export const BookCard: FC<Props> = (props) => {
     }
   };
 
-  console.log(book.image_url);
   return (
     // <Card sx={{ height: "200px", width: "110px" }}>
     <Card sx={{ height: "100%" }}>

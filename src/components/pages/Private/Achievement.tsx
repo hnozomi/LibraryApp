@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-
 import { Box, Button, Container, Grid } from "@mui/material";
 
 import { BookCard } from "../../organisms/BookCard";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { usePageTransition } from "../../../hooks/usePageTransition";
+import { useGetData } from "../../../hooks/usegetData";
 import { BookType } from "../../../types/types";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
 
@@ -14,30 +13,16 @@ export const Achievement = () => {
     userinfo: { user_id },
   } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState(false);
   const [books, setBooks] = useState<BookType[]>();
 
   const { pageTransition } = usePageTransition();
+  const { getAchievementByUserId, loading } = useGetData();
 
   useEffect(() => {
-    setLoading(true);
     const get = async () => {
-      await axios
-        .get(
-          "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_achievement",
-          {
-            params: {
-              user_id: user_id,
-            },
-            headers: { "Content-Type": "text/plain" },
-          }
-        )
-        .then((response) => {
-          setBooks(response.data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      await getAchievementByUserId(user_id).then((res) => {
+        setBooks(res.achievement);
+      });
     };
 
     get();

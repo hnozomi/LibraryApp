@@ -4,118 +4,69 @@ import {
   Avatar,
   Box,
   Container,
-  Divider,
   Typography,
   Button,
   Grid,
   Paper,
 } from "@mui/material";
-import axios from "axios";
-import UUID from "uuidjs";
 
 import { usePageTransition } from "../../../hooks/usePageTransition";
+import { useGetData } from "../../../hooks/usegetData";
+import { usePostData } from "../../../hooks/usePostData";
 import { BookCard } from "../../organisms/BookCard";
 import AuthContext from "../../../provider/LoginUserProvider";
-import { BookType } from "../../../types/types";
+import { BookReservationType } from "../../../types/types";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
+import BookContext from "../../../provider/BookInformationProvider";
 
 export const Mypage = () => {
   console.log("Mypage実行");
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
+  const { books } = useContext(BookContext);
 
-  const [reservationsBook, setReservationsBook] = useState<BookType[]>();
-  const [borrowedBook, setBorrowedBook] = useState<BookType[]>();
-  const [loading, setLoading] = useState(false);
+  const [reservationsBook, setReservationsBook] =
+    useState<BookReservationType[]>();
+  const [borrowedBook, setBorrowedBook] = useState<BookReservationType[]>();
+  // const [loading, setLoading] = useState(false);
 
   const { pageTransition } = usePageTransition();
+  const { getReservationRecord, loading } = useGetData();
+  const { deleteReservation, postloading } = usePostData();
+
+  type ResultData = {
+    data:
+      | undefined
+      | {
+          reservation: BookReservationType[] | undefined;
+          borrowd: BookReservationType[] | undefined;
+        };
+  };
 
   useEffect(() => {
+    console.log(books);
     const get = async () => {
-      await getReservationRecord();
+      await getReservationRecord(user_id).then((res: ResultData) => {
+        if (res.data !== undefined) {
+          setReservationsBook(res.data.reservation);
+          setBorrowedBook(res.data.borrowd);
+        }
+      });
     };
     get();
   }, []);
 
-  const getNowYMD = () => {
-    var dt = new Date();
-    var y = dt.getFullYear();
-    var m = ("00" + (dt.getMonth() + 1)).slice(-2);
-    var d = ("00" + dt.getDate()).slice(-2);
-    var result = y + "-" + m + "-" + d;
-    return result;
-  };
-
-  const check = (info: any) => {
-    const nowDate = getNowYMD();
-
-    let reservation: any = [];
-    let borrowd: any = [];
-    info.forEach((res1: any) => {
-      if (res1.start_day < nowDate && nowDate < res1.end_day) {
-        borrowd.push(res1);
-      } else {
-        reservation.push(res1);
-      }
-    });
-
-    setReservationsBook(reservation);
-    setBorrowedBook(borrowd);
-  };
-
-  const getReservationRecord = async () => {
-    setLoading(true);
-    await axios
-      .get(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_bookReservation",
-        {
-          params: {
-            user_id: user_id,
-          },
-          headers: { "Content-Type": "text/plain" },
-        }
-      )
-      .then((res) => {
-        check(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const options = {
-    headers: { "Content-Type": "text/plain" },
-  };
-
-  const handleClick = async (book: any) => {
-    const ID = UUID.generate();
-    setLoading(true);
-    await axios
-      .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_bookReservation",
-        {
-          reservation_id: book.reservation_id,
-          achievement_id: ID,
-          user_id: book.user_id,
-          book_id: book.book_id,
-        },
-        options
-      )
-      .finally(() => {
-        setLoading(false);
-      });
+  const handleClick = async (book: BookReservationType) => {
+    await deleteReservation(book);
   };
 
   if (loading) {
     return <LoadingScreen text={"取得中"} />;
   }
 
-  {
-    console.log(borrowedBook);
+  if (postloading) {
+    return <LoadingScreen text={"取得中"} />;
   }
 
   return (

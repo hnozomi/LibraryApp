@@ -28,6 +28,19 @@ export type ReservationType = {
     end_day: Date
 } 
 
+export type BookReservationType = {
+    reservation_id: string
+    user_id: string;
+    book_id: string;
+    start_day: Date;
+    end_day: Date
+    title: string;
+    author: string;
+    category: string;
+    image_url: string;
+    review: []
+}
+
 export type ReviewType = {
     review_id: string
     rate: number;
