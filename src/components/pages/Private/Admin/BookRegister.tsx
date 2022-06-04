@@ -24,12 +24,15 @@ import "./book.css";
 
 import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
+import { usePostData } from "../../../../hooks/usePostData";
+import { LoadingScreen } from "../../../organisms/LoadingScreen";
+import { useGetData } from "../../../../hooks/usegetData";
 
 type Book = {
   title: string;
   author: string;
   category: [];
-  url: string;
+  image_url: string;
 };
 
 export const BookRegister: FC = memo(() => {
@@ -42,66 +45,63 @@ export const BookRegister: FC = memo(() => {
     title: "",
     author: "",
     category: [],
-    url: "",
+    image_url: "",
   });
   const [category, setCategory] = useState("");
   const { pageTransition } = usePageTransition();
+  const { insertBooks, postloading, result, complete } = usePostData();
+  const { searchBooks } = useGetData();
 
-  const searchBooks = async (isbn: string) => {
-    const param = {
-      isbn: isbn,
-    };
+  // const searchBooks = async (isbn: string) => {
+  //   const param = {
+  //     isbn: isbn,
+  //   };
 
-    await axios
-      .get(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/search_books",
-        { params: param }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setbooks({
-          ...books,
-          title: res.data[0],
-          author: res.data[1],
-          category: res.data[2],
-          url: res.data[4],
-        });
-        setOpen(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  //   await axios
+  //     .get(
+  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/search_books",
+  //       { params: param }
+  //     )
+  //     .then((res) => {
+  //       setbooks({
+  //         ...books,
+  //         title: res.data[0],
+  //         author: res.data[1],
+  //         category: res.data[2],
+  //         image_url: res.data[4],
+  //       });
+  //       setOpen(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  const options = {
-    headers: { "Content-Type": "text/plain" },
-  };
-
-  const insertBooksTable = async () => {
-    const ID = UUID.generate();
-    await axios
-      .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_books",
-        {
-          book_id: ID,
-          title: books.title,
-          author: books.author,
-          category: category,
-          image_url: books.url,
-        },
-        options
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setStatus(true);
-        setOpen(false);
-      });
-  };
+  // const insertBooksTable = async () => {
+  //   const ID = UUID.generate();
+  //   await axios
+  //     .post(
+  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_books",
+  //       {
+  //         book_id: ID,
+  //         title: books.title,
+  //         author: books.author,
+  //         category: category,
+  //         image_url: books.url,
+  //       },
+  //       options
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setStatus(true);
+  //       setOpen(false);
+  //     });
+  // };
 
   Quagga.onDetected((result) => {
     if (result !== undefined) {
@@ -109,8 +109,15 @@ export const BookRegister: FC = memo(() => {
         const init = result.codeResult.code.slice(0, 3);
         if (init === "978" && status === false) {
           Quagga.stop();
-          // setStatus(true);
-          searchBooks(result.codeResult.code);
+          setStatus(true);
+          searchBooks(result.codeResult.code).then((res) => {
+            if (res.bookInfomation !== undefined) {
+              setbooks(res.bookInfomation);
+            }
+          });
+
+          setOpen(true);
+
           // setBarcode(result.codeResult.code);
         }
       }
@@ -152,9 +159,12 @@ export const BookRegister: FC = memo(() => {
   };
 
   const handleChange = (data: string) => {
-    console.log(data);
     setCategory(data);
   };
+
+  if (postloading) {
+    return <LoadingScreen text={"登録中"} />;
+  }
 
   if (open) {
     return (
@@ -164,7 +174,7 @@ export const BookRegister: FC = memo(() => {
             <CardMedia
               component="img"
               height="280"
-              src={books.url}
+              src={books.image_url}
               // src={book.image_url}
               alt="green iguana"
               sx={{ objectFit: "fill" }}
@@ -218,7 +228,13 @@ export const BookRegister: FC = memo(() => {
           >
             キャンセル
           </Button>
-          <Button onClick={insertBooksTable} variant="outlined">
+          <Button
+            onClick={() => {
+              insertBooks(books, category);
+              setOpen(false);
+            }}
+            variant="outlined"
+          >
             登録
           </Button>
         </Box>
@@ -228,14 +244,6 @@ export const BookRegister: FC = memo(() => {
 
   return (
     <>
-      {/* <Box
-        sx={{
-          width: "80%",
-          margin: "0 auto",
-          textAlign: "center",
-          marginTop: "2em",
-        }}
-      > */}
       <BoxLayout>
         <div>バーコードをスキャンしてください</div>
         <Button disabled={startStatus} onClick={onStart}>
@@ -251,23 +259,7 @@ export const BookRegister: FC = memo(() => {
         ) : (
           <div id="preview"></div>
         )}
-        <ButtonLayout>
-          <Button
-            onClick={() => pageTransition("/home/admin")}
-            sx={{ marginRight: "5px" }}
-            variant="contained"
-          >
-            キャンセル
-          </Button>
-          <Button onClick={insertBooksTable} variant="contained">
-            登録
-          </Button>
-          {/* <Button onClick={test} variant="contained">
-            テスト
-          </Button> */}
-        </ButtonLayout>
       </BoxLayout>
-      {/* </Box> */}
     </>
   );
 });

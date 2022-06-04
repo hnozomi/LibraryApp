@@ -15,10 +15,12 @@ export type BookType = {
     book_id: string
     title: string;
     author: string;
-    category: string;
+    category: string | [];
     image_url: string;
     review: []
 }
+
+export type NewBookType = Omit<BookType, "book_id" | "review">;
 
 export type ReservationType = {
     reservation_id: string

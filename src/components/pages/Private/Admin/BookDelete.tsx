@@ -12,7 +12,6 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import axios from "axios";
 
 import BookContext from "../../../../provider/BookInformationProvider";
 import { BookType } from "../../../../types/types";
@@ -20,13 +19,14 @@ import { BookCard } from "../../../organisms/BookCard";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
 import { memo } from "react";
 import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
+import { usePostData } from "../../../../hooks/usePostData";
 
 export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
   const { books } = useContext(BookContext);
   const [bookName, setBookName] = useState<string>();
   const [BookNameByfilter, setBookNameByfilter] = useState<BookType[]>([]);
-  const [deleteBook, setDeletebook] = useState<BookType>({
+  const [selectedBook, setSelectedbook] = useState<BookType>({
     book_id: "",
     title: "",
     author: "",
@@ -35,9 +35,7 @@ export const BookDelete: FC = memo(() => {
     review: [],
   });
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [complete, setComplete] = useState(false);
-  const [result, setResult] = useState({ status: "", message: "" });
+  const { deleteBook, postloading, result, complete } = usePostData();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBookName(event.target.value as string);
@@ -60,42 +58,10 @@ export const BookDelete: FC = memo(() => {
 
   const handleOpen = (book: BookType) => {
     setOpen(true);
-    setDeletebook(book);
+    setSelectedbook(book);
   };
 
-  const deleteStep = async () => {
-    setLoading(true);
-    const options = {
-      headers: { "Content-Type": "text/plain" },
-    };
-
-    await axios
-      .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_book",
-        {
-          book_id: deleteBook.book_id,
-        },
-        options
-      )
-      .then((result) => {
-        console.log(result);
-        setResult({
-          ...result,
-          message: result.data.message,
-          status: result.data.status,
-        });
-      })
-      .finally(() => {
-        setOpen(false);
-        setLoading(false);
-        setComplete(true);
-        setTimeout(() => {
-          setComplete(false);
-        }, 3000);
-      });
-  };
-
-  if (loading) {
+  if (postloading) {
     return <LoadingScreen text={"削除中"} />;
   }
 
@@ -104,7 +70,7 @@ export const BookDelete: FC = memo(() => {
       <Dialog open={open} onClose={handleClose}>
         <Box>
           <DialogContent>
-            <BookCard book={deleteBook} displayContext={false} />
+            <BookCard book={selectedBook} displayContext={false} />
           </DialogContent>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -122,7 +88,13 @@ export const BookDelete: FC = memo(() => {
           >
             キャンセル
           </Button>
-          <Button onClick={deleteStep} variant="outlined">
+          <Button
+            onClick={() => {
+              setOpen(false);
+              deleteBook(selectedBook);
+            }}
+            variant="outlined"
+          >
             削除
           </Button>
         </Box>
@@ -132,11 +104,11 @@ export const BookDelete: FC = memo(() => {
 
   if (complete) {
     return (
-      <Dialog open={complete} onClose={() => setComplete(false)}>
-        <DialogTitle id="alert-dialog-title">{"result.status"}</DialogTitle>
+      <Dialog open={complete}>
+        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {"result.message"}
+            {result.message}
           </DialogContentText>
         </DialogContent>
       </Dialog>

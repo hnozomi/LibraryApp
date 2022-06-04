@@ -1,12 +1,14 @@
 import UUID from "uuidjs";
 import axios from "axios";
 import { useState } from "react";
-import { BookReservationType, BookType } from "../types/types";
+import { BookReservationType, BookType, NewBookType } from "../types/types";
+import { FormatColorReset } from "@mui/icons-material";
 
 export const usePostData = () => {
   const [postloading, setPostLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [result, setResult] = useState({ status: "", message: "" });
+  const [complete, setComplete] = useState(false);
 
   const options = {
     headers: { "Content-Type": "text/plain" },
@@ -56,12 +58,78 @@ export const usePostData = () => {
       })
       .finally(() => {
         setPostLoading(false);
-        setOpen(true);
+        // setOpen(true);
+        setComplete(true);
         setTimeout(() => {
-          setOpen(false);
+          setComplete(false);
         }, 3000);
       });
   };
 
-  return { deleteReservation, changeRole, postloading, open, result };
+  const deleteBook = async (deleteBook: BookType) => {
+    setPostLoading(true);
+
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_book",
+        {
+          book_id: deleteBook.book_id,
+        },
+        options
+      )
+      .then((result) => {
+        setResult({
+          ...result,
+          message: result.data.message,
+          status: result.data.status,
+        });
+      })
+      .finally(() => {
+        setPostLoading(false);
+        setComplete(true);
+        setTimeout(() => {
+          setComplete(false);
+        }, 3000);
+      });
+  };
+
+  const insertBooks = async (books: NewBookType, category: string) => {
+    const ID = UUID.generate();
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_books",
+        {
+          book_id: ID,
+          title: books.title,
+          author: books.author,
+          category: category,
+          image_url: books.image_url,
+        },
+        options
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setPostLoading(false);
+        setComplete(true);
+        setTimeout(() => {
+          setComplete(false);
+        }, 3000);
+      });
+  };
+
+  return {
+    deleteReservation,
+    changeRole,
+    deleteBook,
+    insertBooks,
+    postloading,
+    open,
+    result,
+    complete,
+  };
 };

@@ -101,5 +101,36 @@ export const useGetData = () => {
     return { reservation, borrowd };
   };
 
-  return { getAchievementByUserId, getReservationRecord, loading };
+  const searchBooks = async (isbn: string) => {
+    const param = {
+      isbn: isbn,
+    };
+
+    let bookInfomation;
+    await axios
+      .get(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/search_books",
+        { params: param }
+      )
+      .then((res) => {
+        // setbooks({
+        //   ...books,
+        //   title: res.data[0],
+        //   author: res.data[1],
+        //   category: res.data[2],
+        //   image_url: res.data[4],
+        // });
+
+        bookInfomation = res.data;
+
+        // AWSで他のgetみたいにkeyをつけてreturnする
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return { bookInfomation };
+  };
+
+  return { getAchievementByUserId, getReservationRecord, searchBooks, loading };
 };

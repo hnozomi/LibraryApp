@@ -29,7 +29,7 @@ export const RoleChange: FC = memo(() => {
   // const [result, setResult] = useState({ status: "", message: "" });
 
   const { pageTransition } = usePageTransition();
-  const { changeRole, postloading, open, result } = usePostData();
+  const { changeRole, postloading, complete, result } = usePostData();
 
   // const handleClose = () => {
   //   setOpen(false);
@@ -90,10 +90,22 @@ export const RoleChange: FC = memo(() => {
     return <LoadingScreen text={"変更中"}></LoadingScreen>;
   }
 
-  if (open) {
+  // if (open) {
+  //   return (
+  //     <Dialog open={open}>
+  //       <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
+  //       <DialogContent>
+  //         <DialogContentText id="alert-dialog-description">
+  //           {result.message}
+  //         </DialogContentText>
+  //       </DialogContent>
+  //     </Dialog>
+  //   );
+  // }
+
+  if (complete) {
     return (
-      // <Dialog open={open} onClose={handleClose}>
-      <Dialog open={open}>
+      <Dialog open={complete}>
         <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
