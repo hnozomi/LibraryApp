@@ -94,6 +94,8 @@ export const usePostData = () => {
   };
 
   const insertBooks = async (books: NewBookType, category: string) => {
+    setPostLoading(true);
+
     const ID = UUID.generate();
     await axios
       .post(
@@ -107,8 +109,12 @@ export const usePostData = () => {
         },
         options
       )
-      .then((res) => {
-        console.log(res.data);
+      .then((result) => {
+        setResult({
+          ...result,
+          message: result.data.message,
+          status: result.data.status,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -122,11 +128,62 @@ export const usePostData = () => {
       });
   };
 
+  const postReview = async (
+    reviews_id: string | undefined,
+    user_id: string,
+    book_id: string | undefined,
+    text: string | undefined,
+    rate: number | null
+  ) => {
+    setPostLoading(true);
+    const ID = UUID.generate();
+    let url = "";
+    let params = {};
+
+    if (reviews_id) {
+      url =
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
+
+      params = {
+        review_id: reviews_id,
+        rate: rate,
+        text: text,
+      };
+    } else {
+      url =
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
+      params = {
+        review_id: ID,
+        book_id: book_id,
+        user_id: user_id,
+        rate: rate,
+        text: text,
+      };
+    }
+
+    await axios
+      .post(url, params, options)
+      .then((result) => {
+        setResult({
+          ...result,
+          message: result.data.message,
+          status: result.data.status,
+        });
+      })
+      .finally(() => {
+        setPostLoading(false);
+        setTimeout(() => {
+          setComplete(false);
+        }, 3000);
+      });
+  };
+
   return {
     deleteReservation,
     changeRole,
     deleteBook,
     insertBooks,
+    postReview,
     postloading,
     open,
     result,

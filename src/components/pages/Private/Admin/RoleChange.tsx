@@ -24,16 +24,9 @@ export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");
   const [role, setRole] = useState("");
   const [mail, setMail] = useState("");
-  const [loading, setLoading] = useState(false);
-  // const [open, setOpen] = useState(false);
-  // const [result, setResult] = useState({ status: "", message: "" });
 
   const { pageTransition } = usePageTransition();
   const { changeRole, postloading, complete, result } = usePostData();
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value as string);
@@ -48,72 +41,10 @@ export const RoleChange: FC = memo(() => {
       setRole("");
       setMail("");
     });
-    // setLoading(true);
-    // const options = {
-    //   headers: { "Content-Type": "text/plain" },
-    // };
-    // const roleSplit = role.split("/");
-    // await axios
-    //   .post(
-    //     "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/change_role",
-    //     {
-    //       e_mail: mail,
-    //       previousRole: roleSplit[0],
-    //       nextRole: roleSplit[1],
-    //     },
-    //     options
-    //   )
-    //   .then((res) => {
-    //     console.log(res, "OK");
-    //     setResult({
-    //       ...result,
-    //       message: res.data.message,
-    //       status: res.data.status,
-    //     });
-    //     setLoading(false);
-    //     setRole("");
-    //     setMail("");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err, "err");
-    //     setLoading(false);
-    //   })
-    //   .finally(() => {
-    //     setOpen(true);
-    //     setTimeout(() => {
-    //       setOpen(false);
-    //     }, 3000);
-    //   });
   };
 
   if (postloading) {
     return <LoadingScreen text={"変更中"}></LoadingScreen>;
-  }
-
-  // if (open) {
-  //   return (
-  //     <Dialog open={open}>
-  //       <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-  //       <DialogContent>
-  //         <DialogContentText id="alert-dialog-description">
-  //           {result.message}
-  //         </DialogContentText>
-  //       </DialogContent>
-  //     </Dialog>
-  //   );
-  // }
-
-  if (complete) {
-    return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    );
   }
 
   return (

@@ -5,6 +5,10 @@ import {
   Button,
   CircularProgress,
   Container,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Rating,
   TextField,
   Typography,
@@ -15,6 +19,7 @@ import { useLocation } from "react-router-dom";
 
 import AuthContext from "../../../provider/LoginUserProvider";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
+import { usePostData } from "../../../hooks/usePostData";
 
 type Rare = number | null;
 
@@ -42,51 +47,66 @@ export const ReviewForm = () => {
     userinfo: { user_id },
   } = useContext(AuthContext);
 
+  const { postReview, postloading, complete, result } = usePostData();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
   };
 
-  const options = {
-    headers: { "Content-Type": "text/plain" },
-  };
+  // const options = {
+  //   headers: { "Content-Type": "text/plain" },
+  // };
 
-  const handleClick = async () => {
-    setLoading(true);
-    const ID = UUID.generate();
-    let url = "";
-    let params = {};
+  // const handleClick = async () => {
+  //   setLoading(true);
+  //   const ID = UUID.generate();
+  //   let url = "";
+  //   let params = {};
 
-    if (reviews_id) {
-      url =
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
+  //   if (reviews_id) {
+  //     url =
+  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
 
-      params = {
-        review_id: reviews_id,
-        rate: rate,
-        text: text,
-      };
-    } else {
-      url =
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
-      params = {
-        review_id: ID,
-        book_id: book_id,
-        user_id: user_id,
-        rate: rate,
-        text: text,
-      };
-    }
+  //     params = {
+  //       review_id: reviews_id,
+  //       rate: rate,
+  //       text: text,
+  //     };
+  //   } else {
+  //     url =
+  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
+  //     params = {
+  //       review_id: ID,
+  //       book_id: book_id,
+  //       user_id: user_id,
+  //       rate: rate,
+  //       text: text,
+  //     };
+  //   }
 
-    await axios
-      .post(url, params, options)
-      .then((response) => {})
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+  //   await axios
+  //     .post(url, params, options)
+  //     .then((response) => {})
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // };
 
-  if (loading) {
+  if (postloading) {
     return <LoadingScreen text={"投稿中"} />;
+  }
+
+  if (complete) {
+    return (
+      <Dialog open={complete}>
+        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {result.message}
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (
@@ -113,7 +133,10 @@ export const ReviewForm = () => {
         </form>
         <Box>
           <Button variant="contained">キャンセル</Button>
-          <Button onClick={handleClick} variant="contained">
+          <Button
+            onClick={() => postReview(reviews_id, user_id, book_id, text, rate)}
+            variant="contained"
+          >
             投稿
           </Button>
         </Box>

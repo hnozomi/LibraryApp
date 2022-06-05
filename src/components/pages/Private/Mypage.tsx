@@ -29,7 +29,6 @@ export const Mypage = () => {
   const [reservationsBook, setReservationsBook] =
     useState<BookReservationType[]>();
   const [borrowedBook, setBorrowedBook] = useState<BookReservationType[]>();
-  // const [loading, setLoading] = useState(false);
 
   const { pageTransition } = usePageTransition();
   const { getReservationRecord, loading } = useGetData();

@@ -1,31 +1,29 @@
 import { FC, memo, useState } from "react";
-import axios from "axios";
 import Quagga from "@ericblade/quagga2";
 import {
   Box,
   Button,
-  Typography,
-  Dialog,
   Card,
   CardContent,
   CardMedia,
   CardActionArea,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
 } from "@mui/material";
 
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-
-import UUID from "uuidjs";
 
 import "./book.css";
 
-import { usePageTransition } from "../../../../hooks/usePageTransition";
-import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
-import { usePostData } from "../../../../hooks/usePostData";
+import { BoxLayout } from "../../../layout/BoxLayout";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
+import { usePostData } from "../../../../hooks/usePostData";
 import { useGetData } from "../../../../hooks/usegetData";
 
 type Book = {
@@ -37,8 +35,8 @@ type Book = {
 
 export const BookRegister: FC = memo(() => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [status, setStatus] = useState(false);
-  const [barcode, setBarcode] = useState("");
   const [startStatus, setStartStatus] = useState(false);
   const [stopStatus, setStopStatus] = useState(true);
   const [books, setbooks] = useState<Book>({
@@ -48,60 +46,8 @@ export const BookRegister: FC = memo(() => {
     image_url: "",
   });
   const [category, setCategory] = useState("");
-  const { pageTransition } = usePageTransition();
-  const { insertBooks, postloading, result, complete } = usePostData();
+  const { insertBooks, postloading, complete, result } = usePostData();
   const { searchBooks } = useGetData();
-
-  // const searchBooks = async (isbn: string) => {
-  //   const param = {
-  //     isbn: isbn,
-  //   };
-
-  //   await axios
-  //     .get(
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/search_books",
-  //       { params: param }
-  //     )
-  //     .then((res) => {
-  //       setbooks({
-  //         ...books,
-  //         title: res.data[0],
-  //         author: res.data[1],
-  //         category: res.data[2],
-  //         image_url: res.data[4],
-  //       });
-  //       setOpen(true);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // const insertBooksTable = async () => {
-  //   const ID = UUID.generate();
-  //   await axios
-  //     .post(
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_books",
-  //       {
-  //         book_id: ID,
-  //         title: books.title,
-  //         author: books.author,
-  //         category: category,
-  //         image_url: books.url,
-  //       },
-  //       options
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       setStatus(true);
-  //       setOpen(false);
-  //     });
-  // };
 
   Quagga.onDetected((result) => {
     if (result !== undefined) {
@@ -112,19 +58,24 @@ export const BookRegister: FC = memo(() => {
           setStatus(true);
           searchBooks(result.codeResult.code).then((res) => {
             if (res.bookInfomation !== undefined) {
-              setbooks(res.bookInfomation);
+              setbooks({
+                ...books,
+                title: res.bookInfomation[0],
+                author: res.bookInfomation[1],
+                category: res.bookInfomation[2],
+                image_url: res.bookInfomation[4],
+              });
             }
           });
 
           setOpen(true);
-
-          // setBarcode(result.codeResult.code);
         }
       }
     }
   });
 
   const onStart = () => {
+    console.log(Quagga);
     Quagga.init(
       {
         inputStream: {
@@ -138,12 +89,15 @@ export const BookRegister: FC = memo(() => {
       },
       function (err: any) {
         if (err) {
+          console.log("Quagga終了 ");
           console.log(err);
           return;
         }
+        console.log("Quaggaスタート ");
         Quagga.start();
       }
     );
+    console.log("実行されています");
     setStartStatus(true);
     setStopStatus(false);
   };
@@ -160,6 +114,15 @@ export const BookRegister: FC = memo(() => {
 
   const handleChange = (data: string) => {
     setCategory(data);
+  };
+
+  const handleClick = () => {
+    if (category) {
+      insertBooks(books, category);
+      setOpen(false);
+      setStartStatus(false);
+      setStopStatus(true);
+    }
   };
 
   if (postloading) {
@@ -199,6 +162,7 @@ export const BookRegister: FC = memo(() => {
                 {books.category.length !== 0 &&
                   books.category.map((data) => (
                     <FormControlLabel
+                      key={data}
                       value={data}
                       control={<Radio />}
                       label={data}
@@ -206,11 +170,16 @@ export const BookRegister: FC = memo(() => {
                     />
                   ))}
               </RadioGroup>
-              <CardContent>
+              <CardContent sx={{ p: 0 }}>
+                {category.length === 0 && (
+                  <Typography sx={{ color: "red", fontSize: "10px" }}>
+                    カテゴリを選択してください
+                  </Typography>
+                )}
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ fontSize: "10px" }}
+                  sx={{ fontSize: "14px" }}
                 >
                   {"↑上記の登録を行います"}
                 </Typography>
@@ -228,16 +197,23 @@ export const BookRegister: FC = memo(() => {
           >
             キャンセル
           </Button>
-          <Button
-            onClick={() => {
-              insertBooks(books, category);
-              setOpen(false);
-            }}
-            variant="outlined"
-          >
+          <Button onClick={() => handleClick()} variant="outlined">
             登録
           </Button>
         </Box>
+      </Dialog>
+    );
+  }
+
+  if (complete) {
+    return (
+      <Dialog open={complete}>
+        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {result.message}
+          </DialogContentText>
+        </DialogContent>
       </Dialog>
     );
   }
@@ -252,13 +228,8 @@ export const BookRegister: FC = memo(() => {
         <Button disabled={stopStatus} onClick={onStop}>
           STOP
         </Button>
-        {status ? (
-          <Box sx={{ width: "100%", height: "300px" }}>
-            <Typography>登録が完了しました</Typography>
-          </Box>
-        ) : (
-          <div id="preview"></div>
-        )}
+        {/* {!status && <div id="preview"></div>} */}
+        <div id="preview"></div>
       </BoxLayout>
     </>
   );
