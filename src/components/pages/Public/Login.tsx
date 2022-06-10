@@ -46,6 +46,7 @@ const MyButton = styled("button")({
 });
 
 export const Login = () => {
+  console.log("lofinが実行されました");
   const { login } = useAuth();
 
   const { authForm, open, handleClose } = useAuthForm();

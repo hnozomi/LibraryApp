@@ -7,7 +7,11 @@ import {
   signOut,
 } from "firebase/auth";
 
+import { usePageTransition } from "../../src/hooks/usePageTransition";
+
 export const useAuth = () => {
+  const { pageTransition } = usePageTransition();
+
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -83,8 +87,13 @@ export const useAuth = () => {
   };
 
   const signout = async () => {
-    await signOut(auth);
+    await signOut(auth).then(() => {
+      pageTransition("/login");
+    });
   };
 
   return { login, signup, signout };
 };
+
+// ログインした後、homeに移動するがまだユーザー情報が取得できていなくて、Routingによりトップページに戻される
+// しかし、数秒後ユーザーの情報が取得できてルーティングする

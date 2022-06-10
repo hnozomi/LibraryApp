@@ -1,9 +1,16 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import axios from "axios";
 
 import { BookType } from "../types/types";
 import { useGetData } from "../hooks/usegetData";
+import AuthContext from "./LoginUserProvider";
 
 export type BookContextType = {
   books: BookType[] | undefined;
@@ -29,6 +36,10 @@ export const BookProvider = ({ children }: Props) => {
   const [books, setBooks] = useState<BookType[]>();
   const [loading, setLoading] = useState(false);
 
+  const {
+    userinfo: { user_id },
+  } = useContext(AuthContext);
+
   useEffect(() => {
     console.log("BookProviderのuseEffect実行");
     const getBooksTable = async () => {
@@ -36,7 +47,7 @@ export const BookProvider = ({ children }: Props) => {
     };
 
     getBooksTable();
-  }, []);
+  }, [user_id]);
 
   const getBooksByBookId = async () => {
     setLoading(true);

@@ -109,7 +109,7 @@ export const Review: FC<Props> = (props) => {
           </Tabs>
           <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
             <Typography>オススメ度</Typography>
-            {user_id === reviews[value].review_user_id && (
+            {user_id === reviews[value].user_id && (
               <Box sx={{ marginLeft: "auto" }}>
                 <Button onClick={() => setOpen(true)}>削除する</Button>
                 <Button

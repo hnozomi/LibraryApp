@@ -51,6 +51,8 @@ export const Signup = () => {
   const { authForm, open, handleClose } = useAuthForm();
   const { pageTransition } = usePageTransition();
 
+  console.log("Signupが実行されました");
+
   return (
     <ThemeProvider theme={theme}>
       <Header />

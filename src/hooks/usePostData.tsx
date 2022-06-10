@@ -1,8 +1,15 @@
 import UUID from "uuidjs";
 import axios from "axios";
 import { useState } from "react";
-import { BookReservationType, BookType, NewBookType } from "../types/types";
-import { FormatColorReset } from "@mui/icons-material";
+import {
+  BookType,
+  DeleteReservationType,
+  NewBookType,
+  ReservationDate,
+  Result,
+} from "../types/types";
+import { useCallback } from "react";
+import { memo } from "react";
 
 export const usePostData = () => {
   const [postloading, setPostLoading] = useState(false);
@@ -14,7 +21,7 @@ export const usePostData = () => {
     headers: { "Content-Type": "text/plain" },
   };
 
-  const deleteReservation = async (book: BookReservationType) => {
+  const returnBook = async (book: DeleteReservationType) => {
     setPostLoading(true);
     const ID = UUID.generate();
     await axios
@@ -172,18 +179,96 @@ export const usePostData = () => {
       })
       .finally(() => {
         setPostLoading(false);
+        setComplete(true);
         setTimeout(() => {
           setComplete(false);
         }, 3000);
       });
   };
 
+  const insertReservation = async (
+    user_id: string,
+    book_id: string,
+    date: ReservationDate
+  ) => {
+    setPostLoading(true);
+
+    const ID = UUID.generate();
+
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_bookReservation",
+        {
+          reservation_id: ID,
+          user_id: user_id,
+          book_id: book_id,
+          start_day: date.start,
+          end_day: date.end,
+        },
+        options
+      )
+      .then((result) => {
+        setResult({
+          ...result,
+          message: result.data.message,
+          status: result.data.status,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setPostLoading(false);
+        setComplete(true);
+        setTimeout(() => {
+          setComplete(false);
+        }, 3000);
+        // setOpen(false);
+      });
+  };
+
+  const EditUserName = useCallback(
+    async (user_id: string, username: string) => {
+      setPostLoading(true);
+
+      await axios
+        .post(
+          "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_username",
+          {
+            user_id: user_id,
+            username: username,
+          },
+          options
+        )
+        .then((result) => {
+          setResult({
+            ...result,
+            message: result.data.message,
+            status: result.data.status,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setPostLoading(false);
+          setComplete(true);
+          setTimeout(() => {
+            setComplete(false);
+          }, 3000);
+        });
+    },
+    []
+  );
+
   return {
-    deleteReservation,
+    returnBook,
     changeRole,
     deleteBook,
     insertBooks,
     postReview,
+    insertReservation,
+    EditUserName,
     postloading,
     open,
     result,

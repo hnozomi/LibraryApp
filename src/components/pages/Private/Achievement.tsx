@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Button, Container, Grid } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 import { BookCard } from "../../organisms/BookCard";
 import AuthContext from "../../../provider/LoginUserProvider";
@@ -36,11 +36,16 @@ export const Achievement = () => {
     <>
       <Container>
         <Box>
-          <Grid container spacing={1} sx={{ marginTop: "1em" }}>
+          <Typography
+            sx={{ py: "1em" }}
+          >{`読んだ冊数：${books?.length}`}</Typography>
+          <Grid container spacing={1}>
             {books?.map((book) => (
-              <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
+              <Grid key={book.book_id} item xs={4} sx={{ textAlign: "center" }}>
                 <BookCard book={book} displayContext={false} />
                 <Button
+                  variant="outlined"
+                  sx={{ width: "100%" }}
                   onClick={() =>
                     pageTransition("/home/mypage/reviewform", book)
                   }

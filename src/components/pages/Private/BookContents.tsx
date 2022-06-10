@@ -38,7 +38,7 @@ export const BookContents: FC = () => {
   } = useContext(AuthContext);
 
   const location = useLocation();
-  const { book_id, title, author, category, image_url, review } =
+  const { book_id, title, author, category, image_url, review, reservations } =
     location.state as BookType;
 
   const [status, setStatus] = useState("評価");
@@ -58,21 +58,19 @@ export const BookContents: FC = () => {
             alt="本の表紙"
           />
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              <Typography component="div" variant="h6">
-                {title}
-              </Typography>
+            <CardContent sx={{ flex: "1 0 auto", fontSize: "8px" }}>
+              <Typography component="p">{title}</Typography>
               <Typography
                 variant="subtitle1"
                 color="text.secondary"
-                component="div"
+                component="p"
               >
                 {author}
               </Typography>
               <Typography
                 variant="subtitle2"
                 color="text.secondary"
-                component="div"
+                component="p"
               >
                 {category}
               </Typography>
@@ -100,7 +98,11 @@ export const BookContents: FC = () => {
           {status === "評価" ? (
             <Review reviews={review} user_id={user_id} />
           ) : (
-            <ReservationCulensder book_id={book_id} user_id={user_id} />
+            <ReservationCulensder
+              book_id={book_id}
+              user_id={user_id}
+              reservations={reservations}
+            />
           )}
         </Box>
       </Container>

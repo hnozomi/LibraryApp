@@ -19,6 +19,7 @@ export const PrivateRoutes: FC<Props> = memo((props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(user_id);
     user_id === "" && navigate("/");
   }, [user_id]);
 

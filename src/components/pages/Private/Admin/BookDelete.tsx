@@ -20,6 +20,8 @@ import { LoadingScreen } from "../../../organisms/LoadingScreen";
 import { memo } from "react";
 import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 import { usePostData } from "../../../../hooks/usePostData";
+import { ResultDialog } from "../../../organisms/ResultDialog";
+import { resourceLimits } from "worker_threads";
 
 export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
@@ -33,6 +35,7 @@ export const BookDelete: FC = memo(() => {
     category: "",
     image_url: "",
     review: [],
+    reservations: [],
   });
   const [open, setOpen] = useState(false);
   const { deleteBook, postloading, result, complete } = usePostData();
@@ -73,9 +76,7 @@ export const BookDelete: FC = memo(() => {
             <BookCard book={selectedBook} displayContext={false} />
           </DialogContent>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              上記の本を削除しますか
-            </DialogContentText>
+            <DialogContentText>上記の本を削除しますか</DialogContentText>
           </DialogContent>
         </Box>
         <Box
@@ -104,14 +105,15 @@ export const BookDelete: FC = memo(() => {
 
   if (complete) {
     return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <ResultDialog result={result}></ResultDialog>
+      // <Dialog open={complete}>
+      //   <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
+      //   <DialogContent>
+      //     <DialogContentText id="alert-dialog-description">
+      //       {result.message}
+      //     </DialogContentText>
+      //   </DialogContent>
+      // </Dialog>
     );
   }
 

@@ -75,7 +75,6 @@ export const Home = () => {
       <BoxLayout>
         <Grid container spacing={1} sx={{ mt: 1 }}>
           {displayBooks?.map((book) => (
-            // <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
             <Grid key={book.book_id} item xs={4}>
               <BookCard book={book} displayContext={true} />
             </Grid>

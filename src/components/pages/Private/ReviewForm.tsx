@@ -1,9 +1,7 @@
 import { useContext, useState } from "react";
 import {
-  Backdrop,
   Box,
   Button,
-  CircularProgress,
   Container,
   Dialog,
   DialogContent,
@@ -13,13 +11,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import UUID from "uuidjs";
 import { useLocation } from "react-router-dom";
 
 import AuthContext from "../../../provider/LoginUserProvider";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
 import { usePostData } from "../../../hooks/usePostData";
+import { ButtonLayout, BoxLayout } from "../../layout/BoxLayout";
+import { usePageTransition } from "../../../hooks/usePageTransition";
 
 type Rare = number | null;
 
@@ -42,55 +40,16 @@ export const ReviewForm = () => {
   } = location.state as LocationState;
   const [rate, setRate] = useState<Rare>(pastRate);
   const [text, setText] = useState(pastText);
-  const [loading, setLoading] = useState(false);
   const {
     userinfo: { user_id },
   } = useContext(AuthContext);
+  const { pageTransition } = usePageTransition();
 
   const { postReview, postloading, complete, result } = usePostData();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
   };
-
-  // const options = {
-  //   headers: { "Content-Type": "text/plain" },
-  // };
-
-  // const handleClick = async () => {
-  //   setLoading(true);
-  //   const ID = UUID.generate();
-  //   let url = "";
-  //   let params = {};
-
-  //   if (reviews_id) {
-  //     url =
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_review";
-
-  //     params = {
-  //       review_id: reviews_id,
-  //       rate: rate,
-  //       text: text,
-  //     };
-  //   } else {
-  //     url =
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/insert_review";
-  //     params = {
-  //       review_id: ID,
-  //       book_id: book_id,
-  //       user_id: user_id,
-  //       rate: rate,
-  //       text: text,
-  //     };
-  //   }
-
-  //   await axios
-  //     .post(url, params, options)
-  //     .then((response) => {})
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
 
   if (postloading) {
     return <LoadingScreen text={"投稿中"} />;
@@ -111,7 +70,7 @@ export const ReviewForm = () => {
 
   return (
     <>
-      <Container sx={{ width: "94%" }}>
+      <BoxLayout>
         <form>
           <Typography>オススメ度</Typography>
           <Rating
@@ -131,16 +90,19 @@ export const ReviewForm = () => {
             onChange={handleChange}
           />
         </form>
-        <Box>
-          <Button variant="contained">キャンセル</Button>
+        <ButtonLayout>
+          <Button variant="contained" onClick={() => pageTransition("/home")}>
+            キャンセル
+          </Button>
           <Button
+            sx={{ marginLeft: "1em" }}
             onClick={() => postReview(reviews_id, user_id, book_id, text, rate)}
             variant="contained"
           >
             投稿
           </Button>
-        </Box>
-      </Container>
+        </ButtonLayout>
+      </BoxLayout>
     </>
   );
 };
