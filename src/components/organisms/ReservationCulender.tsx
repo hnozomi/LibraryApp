@@ -1,4 +1,5 @@
 import { FC, useCallback, useState } from "react";
+
 import {
   Box,
   Button,
@@ -6,17 +7,17 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
+import { usePostData } from "../../hooks/usePostData";
 import { ReservationDate, ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
 import { ButtonLayout } from "../layout/BoxLayout";
-import { usePostData } from "../../hooks/usePostData";
+import { ResultDialog } from "./ResultDialog";
 
 type Props = {
   book_id: string;
@@ -140,16 +141,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
   }
 
   if (complete) {
-    return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    );
+    return <ResultDialog result={result}></ResultDialog>;
   }
 
   return (

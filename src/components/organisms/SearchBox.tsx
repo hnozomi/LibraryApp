@@ -17,16 +17,33 @@ import { categories } from "../../const/Category";
 
 type Props = {
   onClick: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleClose: () => void;
   setValue: any;
+  setSelectedCategory: any;
 };
 
 export const SearchBox: FC<Props> = (props) => {
-  const { onClick, handleClose, setValue } = props;
+  const { onClick, onChange, handleClose, setValue, setSelectedCategory } =
+    props;
+
+  // const [selectedCategory, setSelectedCategory] = useState();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value as string);
   };
+
+  // const onhandleChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  //   category: any
+  // ) => {
+  //   const Array: Array<string> = ["人文・思想・社会", "科学・技術"];
+  //   let newArray = [event.target.value];
+  //   if (Array.includes(event.target.value)) {
+  //     newArray = Array.filter((value) => value === event.target.value);
+  //   }
+  //   setSelectedCategory(newArray);
+  // };
 
   return (
     <Modal open={true} onClose={handleClose}>
@@ -60,7 +77,9 @@ export const SearchBox: FC<Props> = (props) => {
           {categories.map((category) => (
             <Grid key={category} item xs={6}>
               <FormControlLabel
-                control={<Checkbox />}
+                control={
+                  <Checkbox value={category} onChange={(e) => onChange(e)} />
+                }
                 label={
                   <Typography sx={{ fontSize: "0.75rem" }}>
                     {category}

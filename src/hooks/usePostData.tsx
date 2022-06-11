@@ -261,6 +261,36 @@ export const usePostData = () => {
     []
   );
 
+  const deleteReview = useCallback(async (reviews_id: string) => {
+    setPostLoading(true);
+
+    await axios
+      .post(
+        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_review",
+        {
+          review_id: reviews_id,
+        },
+        options
+      )
+      .then((result) => {
+        setResult({
+          ...result,
+          message: result.data.message,
+          status: result.data.status,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setPostLoading(false);
+        setComplete(true);
+        setTimeout(() => {
+          setComplete(false);
+        }, 3000);
+      });
+  }, []);
+
   return {
     returnBook,
     changeRole,
@@ -269,6 +299,7 @@ export const usePostData = () => {
     postReview,
     insertReservation,
     EditUserName,
+    deleteReview,
     postloading,
     open,
     result,

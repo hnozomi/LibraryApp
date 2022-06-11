@@ -9,12 +9,12 @@ import {
 import axios from "axios";
 
 import { BookType } from "../types/types";
-import { useGetData } from "../hooks/usegetData";
 import AuthContext from "./LoginUserProvider";
 
 export type BookContextType = {
   books: BookType[] | undefined;
   loading: boolean;
+  deleteStateBooks: (book_id: string) => void;
 };
 
 export const BookContext = createContext<BookContextType>(
@@ -67,11 +67,19 @@ export const BookProvider = ({ children }: Props) => {
       });
   };
 
+  const deleteStateBooks = (book_id: string) => {
+    const newBooks = books?.filter((book) => {
+      return book.book_id !== book_id;
+    });
+    setBooks(newBooks);
+  };
+
   return (
     <BookContext.Provider
       value={{
         books,
         loading,
+        deleteStateBooks,
       }}
     >
       {children}

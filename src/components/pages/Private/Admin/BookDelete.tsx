@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 
 import BookContext from "../../../../provider/BookInformationProvider";
@@ -21,11 +20,10 @@ import { memo } from "react";
 import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
 import { usePostData } from "../../../../hooks/usePostData";
 import { ResultDialog } from "../../../organisms/ResultDialog";
-import { resourceLimits } from "worker_threads";
 
 export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
-  const { books } = useContext(BookContext);
+  const { books, deleteStateBooks } = useContext(BookContext);
   const [bookName, setBookName] = useState<string>();
   const [BookNameByfilter, setBookNameByfilter] = useState<BookType[]>([]);
   const [selectedBook, setSelectedbook] = useState<BookType>({
@@ -93,6 +91,9 @@ export const BookDelete: FC = memo(() => {
             onClick={() => {
               setOpen(false);
               deleteBook(selectedBook);
+              deleteStateBooks(selectedBook.book_id);
+              setBookName("");
+              setBookNameByfilter([]);
             }}
             variant="outlined"
           >
@@ -104,17 +105,7 @@ export const BookDelete: FC = memo(() => {
   }
 
   if (complete) {
-    return (
-      <ResultDialog result={result}></ResultDialog>
-      // <Dialog open={complete}>
-      //   <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-      //   <DialogContent>
-      //     <DialogContentText id="alert-dialog-description">
-      //       {result.message}
-      //     </DialogContentText>
-      //   </DialogContent>
-      // </Dialog>
-    );
+    return <ResultDialog result={result}></ResultDialog>;
   }
 
   return (
@@ -135,13 +126,19 @@ export const BookDelete: FC = memo(() => {
           </Button>
         </ButtonLayout>
         <Box>
-          <Typography>検索結果</Typography>
+          <Typography>{`検索結果 ${BookNameByfilter.length}冊ヒットしました`}</Typography>
           <Divider />
           <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {BookNameByfilter.map((book) => (
-              <Grid key={book.book_id} item xs={4} sx={{ height: "500px" }}>
+              <Grid key={book.book_id} item xs={4}>
                 <BookCard book={book} displayContext={false} />
-                <Button onClick={() => handleOpen(book)}>削除する</Button>
+                <Button
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  onClick={() => handleOpen(book)}
+                >
+                  削除する
+                </Button>
               </Grid>
             ))}
           </Grid>

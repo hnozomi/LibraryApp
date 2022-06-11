@@ -8,8 +8,6 @@ import { FC } from "react";
 import { Result } from "../../types/types";
 
 type Props = {
-  //   status: string;
-  //   message: string;
   result: Result;
 };
 

@@ -15,6 +15,7 @@ export const Home = () => {
   const [displayBooks, setDisplayBooks] = useState(books);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Array<string>>([]);
 
   useEffect(() => {
     setDisplayBooks(books);
@@ -33,8 +34,30 @@ export const Home = () => {
     });
 
     setDisplayBooks(filterBooks);
+
+    let filterByCategory;
+    if (selectedCategory.length !== 0) {
+      filterByCategory = filterBooks?.filter((book) => {
+        return selectedCategory.some((category) => category === book.category);
+      });
+      setDisplayBooks(filterByCategory);
+    }
+
+    setSelectedCategory([]);
     setOpen(false);
     setValue("");
+  };
+
+  const searchBooksByCategory = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let newArray = [...selectedCategory, event.target.value];
+    if (selectedCategory.includes(event.target.value)) {
+      newArray = selectedCategory.filter(
+        (value) => value !== event.target.value
+      );
+    }
+    setSelectedCategory(newArray);
   };
 
   if (loading) {
@@ -47,6 +70,8 @@ export const Home = () => {
         onClick={searchBooks}
         handleClose={handleClose}
         setValue={setValue}
+        onChange={searchBooksByCategory}
+        setSelectedCategory={setSelectedCategory}
       ></SearchBox>
     );
   }

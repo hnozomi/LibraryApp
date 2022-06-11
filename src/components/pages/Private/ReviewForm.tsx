@@ -1,16 +1,5 @@
 import { useContext, useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Rating,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Rating, TextField, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import AuthContext from "../../../provider/LoginUserProvider";
@@ -18,6 +7,7 @@ import { LoadingScreen } from "../../organisms/LoadingScreen";
 import { usePostData } from "../../../hooks/usePostData";
 import { ButtonLayout, BoxLayout } from "../../layout/BoxLayout";
 import { usePageTransition } from "../../../hooks/usePageTransition";
+import { ResultDialog } from "../../organisms/ResultDialog";
 
 type Rare = number | null;
 
@@ -56,16 +46,7 @@ export const ReviewForm = () => {
   }
 
   if (complete) {
-    return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    );
+    return <ResultDialog result={result}></ResultDialog>;
   }
 
   return (

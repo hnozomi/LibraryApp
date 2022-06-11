@@ -14,6 +14,10 @@ import {
 import axios from "axios";
 
 import { usePageTransition } from "../../hooks/usePageTransition";
+import { usePostData } from "../../hooks/usePostData";
+import { ResultDialog } from "./ResultDialog";
+import { LoadingScreen } from "./LoadingScreen";
+import { getValue } from "@testing-library/user-event/dist/utils";
 
 type Props = {
   reviews: any;
@@ -27,49 +31,53 @@ export const Review: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
 
   const { pageTransition } = usePageTransition();
+  const { deleteReview, postloading, result, complete } = usePostData();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const handleClick = async () => {
-    const url =
-      "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_review";
-
-    const params = {
-      review_id: reviews.reviews_id,
-    };
-
-    const options = {
-      headers: { "Content-Type": "text/plain" },
-    };
-
-    await axios
-      .post(url, params, options)
-      .then((response) => {})
-      .finally(() => {});
+  const handleClick = () => {
+    console.log(value);
+    setOpen(true);
   };
+
+  // const handleClick = async () => {
+  //   const url =
+  //     "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_review";
+
+  //   const params = {
+  //     review_id: reviews.reviews_id,
+  //   };
+
+  //   const options = {
+  //     headers: { "Content-Type": "text/plain" },
+  //   };
+
+  //   await axios
+  //     .post(url, params, options)
+  //     .then((response) => {})
+  //     .finally(() => {});
+  // };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log(reviews);
 
   if (open) {
     return (
       <Dialog open={open} onClose={handleClose}>
         <Box>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <Rating name="half-rating" value={reviews.rate} />
+            <DialogContentText>
+              <Rating name="half-rating" value={reviews[value].rate} />
             </DialogContentText>
-            <DialogContentText id="alert-dialog-description">
-              {reviews.text}
-            </DialogContentText>
+            <DialogContentText>{reviews[value].text}</DialogContentText>
           </DialogContent>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              上記のメモを削除します
-            </DialogContentText>
+            <DialogContentText>上記のメモを削除します</DialogContentText>
           </DialogContent>
         </Box>
         <Box
@@ -82,12 +90,22 @@ export const Review: FC<Props> = (props) => {
           >
             キャンセル
           </Button>
-          <Button onClick={handleClick} variant="outlined">
+          <Button
+            onClick={() => deleteReview(reviews[value].review_id)}
+            variant="outlined"
+          >
             削除
           </Button>
         </Box>
       </Dialog>
     );
+  }
+  if (postloading) {
+    return <LoadingScreen text={"削除中"} />;
+  }
+
+  if (complete) {
+    return <ResultDialog result={result}></ResultDialog>;
   }
 
   return (
