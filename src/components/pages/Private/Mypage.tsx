@@ -144,6 +144,7 @@ export const Mypage = memo(() => {
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <TextField
                   value={value}
+                  label="新たな名前"
                   onChange={(e) => setValue(e.target.value)}
                   sx={{ p: "1px" }}
                 />

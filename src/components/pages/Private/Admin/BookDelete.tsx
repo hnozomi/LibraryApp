@@ -4,7 +4,6 @@ import {
   Box,
   Button as MUIButton,
   Divider,
-  Grid,
   TextField,
   Typography,
   Dialog,
@@ -136,20 +135,6 @@ export const BookDelete: FC = memo(() => {
             <BookCard displayContext={false} />
             <Button text="削除する" onClick={handleOpen}></Button>
           </GridLayout>
-          {/* <Grid container spacing={1} sx={{ marginTop: "1em" }}>
-            {BookNameByfilter.map((book) => (
-              <Grid key={book.book_id} item xs={4}>
-                <BookCard book={book} displayContext={false} />
-                <Button
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  onClick={() => handleOpen(book)}
-                >
-                  削除する
-                </Button>
-              </Grid>
-            ))}
-          </Grid> */}
         </Box>
       </BoxLayout>
     </>

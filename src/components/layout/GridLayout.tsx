@@ -42,7 +42,12 @@ export const GridLayout: FC<Props> = (props) => {
   return (
     <Grid container spacing={1} sx={{ mt: 1 }}>
       {GridItems?.map((item) => (
-        <Grid key={item.book_id} item xs={4}>
+        <Grid
+          key={item.book_id}
+          item
+          xs={4}
+          sx={{ mb: Array.isArray(children) ? "3em" : "0em" }}
+        >
           {/* childrenが2つの場合、配列に含まれる */}
           {Array.isArray(children) ? (
             <AddStatexx book={item}></AddStatexx>

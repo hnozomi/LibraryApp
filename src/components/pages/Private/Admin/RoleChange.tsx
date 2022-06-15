@@ -1,5 +1,4 @@
 import { FC, memo, useState } from "react";
-import axios from "axios";
 
 import {
   Box,
@@ -9,10 +8,6 @@ import {
   Select,
   MenuItem,
   Button,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 
 import { usePageTransition } from "../../../../hooks/usePageTransition";
@@ -20,6 +15,7 @@ import { usePostData } from "../../../../hooks/usePostData";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
+import { ResultDialog } from "../../../organisms/ResultDialog";
 
 export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");
@@ -48,6 +44,10 @@ export const RoleChange: FC = memo(() => {
     return <LoadingScreen text={"変更中"}></LoadingScreen>;
   }
 
+  if (complete) {
+    return <ResultDialog result={result}></ResultDialog>;
+  }
+
   return (
     <>
       <BoxLayout>
@@ -57,7 +57,6 @@ export const RoleChange: FC = memo(() => {
           </Typography>
           <TextField
             sx={{ width: "100%", marginTop: "0.5em" }}
-            id="outlined-basic"
             label="Outlined"
             variant="outlined"
             value={mail}

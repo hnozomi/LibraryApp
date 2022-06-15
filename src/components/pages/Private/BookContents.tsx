@@ -11,6 +11,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/system";
 
 import { ReservationCulensder } from "../../organisms/ReservationCulender";
 import { Review } from "../../organisms/Review";
@@ -53,12 +54,12 @@ export const BookContents: FC = () => {
         <Card sx={{ display: "flex" }}>
           <CardMedia
             component="img"
-            sx={{ width: 151, objectFit: "fill" }}
+            sx={{ objectFit: "fill" }}
             src={image_url}
             alt="本の表紙"
           />
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto", fontSize: "8px" }}>
+          <Box>
+            <CardContent sx={{ fontSize: "8px" }}>
               <Typography component="p">{title}</Typography>
               <Typography
                 variant="subtitle1"
@@ -77,34 +78,32 @@ export const BookContents: FC = () => {
             </CardContent>
           </Box>
         </Card>
-        <Box>
-          <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
-            <Typography variant="h5" sx={{ marginRight: "auto" }}>
-              {status}
-            </Typography>
-            <Box sx={{ textAlign: "right" }}>
-              <SwitchButton
-                active={status}
-                name="評価"
-                onClick={() => changeStatus("評価")}
-              />
-              <SwitchButton
-                active={status}
-                name="予約"
-                onClick={() => changeStatus("予約")}
-              />
-            </Box>
-          </Box>
-          {status === "評価" ? (
-            <Review reviews={review} user_id={user_id} />
-          ) : (
-            <ReservationCulensder
-              book_id={book_id}
-              user_id={user_id}
-              reservations={reservations}
+        <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
+          <Typography variant="h5" sx={{ marginRight: "auto" }}>
+            {status}
+          </Typography>
+          <Box sx={{ textAlign: "right" }}>
+            <SwitchButton
+              active={status}
+              name="評価"
+              onClick={() => changeStatus("評価")}
             />
-          )}
+            <SwitchButton
+              active={status}
+              name="予約"
+              onClick={() => changeStatus("予約")}
+            />
+          </Box>
         </Box>
+        {status === "評価" ? (
+          <Review reviews={review} user_id={user_id} />
+        ) : (
+          <ReservationCulensder
+            book_id={book_id}
+            user_id={user_id}
+            reservations={reservations}
+          />
+        )}
       </Container>
     </>
   );

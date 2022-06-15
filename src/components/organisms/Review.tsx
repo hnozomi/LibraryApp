@@ -25,8 +25,6 @@ type Props = {
 export const Review: FC<Props> = (props) => {
   const { reviews, user_id } = props;
 
-  console.log(reviews, user_id);
-
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
 

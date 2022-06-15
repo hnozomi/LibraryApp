@@ -19,6 +19,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 
+import { styled } from "@mui/system";
+
 import "./book.css";
 
 import { BoxLayout } from "../../../layout/BoxLayout";
@@ -89,15 +91,12 @@ export const BookRegister: FC = memo(() => {
       },
       function (err: any) {
         if (err) {
-          console.log("Quagga終了 ");
           console.log(err);
           return;
         }
-        console.log("Quaggaスタート ");
         Quagga.start();
       }
     );
-    console.log("実行されています");
     setStartStatus(true);
     setStopStatus(false);
   };
@@ -218,6 +217,29 @@ export const BookRegister: FC = memo(() => {
     );
   }
 
+  // const CustomButton = styled("div")({
+  //   width: "100%",
+  //   height: "300px"
+  //   > video {
+  //     width: "100%",
+  //     height: "100%"
+  //   }
+  // }
+  // );
+
+  const PreviewBox = styled("div")(`
+  width: "100%",
+  height: "300px"
+  > video {
+    width: "100%",
+    height: "100%"
+  }
+
+  > canvas {
+    display: none
+  }
+  `);
+
   return (
     <>
       <BoxLayout>
@@ -230,6 +252,7 @@ export const BookRegister: FC = memo(() => {
         </Button>
         {/* {!status && <div id="preview"></div>} */}
         <div id="preview"></div>
+        {/* <PreviewBox id="preview"></PreviewBox> */}
       </BoxLayout>
     </>
   );

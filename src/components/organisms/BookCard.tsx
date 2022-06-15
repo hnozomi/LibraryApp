@@ -24,7 +24,6 @@ type State = {
 export const BookCard: FC<Props> = (props) => {
   const { book, displayContext, state } = props;
 
-  console.log(book, state);
   const { pageTransition } = usePageTransition();
 
   const handleClick = () => {
