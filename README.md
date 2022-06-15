@@ -30,10 +30,10 @@ hookの順序
 useEffectはロジックが入るので、最後
 
 分割方法
-pages: 
-Layout: 
-Organismis:
-Parts: 
+pages: 他の要素の組み合わせ。ロジックの読み込み
+Layout: CSSをあてる
+Organismis: Partsを組み合わせた要素
+Parts: 最小の要素
 
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

@@ -12,18 +12,25 @@ import { BookReservationType, BookType } from "../../types/types";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
 type Props = {
-  book: BookType | BookReservationType;
+  book?: BookType | BookReservationType;
   displayContext: boolean;
+  state?: State;
+};
+
+type State = {
+  book: BookType | BookReservationType;
 };
 
 export const BookCard: FC<Props> = (props) => {
-  const { book, displayContext } = props;
+  const { book, displayContext, state } = props;
 
+  console.log(book, state);
   const { pageTransition } = usePageTransition();
 
   const handleClick = () => {
+    console.log(book);
     if (displayContext) {
-      pageTransition("/home/bookcontext", book);
+      pageTransition("/home/bookcontext", state?.book);
     }
   };
 
@@ -32,13 +39,13 @@ export const BookCard: FC<Props> = (props) => {
       <CardActionArea onClick={handleClick}>
         <CardMedia
           component="img"
-          src={book.image_url}
+          src={book ? book?.image_url : state?.book?.image_url}
           alt="書籍の情報"
           sx={{ objectFit: "fill" }}
         />
         <CardContent sx={{ p: 1 }}>
           <Typography gutterBottom component="p" sx={{ fontSize: "8px" }}>
-            {book.title}
+            {book ? book?.title : state?.book?.title}
           </Typography>
         </CardContent>
       </CardActionArea>

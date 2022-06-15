@@ -11,13 +11,11 @@ import {
   DialogContent,
   DialogContentText,
 } from "@mui/material";
-import axios from "axios";
 
 import { usePageTransition } from "../../hooks/usePageTransition";
 import { usePostData } from "../../hooks/usePostData";
 import { ResultDialog } from "./ResultDialog";
 import { LoadingScreen } from "./LoadingScreen";
-import { getValue } from "@testing-library/user-event/dist/utils";
 
 type Props = {
   reviews: any;
@@ -26,6 +24,8 @@ type Props = {
 
 export const Review: FC<Props> = (props) => {
   const { reviews, user_id } = props;
+
+  console.log(reviews, user_id);
 
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -37,34 +37,9 @@ export const Review: FC<Props> = (props) => {
     setValue(newValue);
   };
 
-  const handleClick = () => {
-    console.log(value);
-    setOpen(true);
-  };
-
-  // const handleClick = async () => {
-  //   const url =
-  //     "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_review";
-
-  //   const params = {
-  //     review_id: reviews.reviews_id,
-  //   };
-
-  //   const options = {
-  //     headers: { "Content-Type": "text/plain" },
-  //   };
-
-  //   await axios
-  //     .post(url, params, options)
-  //     .then((response) => {})
-  //     .finally(() => {});
-  // };
-
   const handleClose = () => {
     setOpen(false);
   };
-
-  console.log(reviews);
 
   if (open) {
     return (

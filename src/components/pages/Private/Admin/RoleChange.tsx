@@ -18,7 +18,8 @@ import {
 import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { usePostData } from "../../../../hooks/usePostData";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
-import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
+import { BoxLayout } from "../../../layout/BoxLayout";
+import { ButtonLayout } from "../../../layout/ButtonLayout";
 
 export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");

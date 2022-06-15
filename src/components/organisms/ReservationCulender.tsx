@@ -16,7 +16,7 @@ import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { usePostData } from "../../hooks/usePostData";
 import { ReservationDate, ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
-import { ButtonLayout } from "../layout/BoxLayout";
+import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";
 
 type Props = {

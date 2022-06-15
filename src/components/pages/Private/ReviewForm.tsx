@@ -5,7 +5,8 @@ import { useLocation } from "react-router-dom";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
 import { usePostData } from "../../../hooks/usePostData";
-import { ButtonLayout, BoxLayout } from "../../layout/BoxLayout";
+import { BoxLayout } from "../../layout/BoxLayout";
+import { ButtonLayout } from "../../layout/ButtonLayout";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ResultDialog } from "../../organisms/ResultDialog";
 
@@ -22,6 +23,7 @@ type LocationState = {
 export const ReviewForm = () => {
   console.log("ReviewForm実行");
   const location = useLocation();
+  console.log(location.state);
   const {
     book_id,
     reviews_id,

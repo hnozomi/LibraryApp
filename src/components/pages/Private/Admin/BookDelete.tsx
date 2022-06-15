@@ -2,7 +2,7 @@ import { FC, useState, useContext } from "react";
 
 import {
   Box,
-  Button,
+  Button as MUIButton,
   Divider,
   Grid,
   TextField,
@@ -17,9 +17,12 @@ import { BookType } from "../../../../types/types";
 import { BookCard } from "../../../organisms/BookCard";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
 import { memo } from "react";
-import { BoxLayout, ButtonLayout } from "../../../layout/BoxLayout";
+import { BoxLayout } from "../../../layout/BoxLayout";
+import { ButtonLayout } from "../../../layout/ButtonLayout";
 import { usePostData } from "../../../../hooks/usePostData";
 import { ResultDialog } from "../../../organisms/ResultDialog";
+import { GridLayout } from "../../../layout/GridLayout";
+import { Button } from "../../../parts/Button";
 
 export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
@@ -60,6 +63,7 @@ export const BookDelete: FC = memo(() => {
   const handleOpen = (book: BookType) => {
     setOpen(true);
     setSelectedbook(book);
+    console.log(book);
   };
 
   if (postloading) {
@@ -80,14 +84,14 @@ export const BookDelete: FC = memo(() => {
         <Box
           sx={{ display: "flex", justifyContent: "flex-end", padding: "0.6em" }}
         >
-          <Button
+          <MUIButton
             onClick={handleClose}
             variant="outlined"
             sx={{ marginRight: "0.4em" }}
           >
             キャンセル
-          </Button>
-          <Button
+          </MUIButton>
+          <MUIButton
             onClick={() => {
               setOpen(false);
               deleteBook(selectedBook);
@@ -98,7 +102,7 @@ export const BookDelete: FC = memo(() => {
             variant="outlined"
           >
             削除
-          </Button>
+          </MUIButton>
         </Box>
       </Dialog>
     );
@@ -121,14 +125,18 @@ export const BookDelete: FC = memo(() => {
           onChange={handleChange}
         />
         <ButtonLayout>
-          <Button variant="contained" onClick={handleClick}>
+          <MUIButton variant="contained" onClick={handleClick}>
             検索する
-          </Button>
+          </MUIButton>
         </ButtonLayout>
         <Box>
           <Typography>{`検索結果 ${BookNameByfilter.length}冊ヒットしました`}</Typography>
           <Divider />
-          <Grid container spacing={1} sx={{ marginTop: "1em" }}>
+          <GridLayout GridItems={BookNameByfilter}>
+            <BookCard displayContext={false} />
+            <Button text="削除する" onClick={handleOpen}></Button>
+          </GridLayout>
+          {/* <Grid container spacing={1} sx={{ marginTop: "1em" }}>
             {BookNameByfilter.map((book) => (
               <Grid key={book.book_id} item xs={4}>
                 <BookCard book={book} displayContext={false} />
@@ -141,7 +149,7 @@ export const BookDelete: FC = memo(() => {
                 </Button>
               </Grid>
             ))}
-          </Grid>
+          </Grid> */}
         </Box>
       </BoxLayout>
     </>

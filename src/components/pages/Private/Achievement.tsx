@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 
 import { BookCard } from "../../organisms/BookCard";
 import AuthContext from "../../../provider/LoginUserProvider";
@@ -7,6 +7,8 @@ import { usePageTransition } from "../../../hooks/usePageTransition";
 import { useGetData } from "../../../hooks/usegetData";
 import { BookType } from "../../../types/types";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
+import { GridLayout } from "../../layout/GridLayout";
+import { Button } from "../../parts/Button";
 
 export const Achievement = () => {
   const {
@@ -39,7 +41,15 @@ export const Achievement = () => {
           <Typography
             sx={{ py: "1em" }}
           >{`読んだ冊数：${books?.length}`}</Typography>
-          <Grid container spacing={1}>
+          <GridLayout GridItems={books}>
+            <BookCard displayContext={true} />
+            <Button
+              text="メモを書く"
+              route="/home/mypage/reviewform"
+              onClick={pageTransition}
+            ></Button>
+          </GridLayout>
+          {/* <Grid container spacing={1}>
             {books?.map((book) => (
               <Grid key={book.book_id} item xs={4} sx={{ textAlign: "center" }}>
                 <BookCard book={book} displayContext={false} />
@@ -54,7 +64,7 @@ export const Achievement = () => {
                 </Button>
               </Grid>
             ))}
-          </Grid>
+          </Grid> */}
         </Box>
       </Container>
     </>

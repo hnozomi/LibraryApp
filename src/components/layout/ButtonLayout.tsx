@@ -6,10 +6,10 @@ type Props = {
   children: ReactNode;
 };
 
-export const BoxLayout: FC<Props> = (props) => {
+export const ButtonLayout: FC<Props> = (props) => {
   const { children } = props;
   return (
-    <Box sx={{ width: "92%", margin: "0 auto", marginTop: "1em" }}>
+    <Box sx={{ textAlign: "right", marginTop: "1em", marginBottom: "1em" }}>
       {children}
     </Box>
   );

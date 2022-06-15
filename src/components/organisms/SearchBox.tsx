@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SearchIcon from "@mui/icons-material/Search";
-import { ButtonLayout } from "../layout/BoxLayout";
+import { ButtonLayout } from "../layout/ButtonLayout";
 import { categories } from "../../const/Category";
 
 type Props = {

@@ -5,7 +5,7 @@ import {
   Box,
   Container,
   Typography,
-  Button,
+  Button as MUIButton,
   Grid,
   Paper,
   IconButton,
@@ -26,6 +26,9 @@ import { ReservationType } from "../../../types/types";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
 import BookContext from "../../../provider/BookInformationProvider";
 import { memo } from "react";
+import { GridLayout } from "../../layout/GridLayout";
+import { ResultDialog } from "../../organisms/ResultDialog";
+import { Button } from "../../parts/Button";
 
 export const Mypage = memo(() => {
   console.log("Mypage実行");
@@ -105,7 +108,7 @@ export const Mypage = memo(() => {
     return result;
   };
 
-  const handleClick = async (book: BookType, index: number) => {
+  const handleClick = async (book: BookType) => {
     // 同じ本をまとめて予約できないことが前提
     const filterReservationByUserId = book?.reservations.filter((res) => {
       return res.user_id === userinfo.user_id;
@@ -128,16 +131,7 @@ export const Mypage = memo(() => {
   }
 
   if (complete) {
-    return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    );
+    return <ResultDialog result={result}></ResultDialog>;
   }
 
   return (
@@ -153,15 +147,15 @@ export const Mypage = memo(() => {
                   onChange={(e) => setValue(e.target.value)}
                   sx={{ p: "1px" }}
                 />
-                <Button variant="text" onClick={() => setEdit(false)}>
+                <MUIButton variant="text" onClick={() => setEdit(false)}>
                   閉じる
-                </Button>
-                <Button
+                </MUIButton>
+                <MUIButton
                   onClick={() => EditUserName(userinfo.user_id, value)}
                   variant="text"
                 >
                   変更
-                </Button>
+                </MUIButton>
               </Box>
             ) : (
               <Typography sx={{ display: "flex", alignItems: "center" }}>
@@ -173,12 +167,12 @@ export const Mypage = memo(() => {
             )}
             <Box sx={{ display: "flex" }}>
               <Typography>読んだ冊数: 10冊</Typography>
-              <Button
+              <MUIButton
                 onClick={() => pageTransition("/home/mypage/booklist")}
                 sx={{ marginLeft: "5px", p: 0 }}
               >
                 一覧で見る
-              </Button>
+              </MUIButton>
             </Box>
           </Box>
         </Box>
@@ -187,33 +181,28 @@ export const Mypage = memo(() => {
           {borrowedBook?.length === 0 ? (
             <Paper sx={{ p: "1em" }}>実績がありません</Paper>
           ) : (
-            <Grid container spacing={1}>
-              {borrowedBook?.map((borrowed, index) => (
-                // <Grid key={borrowed.book_id} item xs={4}>
-                <Grid key={index} item xs={4} sx={{ textAlign: "center" }}>
-                  <BookCard book={borrowed} displayContext={true} />
-                  <Button
-                    variant="outlined"
-                    sx={{ width: "100%" }}
-                    onClick={() => handleClick(borrowed, index)}
-                  >
-                    返却
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
+            <GridLayout GridItems={borrowedBook}>
+              <BookCard displayContext={true} />
+              <Button onClick={handleClick} text="返却"></Button>
+            </GridLayout>
+            // <Grid container spacing={1}>
+            //   {borrowedBook?.map((borrowed, index) => (
+            //     // <Grid key={borrowed.book_id} item xs={4}>
+            //     <Grid key={index} item xs={4} sx={{ textAlign: "center" }}>
+            //       <BookCard book={borrowed} displayContext={true} />
+            //       <Button onClick={() => handleClick(borrowed)} text="返却">
+            //         返却
+            //       </Button>
+            //     </Grid>
+            //   ))}
+            // </Grid>
           )}
         </Box>
         <Box>
           <Typography sx={{ marginBottom: "0.7em" }}>予約中</Typography>
-          <Grid container spacing={1}>
-            {reservationsBook?.map((reservation, index) => (
-              // <Grid key={reservation.book_id} item xs={4}>
-              <Grid key={index} item xs={4}>
-                <BookCard book={reservation} displayContext={true} />
-              </Grid>
-            ))}
-          </Grid>
+          <GridLayout GridItems={reservationsBook}>
+            <BookCard displayContext={true} />
+          </GridLayout>
         </Box>
       </Container>
     </>
