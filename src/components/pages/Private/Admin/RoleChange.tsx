@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
   Button,
+  InputLabel,
 } from "@mui/material";
 
 import { usePageTransition } from "../../../../hooks/usePageTransition";
@@ -56,8 +57,8 @@ export const RoleChange: FC = memo(() => {
             役割を変更するメールアドレスを入力してください
           </Typography>
           <TextField
+            id="component-filled"
             sx={{ width: "100%", marginTop: "0.5em" }}
-            label="Outlined"
             variant="outlined"
             value={mail}
             onChange={handleChangeText}

@@ -11,12 +11,12 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/system";
 
 import { ReservationCulensder } from "../../organisms/ReservationCulender";
 import { Review } from "../../organisms/Review";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { BookType } from "../../../types/types";
+import { BoxLayout } from "../../layout/BoxLayout";
 
 const SwitchButton = (props: any) => {
   const { active, name, onClick } = props;
@@ -42,7 +42,7 @@ export const BookContents: FC = () => {
   const { book_id, title, author, category, image_url, review, reservations } =
     location.state as BookType;
 
-  const [status, setStatus] = useState("評価");
+  const [status, setStatus] = useState("レビュー");
 
   const changeStatus = (status: string) => {
     setStatus(status);
@@ -50,11 +50,11 @@ export const BookContents: FC = () => {
 
   return (
     <>
-      <Container>
+      <BoxLayout>
         <Card sx={{ display: "flex" }}>
           <CardMedia
             component="img"
-            sx={{ objectFit: "fill" }}
+            sx={{ width: "151px", objectFit: "fill" }}
             src={image_url}
             alt="本の表紙"
           />
@@ -85,8 +85,8 @@ export const BookContents: FC = () => {
           <Box sx={{ textAlign: "right" }}>
             <SwitchButton
               active={status}
-              name="評価"
-              onClick={() => changeStatus("評価")}
+              name="レビュー"
+              onClick={() => changeStatus("レビュー")}
             />
             <SwitchButton
               active={status}
@@ -95,7 +95,7 @@ export const BookContents: FC = () => {
             />
           </Box>
         </Box>
-        {status === "評価" ? (
+        {status === "レビュー" ? (
           <Review reviews={review} user_id={user_id} />
         ) : (
           <ReservationCulensder
@@ -104,7 +104,7 @@ export const BookContents: FC = () => {
             reservations={reservations}
           />
         )}
-      </Container>
+      </BoxLayout>
     </>
   );
 };

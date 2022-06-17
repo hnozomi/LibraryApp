@@ -27,7 +27,6 @@ export const BookCard: FC<Props> = (props) => {
   const { pageTransition } = usePageTransition();
 
   const handleClick = () => {
-    console.log(book);
     if (displayContext) {
       pageTransition("/home/bookcontext", state?.book);
     }

@@ -9,12 +9,14 @@ import {
   Result,
 } from "../types/types";
 import { useCallback } from "react";
-import { memo } from "react";
 
 export const usePostData = () => {
   const [postloading, setPostLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [result, setResult] = useState({ status: "", message: "" });
+  const [result, setResult] = useState<Result>({
+    status: "success",
+    message: "",
+  });
   const [complete, setComplete] = useState(false);
 
   const options = {

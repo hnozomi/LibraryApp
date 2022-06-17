@@ -89,7 +89,6 @@ export const SearchBox: FC<Props> = (props) => {
             </Grid>
           ))}
         </Grid>
-        <Typography>並び替え</Typography>
 
         <ButtonLayout>
           <Button onClick={onClick} sx={{ width: "100%" }} variant="contained">

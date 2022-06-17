@@ -1,7 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 
 import { Divider, Grid, IconButton, InputBase, Paper } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 
 import BookContext from "../../../provider/BookInformationProvider";
 import { BookCard } from "../../organisms/BookCard";

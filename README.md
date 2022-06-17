@@ -30,7 +30,7 @@ hookの順序
 useEffectはロジックが入るので、最後
 
 分割方法
-pages: 他の要素の組み合わせ。ロジックの読み込み
+pages: 他の要素の組み合わせ。ロジックの読み込み(カスタムフックの呼び出し)
 Layout: CSSをあてる
 Organismis: Partsを組み合わせた要素
 Parts: 最小の要素

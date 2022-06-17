@@ -8,9 +8,6 @@ import {
   CardMedia,
   CardActionArea,
   Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Typography,
 } from "@mui/material";
 
@@ -19,14 +16,13 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 
-import { styled } from "@mui/system";
-
 import "./book.css";
 
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
 import { usePostData } from "../../../../hooks/usePostData";
 import { useGetData } from "../../../../hooks/usegetData";
+import { ResultDialog } from "../../../organisms/ResultDialog";
 
 type Book = {
   title: string;
@@ -37,8 +33,6 @@ type Book = {
 
 export const BookRegister: FC = memo(() => {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(false);
-  const [status, setStatus] = useState(false);
   const [startStatus, setStartStatus] = useState(false);
   const [stopStatus, setStopStatus] = useState(true);
   const [books, setbooks] = useState<Book>({
@@ -51,33 +45,73 @@ export const BookRegister: FC = memo(() => {
   const { insertBooks, postloading, complete, result } = usePostData();
   const { searchBooks } = useGetData();
 
-  Quagga.onDetected((result) => {
-    if (result !== undefined) {
-      if (result.codeResult.code !== null) {
-        const init = result.codeResult.code.slice(0, 3);
-        if (init === "978" && status === false) {
-          Quagga.stop();
-          setStatus(true);
-          searchBooks(result.codeResult.code).then((res) => {
-            if (res.bookInfomation !== undefined) {
-              setbooks({
-                ...books,
-                title: res.bookInfomation[0],
-                author: res.bookInfomation[1],
-                category: res.bookInfomation[2],
-                image_url: res.bookInfomation[4],
-              });
-            }
-          });
+  Quagga.onDetected(async (result) => {
+    let status = false;
+    let barcode = await BarcodeDetect(result);
 
-          setOpen(true);
-        }
-      }
+    const init = barcode.slice(0, 3);
+    if (init === "978" && status === false) {
+      Quagga.stop();
+
+      await executeSearchBook(barcode);
+
+      setStartStatus(false);
+      setStopStatus(true);
+      setOpen(true);
     }
   });
 
+  const BarcodeDetect = async (result: any) => {
+    if (result !== undefined) {
+      if (result.codeResult.code !== null) {
+        return result.codeResult.code;
+      }
+    }
+  };
+
+  const executeSearchBook = async (barcode: string) => {
+    await searchBooks(barcode).then((res) => {
+      if (res.bookInfomation !== undefined) {
+        setbooks({
+          ...books,
+          title: res.bookInfomation[0],
+          author: res.bookInfomation[1],
+          category: res.bookInfomation[2],
+          image_url: res.bookInfomation[4],
+        });
+      }
+    });
+  };
+
+  // Quagga.onDetected(async (result) => {
+  //   if (result !== undefined) {
+  //     if (result.codeResult.code !== null) {
+  //       const init = result.codeResult.code.slice(0, 3);
+  //       if (init === "978" && status === false) {
+  //         Quagga.stop();
+  //         setStatus(true);
+  //         await searchBooks(result.codeResult.code).then((res) => {
+  //           if (res.bookInfomation !== undefined) {
+  //             setbooks({
+  //               ...books,
+  //               title: res.bookInfomation[0],
+  //               author: res.bookInfomation[1],
+  //               category: res.bookInfomation[2],
+  //               image_url: res.bookInfomation[4],
+  //             });
+  //           }
+  //         });
+
+  //         setStartStatus(false);
+  //         setStopStatus(true);
+  //         setStatus(false);
+  //         setOpen(true);
+  //       }
+  //     }
+  //   }
+  // });
+
   const onStart = () => {
-    console.log(Quagga);
     Quagga.init(
       {
         inputStream: {
@@ -85,6 +119,7 @@ export const BookRegister: FC = memo(() => {
           type: "LiveStream",
           target: "#preview", // Or '#yourElement' (optional)
         },
+        frequency: 3,
         decoder: {
           readers: ["ean_reader"],
         },
@@ -104,7 +139,7 @@ export const BookRegister: FC = memo(() => {
   const onStop = () => {
     setStartStatus(false);
     setStopStatus(true);
-    Quagga.stop();
+    // Quagga.stop();
   };
 
   const handleClose = () => {
@@ -121,6 +156,7 @@ export const BookRegister: FC = memo(() => {
       setOpen(false);
       setStartStatus(false);
       setStopStatus(true);
+      setCategory("");
     }
   };
 
@@ -138,7 +174,7 @@ export const BookRegister: FC = memo(() => {
               height="280"
               src={books.image_url}
               // src={book.image_url}
-              alt="green iguana"
+              alt="書籍の画像"
               sx={{ objectFit: "fill" }}
             />
             <CardContent>
@@ -205,40 +241,8 @@ export const BookRegister: FC = memo(() => {
   }
 
   if (complete) {
-    return (
-      <Dialog open={complete}>
-        <DialogTitle id="alert-dialog-title">{result.status}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {result.message}
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    );
+    return <ResultDialog result={result}></ResultDialog>;
   }
-
-  // const CustomButton = styled("div")({
-  //   width: "100%",
-  //   height: "300px"
-  //   > video {
-  //     width: "100%",
-  //     height: "100%"
-  //   }
-  // }
-  // );
-
-  const PreviewBox = styled("div")(`
-  width: "100%",
-  height: "300px"
-  > video {
-    width: "100%",
-    height: "100%"
-  }
-
-  > canvas {
-    display: none
-  }
-  `);
 
   return (
     <>
@@ -250,9 +254,7 @@ export const BookRegister: FC = memo(() => {
         <Button disabled={stopStatus} onClick={onStop}>
           STOP
         </Button>
-        {/* {!status && <div id="preview"></div>} */}
-        <div id="preview"></div>
-        {/* <PreviewBox id="preview"></PreviewBox> */}
+        <Box id="preview"></Box>
       </BoxLayout>
     </>
   );

@@ -1,10 +1,12 @@
+import { FC } from "react";
+
 import {
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { FC } from "react";
+
 import { Result } from "../../types/types";
 
 type Props = {

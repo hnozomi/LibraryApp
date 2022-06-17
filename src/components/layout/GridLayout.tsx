@@ -1,4 +1,4 @@
-import { cloneElement, FC, ReactNode, ReactElement } from "react";
+import { cloneElement, FC, ReactElement } from "react";
 import { Grid } from "@mui/material";
 import { BookReservationType, BookType } from "../../types/types";
 
@@ -14,12 +14,12 @@ type State = {
 export const GridLayout: FC<Props> = (props) => {
   const { GridItems, children } = props;
 
-  //   childrenが2つある場合s
-  const AddStatexx = (book: State) => {
+  const ClonedArrayElement = (book: State) => {
     const newProps = { state: book };
     let ClonedElementWithMoreProps;
+
     if (Array.isArray(children)) {
-      ClonedElementWithMoreProps = children.map((child: any) => {
+      ClonedElementWithMoreProps = children.map((child: ReactElement) => {
         return cloneElement(child, newProps);
       });
     }
@@ -27,7 +27,7 @@ export const GridLayout: FC<Props> = (props) => {
     return <>{ClonedElementWithMoreProps}</>;
   };
 
-  const AddState = (book: State) => {
+  const ClonedElement = (book: State) => {
     let ClonedElementWithMoreProps;
 
     if (!Array.isArray(children)) {
@@ -50,9 +50,9 @@ export const GridLayout: FC<Props> = (props) => {
         >
           {/* childrenが2つの場合、配列に含まれる */}
           {Array.isArray(children) ? (
-            <AddStatexx book={item}></AddStatexx>
+            <ClonedArrayElement book={item}></ClonedArrayElement>
           ) : (
-            children && <AddState book={item}></AddState>
+            children && <ClonedElement book={item}></ClonedElement>
           )}
         </Grid>
       ))}

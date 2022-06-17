@@ -60,7 +60,7 @@ export type ReviewType = {
 }
 
 export type Result = {
-    status: string;
+    status: "success" | "error";
     message: string;
   };
   

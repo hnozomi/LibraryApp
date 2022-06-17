@@ -1,4 +1,4 @@
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, memo } from "react";
 
 import {
   Box,
@@ -15,7 +15,6 @@ import BookContext from "../../../../provider/BookInformationProvider";
 import { BookType } from "../../../../types/types";
 import { BookCard } from "../../../organisms/BookCard";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
-import { memo } from "react";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
 import { usePostData } from "../../../../hooks/usePostData";

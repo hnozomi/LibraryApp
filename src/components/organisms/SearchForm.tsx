@@ -21,7 +21,10 @@ const SearchFormStyle = styled(Paper)({
 export const SearchForm: FC<Props> = (props) => {
   const { setOpen } = props;
   return (
-    <SearchFormStyle onClick={() => setOpen(true)}>
+    <SearchFormStyle
+      onClick={() => setOpen(true)}
+      sx={{ marginRight: "0.3em" }}
+    >
       <InputBase sx={{ ml: 1, flex: 1 }} placeholder="検索" />
       <IconButton sx={{ p: "0.5em" }}>
         <SearchIcon />

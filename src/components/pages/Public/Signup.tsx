@@ -97,7 +97,7 @@ export const Signup = () => {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Password(6文字以上)"
                   type="password"
                   id="password"
                   autoComplete="new-password"

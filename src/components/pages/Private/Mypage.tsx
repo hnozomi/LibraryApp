@@ -1,34 +1,19 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, memo } from "react";
 
-import {
-  Avatar,
-  Box,
-  Container,
-  Typography,
-  Button as MUIButton,
-  Grid,
-  Paper,
-  IconButton,
-  TextField,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import AuthContext from "../../../provider/LoginUserProvider";
+import BookContext from "../../../provider/BookInformationProvider";
 
-import { usePageTransition } from "../../../hooks/usePageTransition";
 import { usePostData } from "../../../hooks/usePostData";
 import { BookCard } from "../../organisms/BookCard";
-import AuthContext from "../../../provider/LoginUserProvider";
+import { LoadingScreen } from "../../organisms/LoadingScreen";
+import { ResultDialog } from "../../organisms/ResultDialog";
+import { GridLayout } from "../../layout/GridLayout";
+import { BoxLayout } from "../../layout/BoxLayout";
+import { Button } from "../../parts/Button";
 import { BookType } from "../../../types/types";
 import { ReservationType } from "../../../types/types";
-import { LoadingScreen } from "../../organisms/LoadingScreen";
-import BookContext from "../../../provider/BookInformationProvider";
-import { memo } from "react";
-import { GridLayout } from "../../layout/GridLayout";
-import { ResultDialog } from "../../organisms/ResultDialog";
-import { Button } from "../../parts/Button";
+import { PaperBox } from "../../organisms/PaperBox";
+import { Profile } from "../../organisms/Profile";
 
 export const Mypage = memo(() => {
   console.log("Mypage実行");
@@ -37,13 +22,9 @@ export const Mypage = memo(() => {
 
   const [reservationsBook, setReservationsBook] = useState<BookType[]>([]);
   const [borrowedBook, setBorrowedBook] = useState<BookType[]>([]);
-  const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("");
 
-  const { pageTransition } = usePageTransition();
-  const { returnBook, EditUserName, postloading, complete, result } =
-    usePostData();
+  const { returnBook, postloading, complete, result } = usePostData();
 
   useEffect(() => {
     // 書籍情報にReservationsが存在しているかチェック
@@ -53,6 +34,7 @@ export const Mypage = memo(() => {
         await checkReservation(book, book.reservations);
       }
     });
+    setLoading(false);
   }, [books]);
 
   let reservation: BookType[] = [];
@@ -93,7 +75,6 @@ export const Mypage = memo(() => {
       }
     });
 
-    console.log(borrowd);
     setReservationsBook(reservation);
     setBorrowedBook(borrowd);
     setLoading(false);
@@ -136,76 +117,28 @@ export const Mypage = memo(() => {
 
   return (
     <>
-      <Container>
-        <Box sx={{ display: "flex", py: "1.5em", alignItems: "center" }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          <Box sx={{ marginLeft: "1em" }}>
-            {edit ? (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <TextField
-                  value={value}
-                  label="新たな名前"
-                  onChange={(e) => setValue(e.target.value)}
-                  sx={{ p: "1px" }}
-                />
-                <MUIButton variant="text" onClick={() => setEdit(false)}>
-                  閉じる
-                </MUIButton>
-                <MUIButton
-                  onClick={() => EditUserName(userinfo.user_id, value)}
-                  variant="text"
-                >
-                  変更
-                </MUIButton>
-              </Box>
-            ) : (
-              <Typography sx={{ display: "flex", alignItems: "center" }}>
-                {`ユーザー名: ${userinfo.username}`}
-                <IconButton sx={{ p: 0 }} onClick={() => setEdit(true)}>
-                  <EditIcon />
-                </IconButton>
-              </Typography>
-            )}
-            <Box sx={{ display: "flex" }}>
-              <Typography>読んだ冊数: 10冊</Typography>
-              <MUIButton
-                onClick={() => pageTransition("/home/mypage/booklist")}
-                sx={{ marginLeft: "5px", p: 0 }}
-              >
-                一覧で見る
-              </MUIButton>
-            </Box>
-          </Box>
-        </Box>
-        <Box sx={{ mb: "2.5em" }}>
-          <Typography sx={{ marginBottom: "0.7em" }}>借りてる本</Typography>
-          {borrowedBook?.length === 0 ? (
-            <Paper sx={{ p: "1em" }}>実績がありません</Paper>
-          ) : (
-            <GridLayout GridItems={borrowedBook}>
-              <BookCard displayContext={true} />
-              <Button onClick={handleClick} text="返却"></Button>
-            </GridLayout>
-            // <Grid container spacing={1}>
-            //   {borrowedBook?.map((borrowed, index) => (
-            //     // <Grid key={borrowed.book_id} item xs={4}>
-            //     <Grid key={index} item xs={4} sx={{ textAlign: "center" }}>
-            //       <BookCard book={borrowed} displayContext={true} />
-            //       <Button onClick={() => handleClick(borrowed)} text="返却">
-            //         返却
-            //       </Button>
-            //     </Grid>
-            //   ))}
-            // </Grid>
-          )}
-        </Box>
-        <Box>
-          <Typography sx={{ marginBottom: "0.7em" }}>予約中</Typography>
+      <BoxLayout>
+        <Profile userinfo={userinfo} />
+        <PaperBox
+          array={borrowedBook}
+          title="借りてる本"
+          text="借りている本はありません"
+        >
+          <GridLayout GridItems={borrowedBook}>
+            <BookCard displayContext={true} />
+            <Button onClick={handleClick} text="返却"></Button>
+          </GridLayout>
+        </PaperBox>
+        <PaperBox
+          array={reservationsBook}
+          title="予約している本"
+          text="予約している本はありません"
+        >
           <GridLayout GridItems={reservationsBook}>
             <BookCard displayContext={true} />
           </GridLayout>
-        </Box>
-      </Container>
+        </PaperBox>
+      </BoxLayout>
     </>
   );
 });
