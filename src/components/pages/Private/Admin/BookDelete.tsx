@@ -25,7 +25,7 @@ import { Button } from "../../../parts/Button";
 export const BookDelete: FC = memo(() => {
   console.log("BookDelete実行");
   const { books, deleteStateBooks } = useContext(BookContext);
-  const [bookName, setBookName] = useState<string>();
+  const [bookName, setBookName] = useState<string>("");
   const [BookNameByfilter, setBookNameByfilter] = useState<BookType[]>([]);
   const [selectedBook, setSelectedbook] = useState<BookType>({
     book_id: "",
@@ -46,6 +46,7 @@ export const BookDelete: FC = memo(() => {
   const handleClick = () => {
     if (books !== undefined) {
       let filterBook = books.filter((book) => {
+        console.log(book);
         if (bookName !== undefined) {
           return book.title.includes(bookName);
         }
@@ -116,8 +117,6 @@ export const BookDelete: FC = memo(() => {
         <Typography>削除する書籍を検索してください</Typography>
         <TextField
           sx={{ width: "100%", marginTop: "0.5em" }}
-          id="outlined-basic"
-          label="Outlined"
           variant="outlined"
           value={bookName}
           onChange={handleChange}

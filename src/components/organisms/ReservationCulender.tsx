@@ -105,39 +105,57 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return current;
   };
 
-  const handleClose = () => {
+  const handleCloseDialog = () => {
     setOpen(false);
   };
 
   const handleDateClick = useCallback(
     (arg: DateClickArg) => {
-      if (date.start === date.end) {
-        setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
-      } else if (date.start < arg.dateStr) {
-        if (arg.dateStr < date.end) {
-          setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
-        } else {
-          setDate((prevState) => ({ ...prevState, end: arg.dateStr }));
-        }
-      } else if (date.start > arg.dateStr) {
-        setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
+      // const data = document.querySelectorAll('[data-user-id]');
+      // const elements = document.querySelectorAll(
+      //   '[data-date="2022-05-29"]'
+      // ) as HTMLCollectionOf<HTMLElement>;
+      if (date.start !== "" && date.end !== "") {
+        return;
       }
-    },
-    [date]
-  );
 
-  const selectedStart = useCallback(
-    (arg: DateClickArg) => {
-      setIsStart((prevState) => prevState);
+      let selectedDate = { start: "", end: "" };
       if (isStart) {
-        setIsStart(false);
+        setIsStart(false); // 初めに開始日を選択することになり、そのあと、終了日を選択してもらうため
+
+        selectedDate.start = arg.dateStr;
+        selectedDate.end = date.end;
         setDate((prevState) => ({ ...prevState, start: arg.dateStr }));
       } else {
+        selectedDate.start = date.start;
+        selectedDate.end = arg.dateStr;
         setDate((prevState) => ({ ...prevState, end: arg.dateStr }));
       }
+
+      selectedDateWithColor(selectedDate);
     },
     [date, isStart]
   );
+
+  const selectedDateWithColor = (date: any) => {
+    var GridElements = document.getElementsByClassName(
+      "fc-daygrid-day"
+    ) as HTMLCollectionOf<HTMLElement>;
+
+    for (let step = 0; step < GridElements.length; step++) {
+      var GridElement = GridElements.item(step);
+
+      if (GridElement !== null) {
+        if (GridElement.dataset.date === date.start) {
+          GridElement.style.backgroundColor = "pink";
+        } else if (GridElement.dataset.date === date.end) {
+          GridElement.style.backgroundColor = "pink";
+        } else {
+          GridElement.style.backgroundColor = "white";
+        }
+      }
+    }
+  };
 
   const handlePostClick = () => {
     setOpen(false);
@@ -152,7 +170,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return reservationData;
   });
 
-  const handleClose1 = () => {
+  const handleCloseSnackBar = () => {
     setAlert({
       ...alert,
       open: false,
@@ -172,7 +190,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   if (open) {
     return (
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleCloseDialog}>
         <Box>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -192,7 +210,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
           sx={{ display: "flex", justifyContent: "flex-end", padding: "0.6em" }}
         >
           <Button
-            onClick={handleClose}
+            onClick={handleCloseDialog}
             variant="outlined"
             sx={{ marginRight: "0.4em" }}
           >
@@ -214,67 +232,48 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return <ResultDialog result={result}></ResultDialog>;
   }
 
+  const SelectedDate = (props: any) => {
+    const { selectedDate, text, onClick } = props;
+    return (
+      <Box sx={{ display: "flex", alignItems: "center", py: "0.1em" }}>
+        <Typography>{`${text}:`}</Typography>
+        {!selectedDate ? (
+          <Typography sx={{ ml: "0.5em" }}>
+            カレンダーから選択してください
+          </Typography>
+        ) : (
+          <Typography>{selectedDate}</Typography>
+        )}
+        {date.start !== "" && date.end !== "" && (
+          <Button onClick={onClick} sx={{ p: "0" }} size="small">
+            変更する
+          </Button>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ marginTop: "1em" }}>
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         locale="ja" // 日本語化
-        dateClick={selectedStart}
+        dateClick={handleDateClick}
         events={reservation}
         displayEventTime={false}
       />
       <Box sx={{ mt: "1em" }}>
-        {/* <Typography onClick={() => setIsStart(true)}>
-          {`予約開始日: ${!date.start ? "開始日を選択" : date.start}  ${
-            isStart ? "選択中" : ""
-          }`}
-        </Typography>
-        <Typography onClick={() => setIsStart(false)}>{`予約終了日: ${
-          !date.end ? "終了日を選択" : date.end
-        }  ${!isStart ? "選択中" : ""}`}</Typography> */}
-
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography>開始日：</Typography>
-          {!date.start ? (
-            // <Button onClick={() => setIsStart(true)} size="small">
-            //   カレンダーから選択してください
-            // </Button>
-            <Typography sx={{ ml: "1em" }}>
-              カレンダーから選択してください
-            </Typography>
-          ) : (
-            date.start
-          )}
-          {date.start && (
-            <Button
-              onClick={handleStartDateChange}
-              sx={{ ml: "1em" }}
-              size="small"
-            >
-              変更する
-            </Button>
-          )}
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography>終了日：</Typography>
-          {!date.end ? (
-            <Typography sx={{ ml: "1em" }}>
-              カレンダーから選択してください
-            </Typography>
-          ) : (
-            date.end
-          )}
-          {date.end && (
-            <Button
-              onClick={handleEndDateChange}
-              sx={{ ml: "1em" }}
-              size="small"
-            >
-              変更する
-            </Button>
-          )}
-        </Box>
+        <SelectedDate
+          text={"開始日"}
+          selectedDate={date.start}
+          onClick={handleStartDateChange}
+        />
+        <SelectedDate
+          text={"終了日"}
+          selectedDate={date.end}
+          onClick={handleEndDateChange}
+        />
       </Box>
       <ButtonLayout>
         <Fab
@@ -283,16 +282,13 @@ export const ReservationCulensder: FC<Props> = (props) => {
           color="primary"
           onClick={handleClick}
         >
-          {/* <button> cannot appear as a descendant of <button>のエラーが出る */}
-          {/* <Button variant="text" sx={{ color: "white" }} onClick={handleClick}> */}
           予約する
-          {/* </Button> */}
         </Fab>
         <Snackbar
           open={alert.open}
           autoHideDuration={1000}
           message={alert.message}
-          onClose={handleClose1}
+          onClose={handleCloseSnackBar}
           sx={{ bottom: { xs: 90, sm: 0 } }}
         />
       </ButtonLayout>
