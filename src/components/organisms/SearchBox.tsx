@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Button,
   Checkbox,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SearchIcon from "@mui/icons-material/Search";
+
 import { ButtonLayout } from "../layout/ButtonLayout";
 import { categories } from "../../const/Category";
 
@@ -20,30 +21,14 @@ type Props = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleClose: () => void;
   setValue: any;
-  setSelectedCategory: any;
 };
 
 export const SearchBox: FC<Props> = (props) => {
-  const { onClick, onChange, handleClose, setValue, setSelectedCategory } =
-    props;
-
-  // const [selectedCategory, setSelectedCategory] = useState();
+  const { onClick, onChange, handleClose, setValue } = props;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value as string);
   };
-
-  // const onhandleChange = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  //   category: any
-  // ) => {
-  //   const Array: Array<string> = ["人文・思想・社会", "科学・技術"];
-  //   let newArray = [event.target.value];
-  //   if (Array.includes(event.target.value)) {
-  //     newArray = Array.filter((value) => value === event.target.value);
-  //   }
-  //   setSelectedCategory(newArray);
-  // };
 
   return (
     <Modal open={true} onClose={handleClose}>
@@ -72,6 +57,7 @@ export const SearchBox: FC<Props> = (props) => {
             <SearchIcon />
           </IconButton>
         </Paper>
+
         <Typography sx={{ marginTop: "1em" }}>ジャンルで探す</Typography>
         <Grid container spacing={1} sx={{ mt: 1 }}>
           {categories.map((category) => (

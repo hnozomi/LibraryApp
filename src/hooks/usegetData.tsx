@@ -1,29 +1,9 @@
-import axios from "axios";
 import { useState } from "react";
+
+import axios from "axios";
 
 export const useGetData = () => {
   const [loading, setLoading] = useState(false);
-  const options = {
-    headers: { "Content-Type": "text/plain" },
-  };
-  // const returnBooks = async (book: BookType) => {
-  //   const ID = UUID.generate();
-  //   setLoading(true);
-  //   await axios
-  //     .post(
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/delete_bookReservation",
-  //       {
-  //         reservation_id: book.reservation_id,
-  //         achievement_id: ID,
-  //         user_id: book.user_id,
-  //         book_id: book.book_id,
-  //       },
-  //       options
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
 
   const getAchievementByUserId = async (user_id: string) => {
     setLoading(true);

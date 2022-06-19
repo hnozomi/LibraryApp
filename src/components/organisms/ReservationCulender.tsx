@@ -7,11 +7,9 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
-  IconButton,
   Fab,
   Snackbar,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -22,6 +20,8 @@ import { ReservationDate, ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
 import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";
+import { getNowYMD } from "../../utils/getNowYMD";
+import { SelectDate } from "./SelectDate";
 
 type Props = {
   book_id: string;
@@ -34,17 +34,25 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   const [date, setDate] = useState({ start: "", end: "" });
   const [open, setOpen] = useState(false);
-  const [open1, setOpen1] = useState(false);
   const [alert, setAlert] = useState({ open: false, message: "" });
   const [isStart, setIsStart] = useState(true);
 
   const { insertReservation, postloading, result, complete } = usePostData();
 
   const handleClick = () => {
-    console.log(date);
+    const nowDate = getNowYMD();
+
     if (date.start === "" || date.end === "") {
-      // alert("予約日付を選択してください");
       setAlert({ ...alert, open: true, message: "予約日付を選択してください" });
+      return;
+    }
+
+    if (date.start < nowDate) {
+      setAlert({
+        ...alert,
+        open: true,
+        message: "過去の日付を予約することはできません",
+      });
       return;
     }
 
@@ -111,10 +119,6 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   const handleDateClick = useCallback(
     (arg: DateClickArg) => {
-      // const data = document.querySelectorAll('[data-user-id]');
-      // const elements = document.querySelectorAll(
-      //   '[data-date="2022-05-29"]'
-      // ) as HTMLCollectionOf<HTMLElement>;
       if (date.start !== "" && date.end !== "") {
         return;
       }
@@ -140,7 +144,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
   const selectedDateWithColor = (date: any) => {
     var GridElements = document.getElementsByClassName(
       "fc-daygrid-day"
-    ) as HTMLCollectionOf<HTMLElement>;
+    ) as HTMLCollectionOf<HTMLElement>; //デフォルトではHTMLCollectionOf<Element>になっており、datasetがない
 
     for (let step = 0; step < GridElements.length; step++) {
       var GridElement = GridElements.item(step);
@@ -232,27 +236,6 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return <ResultDialog result={result}></ResultDialog>;
   }
 
-  const SelectedDate = (props: any) => {
-    const { selectedDate, text, onClick } = props;
-    return (
-      <Box sx={{ display: "flex", alignItems: "center", py: "0.1em" }}>
-        <Typography>{`${text}:`}</Typography>
-        {!selectedDate ? (
-          <Typography sx={{ ml: "0.5em" }}>
-            カレンダーから選択してください
-          </Typography>
-        ) : (
-          <Typography>{selectedDate}</Typography>
-        )}
-        {date.start !== "" && date.end !== "" && (
-          <Button onClick={onClick} sx={{ p: "0" }} size="small">
-            変更する
-          </Button>
-        )}
-      </Box>
-    );
-  };
-
   return (
     <Box sx={{ marginTop: "1em" }}>
       <FullCalendar
@@ -264,14 +247,16 @@ export const ReservationCulensder: FC<Props> = (props) => {
         displayEventTime={false}
       />
       <Box sx={{ mt: "1em" }}>
-        <SelectedDate
+        <SelectDate
           text={"開始日"}
           selectedDate={date.start}
+          date={date}
           onClick={handleStartDateChange}
         />
-        <SelectedDate
+        <SelectDate
           text={"終了日"}
           selectedDate={date.end}
+          date={date}
           onClick={handleEndDateChange}
         />
       </Box>
@@ -286,7 +271,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
         </Fab>
         <Snackbar
           open={alert.open}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           message={alert.message}
           onClose={handleCloseSnackBar}
           sx={{ bottom: { xs: 90, sm: 0 } }}

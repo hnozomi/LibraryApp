@@ -23,13 +23,13 @@ type LocationState = {
 export const ReviewForm = () => {
   console.log("ReviewForm実行");
   const location = useLocation();
-  console.log(location.state);
   const {
     book_id,
     reviews_id,
     rate: pastRate = 2.5,
     text: pastText,
   } = location.state as LocationState;
+
   const [rate, setRate] = useState<Rare>(pastRate);
   const [text, setText] = useState(pastText);
   const {
@@ -63,9 +63,9 @@ export const ReviewForm = () => {
               setRate(newValue);
             }}
           />
-          <Typography>メモ</Typography>
+          <Typography>レビュー</Typography>
           <TextField
-            placeholder="MultiLine with rows: 2 and rowsMax: 4"
+            placeholder="読んだ感想を書いてください"
             multiline
             rows={15}
             sx={{ width: "100%" }}

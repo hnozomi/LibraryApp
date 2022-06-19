@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Button as MUIButton,
-  Paper,
   IconButton,
   TextField,
   Snackbar,
@@ -17,6 +16,7 @@ import { usePageTransition } from "../../hooks/usePageTransition";
 import { usePostData } from "../../hooks/usePostData";
 
 import { UserType } from "../../types/types";
+import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {
   userinfo: UserType;
@@ -47,12 +47,12 @@ export const Profile: FC<Props> = (props) => {
   }
 
   return (
-    <Box sx={{ mb: "1em", display: "flex", alignItems: "center" }}>
+    <FlexBoxLayout>
       {/* 後でアイコンを設定できるようにする */}
       <Avatar alt="アイコン" src="/static/images/avatar/1.jpg" />
       <Box sx={{ marginLeft: "1em" }}>
         {edit ? (
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <FlexBoxLayout>
             <TextField
               value={value}
               label="新たな名前"
@@ -72,22 +72,31 @@ export const Profile: FC<Props> = (props) => {
             >
               変更
             </MUIButton>
-          </Box>
+          </FlexBoxLayout>
         ) : (
-          <Typography
-            sx={{ mb: "0.1em", display: "flex", alignItems: "center" }}
-          >
-            {`ユーザー名: ${value}`}
+          <FlexBoxLayout>
+            <Typography>{`ユーザー名: ${value}`}</Typography>
             <IconButton
               sx={{ p: 0, ml: "0.2em" }}
               onClick={() => setEdit(true)}
             >
               <EditIcon />
             </IconButton>
-          </Typography>
+          </FlexBoxLayout>
+          // <Typography
+          //   sx={{ mb: "0.1em", display: "flex", alignItems: "center" }}
+          // >
+          //   {`ユーザー名: ${value}`}
+          //   <IconButton
+          //     sx={{ p: 0, ml: "0.2em" }}
+          //     onClick={() => setEdit(true)}
+          //   >
+          //     <EditIcon />
+          //   </IconButton>
+          // </Typography>
         )}
 
-        <Box sx={{ display: "flex" }}>
+        <Box>
           <MUIButton
             onClick={() => pageTransition("/home/mypage/booklist")}
             sx={{ p: 0 }}
@@ -96,6 +105,6 @@ export const Profile: FC<Props> = (props) => {
           </MUIButton>
         </Box>
       </Box>
-    </Box>
+    </FlexBoxLayout>
   );
 };

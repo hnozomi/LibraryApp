@@ -17,6 +17,7 @@ import { Review } from "../../organisms/Review";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { BookType } from "../../../types/types";
 import { BoxLayout } from "../../layout/BoxLayout";
+import { FlexBoxLayout } from "../../layout/FlexBoxLayout";
 
 const SwitchButton = (props: any) => {
   const { active, name, onClick } = props;
@@ -78,7 +79,8 @@ export const BookContents: FC = () => {
             </CardContent>
           </Box>
         </Card>
-        <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
+        <FlexBoxLayout>
+          {/* <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}> */}
           <Typography variant="h5" sx={{ marginRight: "auto" }}>
             {status}
           </Typography>
@@ -94,7 +96,8 @@ export const BookContents: FC = () => {
               onClick={() => changeStatus("予約")}
             />
           </Box>
-        </Box>
+        </FlexBoxLayout>
+        {/* </Box> */}
         {status === "レビュー" ? (
           <Review reviews={review} user_id={user_id} />
         ) : (

@@ -8,15 +8,14 @@ import {
   Select,
   MenuItem,
   Button,
-  InputLabel,
 } from "@mui/material";
 
 import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { usePostData } from "../../../../hooks/usePostData";
 import { LoadingScreen } from "../../../organisms/LoadingScreen";
+import { ResultDialog } from "../../../organisms/ResultDialog";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
-import { ResultDialog } from "../../../organisms/ResultDialog";
 
 export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");

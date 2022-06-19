@@ -14,6 +14,7 @@ import { BookType } from "../../../types/types";
 import { ReservationType } from "../../../types/types";
 import { PaperBox } from "../../organisms/PaperBox";
 import { Profile } from "../../organisms/Profile";
+import { getNowYMD } from "../../../utils/getNowYMD";
 
 export const Mypage = memo(() => {
   console.log("Mypage実行");
@@ -78,15 +79,6 @@ export const Mypage = memo(() => {
     setReservationsBook(reservation);
     setBorrowedBook(borrowd);
     setLoading(false);
-  };
-
-  const getNowYMD = () => {
-    var dt = new Date();
-    var y = dt.getFullYear();
-    var m = ("00" + (dt.getMonth() + 1)).slice(-2);
-    var d = ("00" + dt.getDate()).slice(-2);
-    var result = y + "-" + m + "-" + d;
-    return result;
   };
 
   const handleClick = async (book: BookType) => {

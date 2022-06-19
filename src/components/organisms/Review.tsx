@@ -16,6 +16,7 @@ import { usePageTransition } from "../../hooks/usePageTransition";
 import { usePostData } from "../../hooks/usePostData";
 import { ResultDialog } from "./ResultDialog";
 import { LoadingScreen } from "./LoadingScreen";
+import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {
   reviews: any;
@@ -73,6 +74,7 @@ export const Review: FC<Props> = (props) => {
       </Dialog>
     );
   }
+
   if (postloading) {
     return <LoadingScreen text={"削除中"} />;
   }
@@ -98,7 +100,8 @@ export const Review: FC<Props> = (props) => {
               <Tab label={index + 1} value={index} key={review.review_id} />
             ))}
           </Tabs>
-          <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}>
+
+          <FlexBoxLayout>
             <Typography>オススメ度</Typography>
             {user_id === reviews[value].user_id && (
               <Box sx={{ marginLeft: "auto" }}>
@@ -112,8 +115,9 @@ export const Review: FC<Props> = (props) => {
                 </Button>
               </Box>
             )}
-          </Box>
-          <Rating name="half-rating" value={reviews[value].rate} readOnly />
+          </FlexBoxLayout>
+
+          <Rating value={reviews[value].rate} readOnly />
           <Box sx={{ width: "100%" }}>
             <Typography>感想</Typography>
             <TextareaAutosize

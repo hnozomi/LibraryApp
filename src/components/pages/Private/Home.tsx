@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 
-import { Divider, Grid, IconButton, InputBase, Paper } from "@mui/material";
+import { Divider } from "@mui/material";
 
 import BookContext from "../../../provider/BookInformationProvider";
 import { BookCard } from "../../organisms/BookCard";
@@ -71,7 +71,6 @@ export const Home = () => {
         handleClose={handleClose}
         setValue={setValue}
         onChange={searchBooksByCategory}
-        setSelectedCategory={setSelectedCategory}
       ></SearchBox>
     );
   }
