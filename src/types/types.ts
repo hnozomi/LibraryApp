@@ -64,3 +64,8 @@ export type Result = {
     message: string;
   };
   
+
+export type DateType = {
+    start: string,
+    end: string
+}

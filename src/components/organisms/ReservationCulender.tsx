@@ -3,7 +3,6 @@ import { FC, useCallback, useState } from "react";
 import {
   Box,
   Button,
-  Typography,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -16,12 +15,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
 import { usePostData } from "../../hooks/usePostData";
-import { ReservationDate, ReservationType } from "../../types/types";
+import { ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
 import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";
-import { getNowYMD } from "../../utils/getNowYMD";
 import { SelectDate } from "./SelectDate";
+import { checkReservationDate } from "../../utils/validation/dateCheckValidation";
 
 type Props = {
   book_id: string;
@@ -40,77 +39,13 @@ export const ReservationCulensder: FC<Props> = (props) => {
   const { insertReservation, postloading, result, complete } = usePostData();
 
   const handleClick = () => {
-    const nowDate = getNowYMD();
-
-    if (date.start === "" || date.end === "") {
-      setAlert({ ...alert, open: true, message: "予約日付を選択してください" });
-      return;
-    }
-
-    if (date.start < nowDate) {
-      setAlert({
-        ...alert,
-        open: true,
-        message: "過去の日付を予約することはできません",
-      });
-      return;
-    }
-
-    if (date.start > date.end) {
-      setAlert({
-        ...alert,
-        open: true,
-        message: "開始日は終了日よりも前の日付にしてください",
-      });
-      return;
-    }
-
-    if (date.start > date.end) {
-      setAlert({
-        ...alert,
-        open: true,
-        message: "開始日は終了日よりも前の日付にしてください",
-      });
-      return;
-    }
-
-    const diff = checkDate(date);
-    if (diff > 14) {
-      setAlert({
-        ...alert,
-        open: true,
-        message: "1回の予約は14日以内にしてください",
-      });
-      return;
-    }
-
-    const current = checkCurrentReservation(reservations);
-    if (current) {
-      setAlert({
-        ...alert,
-        open: true,
-        message: "現在の予約が終わってからにしてください",
-      });
+    const result = checkReservationDate(date, reservations, user_id);
+    if (result.isCheck) {
+      setAlert({ ...alert, open: true, message: result.message });
       return;
     }
 
     setOpen(true);
-  };
-
-  const checkDate = (date: ReservationDate) => {
-    const startDate = new Date(date.start);
-    const endDate = new Date(date.end);
-    const diffDate =
-      Math.floor(endDate.getTime() - startDate.getTime()) / 86400000;
-
-    return diffDate;
-  };
-
-  const checkCurrentReservation = (reservations: any) => {
-    const current = reservations.some(
-      (reservation: any) => reservation.user_id === user_id
-    );
-    return current;
   };
 
   const handleCloseDialog = () => {
@@ -271,7 +206,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
         </Fab>
         <Snackbar
           open={alert.open}
-          autoHideDuration={2000}
+          autoHideDuration={1000}
           message={alert.message}
           onClose={handleCloseSnackBar}
           sx={{ bottom: { xs: 90, sm: 0 } }}
