@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
 
 import {
@@ -13,10 +12,10 @@ import {
   where,
 } from "../lib/Firebase/firebase";
 import { UserType } from "../types/types";
-import { AccessAlarm } from "@mui/icons-material";
 
 export type LoginUserContextType = {
   userinfo: UserType | null;
+  setUserInfo: any;
 };
 
 export const AuthContext = createContext<LoginUserContextType>(
@@ -27,33 +26,18 @@ type Props = {
   children: ReactNode;
 };
 
-// const initialUser = {
-//   user_id: "",
-//   username: "",
-//   icon: "",
-//   role: "",
-// };
-
 export const AuthProvider = ({ children }: Props) => {
   console.log("AuthProvider実行");
   const [userinfo, setUserInfo] = useState<UserType | null>(null);
   const [screenLoading, setScreenLoading] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [test, setTest] = useState<any>();
 
   useEffect(() => {
-    console.log("AuthProviderのuseEffect実行");
-    console.log("Provider実行");
-
-    const unsub = onAuthStateChanged(auth, async (user: any) => {
-      // console.log(user, "外");
+    onAuthStateChanged(auth, async (user: any) => {
       if (user) {
         await checkUser(user);
       } else {
         setUserInfo(null);
       }
-
-      // user?.uid ? await getUserInfo(user) : setUserInfo(null);
       setScreenLoading(false);
     });
   }, []);
@@ -62,7 +46,6 @@ export const AuthProvider = ({ children }: Props) => {
     const querySnapshot = await queryUserInfo(user);
 
     if (querySnapshot.empty) {
-      console.log("存在しません");
       await addDoc(collection(db, "users"), {
         user_id: user.uid,
         username: "名無し",
@@ -74,8 +57,6 @@ export const AuthProvider = ({ children }: Props) => {
         await getUserInfo(querySnapshot);
       });
     } else {
-      console.log("存在します");
-
       await getUserInfo(querySnapshot);
     }
   };
@@ -91,33 +72,18 @@ export const AuthProvider = ({ children }: Props) => {
 
   const getUserInfo = async (querySnapshot: any) => {
     querySnapshot.forEach((doc: any) => {
-      const userinfo: any = doc.data();
+      console.log(doc.id);
+      let userinfo: any = doc.data();
+      userinfo.documentId = doc.id;
       setUserInfo(userinfo);
     });
   };
-
-  // const getUserInfo = async (user: any) => {
-  //   console.log(user, "getUserInfo");
-  //   await axios
-  //     .get<UserType>(
-  //       "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/get_user",
-  //       {
-  //         params: {
-  //           user_id: user?.uid,
-  //         },
-  //         headers: { "Content-Type": "text/plain" },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       setUserInfo(response.data);
-  //       setScreenLoading(false);
-  //     });
-  // };
 
   return (
     <AuthContext.Provider
       value={{
         userinfo,
+        setUserInfo,
       }}
     >
       {!screenLoading && children}

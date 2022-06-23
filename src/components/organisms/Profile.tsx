@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
+import { db, collection, doc, updateDoc } from "../../lib/Firebase/firebase";
+
 import { usePageTransition } from "../../hooks/usePageTransition";
 import { usePostData } from "../../hooks/usePostData";
 
@@ -19,11 +21,13 @@ import { UserType } from "../../types/types";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {
-  userinfo: UserType;
+  // userinfo: UserType;
+  userinfo: any;
+  setUserInfo: any;
 };
 
 export const Profile: FC<Props> = (props) => {
-  const { userinfo } = props;
+  const { userinfo, setUserInfo } = props;
 
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(userinfo.username);
@@ -46,6 +50,15 @@ export const Profile: FC<Props> = (props) => {
     );
   }
 
+  const editUsername = () => {
+    const newCityRef = doc(collection(db, "users"), userinfo.documentId);
+    updateDoc(newCityRef, {
+      username: value,
+    });
+    setUserInfo({ ...userinfo, username: value });
+    setEdit(false);
+  };
+
   return (
     <FlexBoxLayout>
       {/* 後でアイコンを設定できるようにする */}
@@ -63,11 +76,12 @@ export const Profile: FC<Props> = (props) => {
               閉じる
             </MUIButton>
             <MUIButton
-              onClick={() => {
-                EditUserName(userinfo.user_id, value).finally(() => {
-                  setEdit(false);
-                });
-              }}
+              onClick={editUsername}
+              // onClick={() => {
+              //   EditUserName(userinfo.user_id, value).finally(() => {
+              //     setEdit(false);
+              //   });
+              // }}
               variant="text"
             >
               変更

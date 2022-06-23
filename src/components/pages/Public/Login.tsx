@@ -5,7 +5,6 @@ import {
   Container,
   CssBaseline,
   Grid,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,7 +17,6 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useAuthForm } from "../../../hooks/useAuthForm";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ValidationAlert } from "../../organisms/ValidationAlert";
-import { Header } from "../../organisms/Header";
 import { Copyright } from "../../organisms/Copyright";
 import { ToppageHeader } from "../../organisms/ToppageHeader";
 

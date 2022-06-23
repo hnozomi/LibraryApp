@@ -18,7 +18,7 @@ import { getNowYMD } from "../../../utils/getNowYMD";
 
 export const Mypage = memo(() => {
   console.log("Mypage実行");
-  const { userinfo } = useContext(AuthContext);
+  const { userinfo, setUserInfo } = useContext(AuthContext);
   const { books } = useContext(BookContext);
 
   const [reservationsBook, setReservationsBook] = useState<BookType[]>([]);
@@ -110,7 +110,7 @@ export const Mypage = memo(() => {
   return (
     <>
       <BoxLayout>
-        <Profile userinfo={userinfo!} />
+        <Profile userinfo={userinfo!} setUserInfo={setUserInfo} />
         <PaperBox
           array={borrowedBook}
           title="借りてる本"
