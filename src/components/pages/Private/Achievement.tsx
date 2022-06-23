@@ -12,9 +12,7 @@ import { Button } from "../../parts/Button";
 import { BoxLayout } from "../../layout/BoxLayout";
 
 export const Achievement = () => {
-  const {
-    userinfo: { user_id },
-  } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
 
   const [books, setBooks] = useState<BookType[]>();
 
@@ -23,13 +21,13 @@ export const Achievement = () => {
 
   useEffect(() => {
     const get = async () => {
-      await getAchievementByUserId(user_id).then((res) => {
+      await getAchievementByUserId(userinfo!.user_id).then((res) => {
         setBooks(res.achievement);
       });
     };
 
     get();
-  }, [user_id]);
+  }, [userinfo!.user_id]);
 
   if (loading) {
     return <LoadingScreen text={"取得中"} />;

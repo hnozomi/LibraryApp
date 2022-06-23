@@ -52,7 +52,7 @@ export const Mypage = memo(() => {
 
     // 予約しているユーザーの一覧を抽出し、user_idと一致するか確認
     const isContains = checkArray.some(
-      (element: string) => element === userinfo.user_id
+      (element: string) => element === userinfo!.user_id
     );
 
     // 一致するデータがあった場合、予約している日をチェックする
@@ -84,13 +84,13 @@ export const Mypage = memo(() => {
   const handleClick = async (book: BookType) => {
     // 同じ本をまとめて予約できないことが前提
     const filterReservationByUserId = book?.reservations.filter((res) => {
-      return res.user_id === userinfo.user_id;
+      return res.user_id === userinfo!.user_id;
     });
 
     const info = {
       reservation_id: filterReservationByUserId[0].reservation_id,
       book_id: book?.book_id,
-      user_id: userinfo.user_id,
+      user_id: userinfo!.user_id,
     };
     await returnBook(info);
   };
@@ -110,7 +110,7 @@ export const Mypage = memo(() => {
   return (
     <>
       <BoxLayout>
-        <Profile userinfo={userinfo} />
+        <Profile userinfo={userinfo!} />
         <PaperBox
           array={borrowedBook}
           title="借りてる本"

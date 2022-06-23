@@ -19,21 +19,8 @@ import { useAuthForm } from "../../../hooks/useAuthForm";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ValidationAlert } from "../../organisms/ValidationAlert";
 import { Header } from "../../organisms/Header";
-
-const Copyright = (props: any) => {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      Nozomi Portfolio
-      {new Date().getFullYear()}
-    </Typography>
-  );
-};
+import { Copyright } from "../../organisms/Copyright";
+import { ToppageHeader } from "../../organisms/ToppageHeader";
 
 const theme = createTheme();
 
@@ -54,7 +41,7 @@ export const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      <ToppageHeader />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -108,12 +95,7 @@ export const Login = () => {
             >
               Login
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <MyButton onClick={() => pageTransition("/signup")}>
                   Don't have an account? Sign Up

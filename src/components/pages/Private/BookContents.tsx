@@ -35,9 +35,11 @@ const SwitchButton = (props: any) => {
 };
 
 export const BookContents: FC = () => {
-  const {
-    userinfo: { user_id },
-  } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
+  const [user_id, setUserid] = useState("");
+  if (userinfo !== null) {
+    setUserid(userinfo.user_id);
+  }
 
   const location = useLocation();
   const { book_id, title, author, category, image_url, review, reservations } =

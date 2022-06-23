@@ -36,9 +36,7 @@ export const BookProvider = ({ children }: Props) => {
   const [books, setBooks] = useState<BookType[]>();
   const [loading, setLoading] = useState(false);
 
-  const {
-    userinfo: { user_id },
-  } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
 
   useEffect(() => {
     console.log("BookProviderのuseEffect実行");
@@ -47,7 +45,7 @@ export const BookProvider = ({ children }: Props) => {
     };
 
     getBooksTable();
-  }, [user_id]);
+  }, [userinfo]);
 
   const getBooksByBookId = async () => {
     setLoading(true);

@@ -13,15 +13,14 @@ type Props = {
 export const PrivateRoutes: FC<Props> = memo((props) => {
   console.log("PrivateRoutes実行");
   const { children } = props;
-  const {
-    userinfo: { user_id },
-  } = useContext(AuthContext);
+  const { userinfo, uid } = useContext(AuthContext);
+  console.log(userinfo);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user_id);
-    user_id === "" && navigate("/");
-  }, [user_id]);
+    console.log(userinfo);
+    userinfo === null && navigate("/");
+  }, [userinfo]);
 
   return (
     <BookProvider>

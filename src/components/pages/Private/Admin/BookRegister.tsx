@@ -139,7 +139,7 @@ export const BookRegister: FC = memo(() => {
   const onStop = () => {
     setStartStatus(false);
     setStopStatus(true);
-    // Quagga.stop();
+    Quagga.stop();
   };
 
   const handleClose = () => {

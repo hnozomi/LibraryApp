@@ -20,7 +20,7 @@ import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {
   reviews: any;
-  user_id: string;
+  user_id: string | undefined;
 };
 
 export const Review: FC<Props> = (props) => {

@@ -17,24 +17,26 @@ import { useAuthForm } from "../../../hooks/useAuthForm";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ValidationAlert } from "../../organisms/ValidationAlert";
 import { Header } from "../../organisms/Header";
+import { Copyright } from "../../organisms/Copyright";
+import { ToppageHeader } from "../../organisms/ToppageHeader";
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+// function Copyright(props: any) {
+//   return (
+//     <Typography
+//       variant="body2"
+//       color="text.secondary"
+//       align="center"
+//       {...props}
+//     >
+//       {"Copyright © "}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{" "}
+//       {new Date().getFullYear()}
+//       {"."}
+//     </Typography>
+//   );
+// }
 
 const theme = createTheme();
 
@@ -55,7 +57,7 @@ export const Signup = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      <ToppageHeader />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

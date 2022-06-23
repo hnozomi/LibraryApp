@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, memo, useContext, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -8,7 +8,6 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Button,
   Drawer,
   List,
   ListItem,
@@ -24,15 +23,13 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 
-import { useAuth } from "../../hooks/useAuth";
 import AuthContext from "../../provider/LoginUserProvider";
-
+import { useAuth } from "../../hooks/useAuth";
 import { usePageTransition } from "../../hooks/usePageTransition";
 
-export const Header = () => {
-  const {
-    userinfo: { role },
-  } = useContext(AuthContext);
+export const Header: FC = memo(() => {
+  console.log("Headerが実行");
+  const { userinfo } = useContext(AuthContext);
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -40,7 +37,7 @@ export const Header = () => {
   const { pageTransition } = usePageTransition();
   const { signout } = useAuth();
 
-  const MenuArray = [
+  const HamburgerMenuArray = [
     {
       name: "Home",
       icon: <HomeOutlinedIcon sx={{ p: 0 }} />,
@@ -67,36 +64,42 @@ export const Header = () => {
     },
   ];
 
-  if (role !== "admin") {
-    MenuArray.splice(2, 1);
+  if (userinfo !== null) {
+    if (userinfo!.role !== "admin") {
+      HamburgerMenuArray.splice(2, 1);
+    }
   }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {pathname !== "/home" && (
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowBackIosNewIcon sx={{ textAlign: "left" }} />
-            </IconButton>
+          {pathname !== "/home" ? (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                size="small"
+                color="inherit"
+                sx={{ p: 0 }}
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBackIosNewIcon sx={{ textAlign: "left" }} />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                戻る
+              </Typography>
+            </Box>
+          ) : (
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              LOGO
+            </Typography>
           )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          {pathname.startsWith("/home") ? (
+          {pathname.startsWith("/home") && (
             <>
+              <Box sx={{ flexGrow: 1 }}></Box>
               <IconButton
                 onClick={() => setOpen(true)}
                 size="large"
-                edge="end"
                 color="inherit"
-                aria-label="menu"
               >
                 <MenuIcon />
               </IconButton>
@@ -107,7 +110,7 @@ export const Header = () => {
               >
                 <Box role="presentation">
                   <List>
-                    {MenuArray.map((text, index) => (
+                    {HamburgerMenuArray.map((text, index) => (
                       <ListItem
                         key={text.name}
                         disablePadding
@@ -123,18 +126,9 @@ export const Header = () => {
                 </Box>
               </Drawer>
             </>
-          ) : (
-            <>
-              <Button color="inherit" onClick={() => pageTransition("/login")}>
-                Login
-              </Button>
-              <Button color="inherit" onClick={() => pageTransition("/signup")}>
-                Signup
-              </Button>
-            </>
           )}
         </Toolbar>
       </AppBar>
     </Box>
   );
-};
+});

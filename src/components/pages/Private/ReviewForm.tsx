@@ -32,9 +32,7 @@ export const ReviewForm = () => {
 
   const [rate, setRate] = useState<Rare>(pastRate);
   const [text, setText] = useState(pastText);
-  const {
-    userinfo: { user_id },
-  } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
   const { pageTransition } = usePageTransition();
 
   const { postReview, postloading, complete, result } = usePostData();
@@ -79,7 +77,9 @@ export const ReviewForm = () => {
           </Button>
           <Button
             sx={{ marginLeft: "1em" }}
-            onClick={() => postReview(reviews_id, user_id, book_id, text, rate)}
+            onClick={() =>
+              postReview(reviews_id, userinfo!.user_id, book_id, text, rate)
+            }
             variant="contained"
           >
             投稿

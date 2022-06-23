@@ -11,14 +11,12 @@ type Props = {
 export const AdminRoutes: FC<Props> = memo((props) => {
   console.log("AdminRoutes実行");
   const { children } = props;
-  const {
-    userinfo: { role },
-  } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    role !== "admin" && navigate("/home");
-  }, [role]);
+    userinfo!.role !== "admin" && navigate("/home");
+  }, [userinfo!.role]);
 
   return <>{children}</>;
 });
