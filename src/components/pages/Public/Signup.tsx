@@ -20,24 +20,6 @@ import { Header } from "../../organisms/Header";
 import { Copyright } from "../../organisms/Copyright";
 import { ToppageHeader } from "../../organisms/ToppageHeader";
 
-// function Copyright(props: any) {
-//   return (
-//     <Typography
-//       variant="body2"
-//       color="text.secondary"
-//       align="center"
-//       {...props}
-//     >
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
-
 const theme = createTheme();
 
 const MyButton = styled("button")({
@@ -80,7 +62,7 @@ export const Signup = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={(e: any) => authForm(e, signup, "/login")}
+            onSubmit={(e: any) => authForm(e, signup, "/home")}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>

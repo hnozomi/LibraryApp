@@ -63,7 +63,7 @@ export const Login = () => {
           )}
           <Box
             component="form"
-            onSubmit={(e: any) => authForm(e, login, "/home")}
+            onSubmit={(e: any) => authForm(e, login, "/login")}
             noValidate
             sx={{ mt: 1 }}
           >

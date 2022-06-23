@@ -45,7 +45,7 @@ export const BookProvider = ({ children }: Props) => {
     };
 
     getBooksTable();
-  }, [userinfo]);
+  }, []);
 
   const getBooksByBookId = async () => {
     setLoading(true);

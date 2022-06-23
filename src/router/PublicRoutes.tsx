@@ -11,7 +11,7 @@ type Props = {
 export const PublicRoutes: FC<Props> = memo((props) => {
   console.log("PublicRoutes実行");
   const { children } = props;
-  const { userinfo, uid } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {

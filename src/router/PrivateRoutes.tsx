@@ -13,7 +13,7 @@ type Props = {
 export const PrivateRoutes: FC<Props> = memo((props) => {
   console.log("PrivateRoutes実行");
   const { children } = props;
-  const { userinfo, uid } = useContext(AuthContext);
+  const { userinfo } = useContext(AuthContext);
   console.log(userinfo);
   const navigate = useNavigate();
 

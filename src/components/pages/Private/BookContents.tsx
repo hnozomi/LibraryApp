@@ -36,10 +36,6 @@ const SwitchButton = (props: any) => {
 
 export const BookContents: FC = () => {
   const { userinfo } = useContext(AuthContext);
-  const [user_id, setUserid] = useState("");
-  if (userinfo !== null) {
-    setUserid(userinfo.user_id);
-  }
 
   const location = useLocation();
   const { book_id, title, author, category, image_url, review, reservations } =
@@ -101,11 +97,11 @@ export const BookContents: FC = () => {
         </FlexBoxLayout>
         {/* </Box> */}
         {status === "レビュー" ? (
-          <Review reviews={review} user_id={user_id} />
+          <Review reviews={review} user_id={userinfo!.user_id} />
         ) : (
           <ReservationCulensder
             book_id={book_id}
-            user_id={user_id}
+            user_id={userinfo!.user_id}
             reservations={reservations}
           />
         )}
