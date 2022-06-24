@@ -25,6 +25,7 @@ import {
 import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
+import { DocumentData } from "firebase/firestore";
 
 type FormNotification = {
   open: boolean;
@@ -60,7 +61,7 @@ export const RoleChange: FC = memo(() => {
     );
 
     const querySnapshot = await getDocs(queryResult);
-    querySnapshot.forEach((doc: any) => {
+    querySnapshot.forEach((doc: DocumentData) => {
       objectId = doc.id;
     });
 

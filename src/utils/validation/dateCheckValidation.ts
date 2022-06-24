@@ -49,16 +49,6 @@ import { getNowYMD } from "../getNowYMD";
 //     }
 // }
 
-const checkDate = (date: ReservationDate) => {
-    const startDate = new Date(date.start);
-    const endDate = new Date(date.end);
-    const diffDate =
-      Math.floor(endDate.getTime() - startDate.getTime()) / 86400000;
-  
-    return diffDate;
-  };
-
-
 //   export const checkCurrentReservation = (reservations: any, setAlert: any, user_id: string) => {
 
 //       const current = checkMyReservation(reservations, user_id);
@@ -72,15 +62,23 @@ const checkDate = (date: ReservationDate) => {
 //         }
 //   }
 
+const checkDate = (date: ReservationDate) => {
+  const startDate = new Date(date.start);
+  const endDate = new Date(date.end);
+  const diffDate =
+    Math.floor(endDate.getTime() - startDate.getTime()) / 86400000;
 
-  const checkMyReservation = (reservations: any, user_id: string) => {
+  return diffDate;
+};
+
+  const checkMyReservation = (reservations: Array<ReservationType>, user_id: string) => {
     const current = reservations.some(
-      (reservation: any) => reservation.user_id === user_id
+      (reservation: ReservationType) => reservation.user_id === user_id
     );
     return current;
   };
 
-  export const checkReservationDate = (date: DateType, reservations: ReservationType[], user_id: string) => {
+  export const checkReservationDate = (date: DateType, reservations: Array<ReservationType>, user_id: string) => {
 
     let message = ""
     let isCheck = false
@@ -103,11 +101,11 @@ const checkDate = (date: ReservationDate) => {
         isCheck = true
       }
 
-      // const current = checkMyReservation(reservations, user_id);
-      // if (current) {
-      //   message = "現在の予約が終わってからにしてください"
-      //   isCheck = true
-      // }
+      const current = checkMyReservation(reservations, user_id);
+      if (current) {
+        message = "現在の予約が終わってからにしてください"
+        isCheck = true
+      }
 
       if (date.start === "" || date.end === "") {
         message = "予約日付を選択してください"

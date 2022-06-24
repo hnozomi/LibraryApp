@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 import {
   Avatar,
@@ -18,9 +18,8 @@ import { UserType } from "../../types/types";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {
-  // userinfo: UserType;
-  userinfo: any;
-  setUserInfo: any;
+  userinfo: UserType;
+  setUserInfo: Dispatch<SetStateAction<UserType | null>>;
 };
 
 export const Profile: FC<Props> = (props) => {
@@ -41,7 +40,7 @@ export const Profile: FC<Props> = (props) => {
   };
 
   return (
-    <FlexBoxLayout css={{ marginTop: "1em" }}>
+    <FlexBoxLayout style={{ marginTop: "1em" }}>
       {/* 後でアイコンを設定できるようにする */}
       <Avatar alt="アイコン" src="/static/images/avatar/1.jpg" />
       <Box sx={{ marginLeft: "1em" }}>
@@ -62,9 +61,9 @@ export const Profile: FC<Props> = (props) => {
           </FlexBoxLayout>
         ) : (
           <FlexBoxLayout
-            css={{ justifyContent: "space-around", flexFlow: "column" }}
+            style={{ justifyContent: "space-around", flexFlow: "column" }}
           >
-            <FlexBoxLayout css={{ width: "100%" }}>
+            <FlexBoxLayout style={{ width: "100%" }}>
               <Typography>{`${value}`}</Typography>
               <IconButton
                 sx={{ p: 0, ml: "0.2em" }}

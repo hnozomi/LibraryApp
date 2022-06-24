@@ -15,7 +15,7 @@ export type BookContextType = {
   books: BookType[] | undefined;
   loading: boolean;
   deleteStateBooks: (book_id: string) => void;
-  getBooksByBookId: any;
+  getBooksByBookId: () => void;
 };
 
 export const BookContext = createContext<BookContextType>(
@@ -32,7 +32,6 @@ const options = {
 
 export const BookProvider = ({ children }: Props) => {
   console.log("BookProvider実行");
-  // const { getBooksByBookId, loading }: any = useGetData();
   // 初期値入れないとundefinedになるのはどうすればよい？
   const [books, setBooks] = useState<BookType[]>();
   const [loading, setLoading] = useState(false);

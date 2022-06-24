@@ -1,5 +1,5 @@
 import { FC, memo, useState } from "react";
-import Quagga from "@ericblade/quagga2";
+import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import {
   Box,
   Button,
@@ -49,11 +49,13 @@ export const BookRegister: FC = memo(() => {
     let status = false;
     let barcode = await BarcodeDetect(result);
 
-    const init = barcode.slice(0, 3);
+    const init = barcode?.slice(0, 3);
     if (init === "978" && status === false) {
       Quagga.stop();
 
-      await executeSearchBook(barcode);
+      if (barcode !== undefined) {
+        await executeSearchBook(barcode);
+      }
 
       setStartStatus(false);
       setStopStatus(true);
@@ -61,7 +63,7 @@ export const BookRegister: FC = memo(() => {
     }
   });
 
-  const BarcodeDetect = async (result: any) => {
+  const BarcodeDetect = async (result: QuaggaJSResultObject) => {
     if (result !== undefined) {
       if (result.codeResult.code !== null) {
         return result.codeResult.code;

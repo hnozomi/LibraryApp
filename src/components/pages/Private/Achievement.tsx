@@ -14,7 +14,7 @@ import { BoxLayout } from "../../layout/BoxLayout";
 export const Achievement = () => {
   const { userinfo } = useContext(AuthContext);
 
-  const [books, setBooks] = useState<BookType[]>();
+  const [books, setBooks] = useState<BookType[]>([]);
 
   const { pageTransition } = usePageTransition();
   const { getAchievementByUserId, loading } = useGetData();
@@ -22,7 +22,9 @@ export const Achievement = () => {
   useEffect(() => {
     const get = async () => {
       await getAchievementByUserId(userinfo!.user_id).then((res) => {
-        setBooks(res.achievement);
+        if (res.achievement !== undefined) {
+          setBooks(res.achievement);
+        }
       });
     };
 
@@ -33,6 +35,7 @@ export const Achievement = () => {
     return <LoadingScreen text={"取得中"} />;
   }
 
+  console.log(books);
   return (
     <>
       <BoxLayout>

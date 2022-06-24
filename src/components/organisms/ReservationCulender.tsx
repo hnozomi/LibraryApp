@@ -15,7 +15,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
 import { usePostData } from "../../hooks/usePostData";
-import { ReservationType } from "../../types/types";
+import { DateType, ReservationType } from "../../types/types";
 import { LoadingScreen } from "./LoadingScreen";
 import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";
@@ -37,10 +37,10 @@ export const ReservationCulensder: FC<Props> = (props) => {
   const [alert, setAlert] = useState({ open: false, message: "" });
   const [isStart, setIsStart] = useState(true);
 
-  const [test, setTest] = useState<any>();
-
   const { insertReservation, postloading, result, complete } = usePostData();
   const { getBooksByBookId } = useContext(BookContext);
+
+  const [reservationDate, setReservationDate] = useState<Array<DateType>>([]);
 
   useEffect(() => {
     let reservation = reservations.map((res: ReservationType) => {
@@ -50,7 +50,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
       };
       return reservationData;
     });
-    setTest(reservation);
+    setReservationDate(reservation);
   }, [reservations]);
 
   const handleClick = () => {
@@ -113,11 +113,10 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   const handlePostClick = () => {
     setOpen(false);
-    // console.log(date);
     date.end = date.end + " 23:59:59";
-    let newArray = [...test, date];
+    let newArray = [...reservationDate, date];
     insertReservation(user_id, book_id, date).then((res) => {
-      setTest(newArray);
+      setReservationDate(newArray);
       getBooksByBookId();
     });
   };
@@ -192,8 +191,6 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return <ResultDialog result={result}></ResultDialog>;
   }
 
-  console.log(test);
-
   return (
     <Box sx={{ marginTop: "1em" }}>
       <FullCalendar
@@ -201,7 +198,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
         initialView="dayGridMonth"
         locale="ja" // 日本語化
         dateClick={handleDateClick}
-        events={test}
+        events={reservationDate}
         displayEventTime={false}
       />
       <Box sx={{ mt: "1em" }}>

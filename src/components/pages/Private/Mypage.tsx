@@ -22,7 +22,7 @@ export const Mypage = memo(() => {
   const { books } = useContext(BookContext);
 
   const [reservationsBook, setReservationsBook] = useState<BookType[]>([]);
-  const [borrowedBook, setBorrowedBook] = useState<BookType[]>([]);
+  const [borrowedBook, setBorrowedBook] = useState<Array<BookType>>([]);
   const [loading, setLoading] = useState(false);
 
   const { returnBook, postloading, complete, result } = usePostData();
@@ -30,6 +30,7 @@ export const Mypage = memo(() => {
   useEffect(() => {
     // 書籍情報にReservationsが存在しているかチェック
     setLoading(true);
+    console.log(books);
     books?.map(async (book) => {
       if (book.reservations.length !== 0) {
         await checkReservation(book, book.reservations);
@@ -63,12 +64,12 @@ export const Mypage = memo(() => {
 
   // 予約している日かどうかをチェック
   const checkReservationDate = async (
-    bookReservation: any,
-    bookInformation: any
+    bookReservation: ReservationType[],
+    bookInformation: BookType
   ) => {
     const nowDate = getNowYMD();
 
-    bookReservation.forEach((res: any) => {
+    bookReservation.forEach((res: ReservationType) => {
       if (res.start_day <= nowDate && nowDate <= res.end_day) {
         borrowd.push(bookInformation);
       } else {

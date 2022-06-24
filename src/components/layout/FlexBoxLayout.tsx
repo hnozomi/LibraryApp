@@ -1,21 +1,19 @@
-import { CssRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { FC, ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
-  css?: any;
+  style?: any;
 };
 
 export const FlexBoxLayout: FC<Props> = (props) => {
-  const { children, css } = props;
-  console.log(css);
+  const { children, style } = props;
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        ...css,
+        ...style,
       }}
     >
       {children}

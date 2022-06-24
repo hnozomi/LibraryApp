@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import {
   Button,
   Checkbox,
@@ -20,7 +20,8 @@ type Props = {
   onClick: () => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleClose: () => void;
-  setValue: any;
+  setValue: Dispatch<SetStateAction<string>>;
+  // setValue: any;
 };
 
 export const SearchBox: FC<Props> = (props) => {

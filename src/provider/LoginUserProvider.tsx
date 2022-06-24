@@ -1,6 +1,13 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 import {
   auth,
@@ -12,10 +19,11 @@ import {
   where,
 } from "../lib/Firebase/firebase";
 import { UserType } from "../types/types";
+import { DocumentData, QuerySnapshot } from "firebase/firestore";
 
 export type LoginUserContextType = {
   userinfo: UserType | null;
-  setUserInfo: any;
+  setUserInfo: Dispatch<SetStateAction<UserType | null>>;
 };
 
 export const AuthContext = createContext<LoginUserContextType>(
@@ -32,7 +40,7 @@ export const AuthProvider = ({ children }: Props) => {
   const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user: any) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         await checkUser(user);
       } else {
@@ -42,7 +50,7 @@ export const AuthProvider = ({ children }: Props) => {
     });
   }, []);
 
-  const checkUser = async (user: any) => {
+  const checkUser = async (user: User) => {
     const querySnapshot = await queryUserInfo(user);
 
     if (querySnapshot.empty) {
@@ -61,7 +69,7 @@ export const AuthProvider = ({ children }: Props) => {
     }
   };
 
-  const queryUserInfo = async (user: any) => {
+  const queryUserInfo = async (user: User) => {
     const queryResult = query(
       collection(db, "users"),
       where("user_id", "==", user.uid)
@@ -70,10 +78,9 @@ export const AuthProvider = ({ children }: Props) => {
     return querySnapshot;
   };
 
-  const getUserInfo = async (querySnapshot: any) => {
-    querySnapshot.forEach((doc: any) => {
-      console.log(doc.id);
-      let userinfo: any = doc.data();
+  const getUserInfo = async (querySnapshot: QuerySnapshot<DocumentData>) => {
+    querySnapshot.forEach((doc: DocumentData) => {
+      let userinfo: UserType = doc.data();
       userinfo.documentId = doc.id;
       setUserInfo(userinfo);
     });

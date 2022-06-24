@@ -1,8 +1,9 @@
 import { Alert, Snackbar } from "@mui/material";
+import { FormNotification } from "../../types/types";
 
 type Props = {
-  open: any;
-  handleClose: any;
+  open: FormNotification;
+  handleClose: () => void;
 };
 
 export const ValidationAlert = (props: Props) => {

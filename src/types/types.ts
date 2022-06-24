@@ -1,4 +1,5 @@
 export type UserType = {
+    documentId: string
     user_id: string
     username: string;
     icon: string;
@@ -17,7 +18,7 @@ export type BookType = {
     author: string;
     category: string | [];
     image_url: string;
-    review: [],
+    review: Array<ReviewType>,
     reservations: Array<ReservationType>
 }
 
@@ -27,8 +28,8 @@ export type ReservationType = {
     reservation_id: string
     user_id: string;
     book_id: string;
-    start_day: Date;
-    end_day: Date
+    start_day: string;
+    end_day: string
 } 
 
 export type DeleteReservationType = Omit<ReservationType, "start_day" | "end_day">
@@ -54,9 +55,8 @@ export type ReservationDate = {
 export type ReviewType = {
     review_id: string
     rate: number;
-    memo: string;
+    text: string;
     user_id: string;
-    book_id: string
 }
 
 export type Result = {
@@ -69,3 +69,9 @@ export type DateType = {
     start: string,
     end: string
 }
+
+export type FormNotification = {
+    open: boolean;
+    status: string | undefined;
+    message: string | undefined;
+  };

@@ -17,14 +17,16 @@ import { usePostData } from "../../hooks/usePostData";
 import { ResultDialog } from "./ResultDialog";
 import { LoadingScreen } from "./LoadingScreen";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
+import { ReviewType } from "../../types/types";
 
 type Props = {
-  reviews: any;
+  reviews: Array<ReviewType>;
   user_id: string | undefined;
 };
 
 export const Review: FC<Props> = (props) => {
   const { reviews, user_id } = props;
+  console.log(reviews);
 
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -96,7 +98,7 @@ export const Review: FC<Props> = (props) => {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
-            {reviews.map((review: any, index: number) => (
+            {reviews.map((review: ReviewType, index: number) => (
               <Tab label={index + 1} value={index} key={review.review_id} />
             ))}
           </Tabs>

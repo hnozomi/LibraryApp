@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Container,
   Typography,
 } from "@mui/material";
 
@@ -19,7 +18,13 @@ import { BookType } from "../../../types/types";
 import { BoxLayout } from "../../layout/BoxLayout";
 import { FlexBoxLayout } from "../../layout/FlexBoxLayout";
 
-const SwitchButton = (props: any) => {
+type Props = {
+  active: string;
+  name: string;
+  onClick: () => void;
+};
+
+const SwitchButton = (props: Props) => {
   const { active, name, onClick } = props;
   const color = active === name ? "primary" : "inherit";
   return (
@@ -77,7 +82,7 @@ export const BookContents: FC = () => {
             </CardContent>
           </Box>
         </Card>
-        <FlexBoxLayout css={{ marginTop: "1em" }}>
+        <FlexBoxLayout style={{ marginTop: "1em" }}>
           {/* <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}> */}
           <Typography variant="h5" sx={{ marginRight: "auto" }}>
             {status}

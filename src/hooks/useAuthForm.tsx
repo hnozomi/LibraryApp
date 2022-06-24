@@ -1,12 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-
-type FormNotification = {
-  open: boolean;
-  status: string | undefined;
-  message: string | undefined;
-};
+import { FormNotification } from "../types/types";
 
 export const useAuthForm = () => {
   const [open, setOpen] = useState<FormNotification>({
@@ -23,7 +18,14 @@ export const useAuthForm = () => {
 
   const authForm = async (
     e: React.FormEvent<HTMLFormElement>,
-    func: any,
+    func: (
+      email: string,
+      password: string
+    ) => Promise<{
+      open: boolean;
+      status: string;
+      message: string;
+    }>,
     path: string
   ) => {
     e.preventDefault();
