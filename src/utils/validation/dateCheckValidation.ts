@@ -103,11 +103,11 @@ const checkDate = (date: ReservationDate) => {
         isCheck = true
       }
 
-      const current = checkMyReservation(reservations, user_id);
-      if (current) {
-        message = "現在の予約が終わってからにしてください"
-        isCheck = true
-      }
+      // const current = checkMyReservation(reservations, user_id);
+      // if (current) {
+      //   message = "現在の予約が終わってからにしてください"
+      //   isCheck = true
+      // }
 
       if (date.start === "" || date.end === "") {
         message = "予約日付を選択してください"

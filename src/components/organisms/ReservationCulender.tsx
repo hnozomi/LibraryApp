@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 
 import {
   Box,
@@ -21,6 +21,7 @@ import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";
 import { SelectDate } from "./SelectDate";
 import { checkReservationDate } from "../../utils/validation/dateCheckValidation";
+import BookContext from "../../provider/BookInformationProvider";
 
 type Props = {
   book_id: string;
@@ -36,7 +37,21 @@ export const ReservationCulensder: FC<Props> = (props) => {
   const [alert, setAlert] = useState({ open: false, message: "" });
   const [isStart, setIsStart] = useState(true);
 
+  const [test, setTest] = useState<any>();
+
   const { insertReservation, postloading, result, complete } = usePostData();
+  const { getBooksByBookId } = useContext(BookContext);
+
+  useEffect(() => {
+    let reservation = reservations.map((res: ReservationType) => {
+      const reservationData = {
+        start: res.start_day + " 00:00:00",
+        end: res.end_day + " 23:59:59", //時刻を入力しないと、00:00:00で認識され、日付の表示が前日になる
+      };
+      return reservationData;
+    });
+    setTest(reservation);
+  }, [reservations]);
 
   const handleClick = () => {
     const result = checkReservationDate(date, reservations, user_id);
@@ -98,16 +113,22 @@ export const ReservationCulensder: FC<Props> = (props) => {
 
   const handlePostClick = () => {
     setOpen(false);
-    insertReservation(user_id, book_id, date);
+    // console.log(date);
+    date.end = date.end + " 23:59:59";
+    let newArray = [...test, date];
+    insertReservation(user_id, book_id, date).then((res) => {
+      setTest(newArray);
+      getBooksByBookId();
+    });
   };
 
-  let reservation = reservations.map((res: ReservationType) => {
-    const reservationData = {
-      start: res.start_day,
-      end: res.end_day + " 23:59:59", //時刻を入力しないと、00:00:00で認識され、日付の表示が前日になる
-    };
-    return reservationData;
-  });
+  // let reservation = reservations.map((res: ReservationType) => {
+  //   const reservationData = {
+  //     start: res.start_day + " 00:00:00",
+  //     end: res.end_day + " 23:59:59", //時刻を入力しないと、00:00:00で認識され、日付の表示が前日になる
+  //   };
+  //   return reservationData;
+  // });
 
   const handleCloseSnackBar = () => {
     setAlert({
@@ -171,6 +192,8 @@ export const ReservationCulensder: FC<Props> = (props) => {
     return <ResultDialog result={result}></ResultDialog>;
   }
 
+  console.log(test);
+
   return (
     <Box sx={{ marginTop: "1em" }}>
       <FullCalendar
@@ -178,7 +201,7 @@ export const ReservationCulensder: FC<Props> = (props) => {
         initialView="dayGridMonth"
         locale="ja" // 日本語化
         dateClick={handleDateClick}
-        events={reservation}
+        events={test}
         displayEventTime={false}
       />
       <Box sx={{ mt: "1em" }}>

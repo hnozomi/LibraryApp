@@ -77,7 +77,7 @@ export const BookContents: FC = () => {
             </CardContent>
           </Box>
         </Card>
-        <FlexBoxLayout>
+        <FlexBoxLayout css={{ marginTop: "1em" }}>
           {/* <Box sx={{ display: "flex", alignItems: "center", marginTop: "1em" }}> */}
           <Typography variant="h5" sx={{ marginRight: "auto" }}>
             {status}

@@ -8,75 +8,117 @@ import {
   Select,
   MenuItem,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
+import {
+  db,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "../../../../lib/Firebase/firebase";
+
 import { usePageTransition } from "../../../../hooks/usePageTransition";
-import { usePostData } from "../../../../hooks/usePostData";
-import { LoadingScreen } from "../../../organisms/LoadingScreen";
-import { ResultDialog } from "../../../organisms/ResultDialog";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
+
+type FormNotification = {
+  open: boolean;
+  status: string | undefined;
+  message: string | undefined;
+};
 
 export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");
   const [role, setRole] = useState("");
-  const [mail, setMail] = useState("");
+  const [userId, setUserId] = useState("");
+  const [open, setOpen] = useState<FormNotification>({
+    open: false,
+    status: "",
+    message: "",
+  });
 
   const { pageTransition } = usePageTransition();
-  const { changeRole, postloading, complete, result } = usePostData();
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value as string);
   };
 
   const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMail(event.target.value as string);
+    setUserId(event.target.value as string);
   };
 
   const handleClick = async () => {
-    await changeRole(role, mail).then(() => {
-      setRole("");
-      setMail("");
+    let objectId;
+    const queryResult = query(
+      collection(db, "users"),
+      where("user_id", "==", userId)
+    );
+
+    const querySnapshot = await getDocs(queryResult);
+    querySnapshot.forEach((doc: any) => {
+      objectId = doc.id;
     });
+
+    const selectUserInfo = doc(collection(db, "users"), objectId);
+    updateDoc(selectUserInfo, {
+      role: role,
+    });
+    setOpen({ ...open, open: true, message: "変更に成功しました" });
+    setRole("");
+    setUserId("");
   };
 
-  if (postloading) {
-    return <LoadingScreen text={"変更中"}></LoadingScreen>;
-  }
+  const handleClose = () => {
+    setOpen({ ...open, open: false });
+  };
 
-  if (complete) {
-    return <ResultDialog result={result}></ResultDialog>;
-  }
+  const SnackAlert = () => {
+    return (
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open.open}
+        onClose={handleClose}
+        autoHideDuration={2500}
+      >
+        <Alert sx={{ width: "100%" }} severity="success">
+          {open.message}
+        </Alert>
+      </Snackbar>
+    );
+  };
 
   return (
     <>
       <BoxLayout>
         <Box>
+          {open.open && <SnackAlert />}
           <Typography sx={{ fontSize: "14px" }}>
-            役割を変更するメールアドレスを入力してください
+            役割を変更する人のユーザーIDを入力してください
           </Typography>
           <TextField
             id="component-filled"
             sx={{ width: "100%", marginTop: "0.5em" }}
             variant="outlined"
-            value={mail}
+            value={userId}
             onChange={handleChangeText}
           />
         </Box>
         <Box sx={{ marginTop: "1em" }}>
-          <Typography>変更する内容を選択してください</Typography>
+          <Typography>変更する役割を選択してください</Typography>
           <Select
             value={role}
             label="変更内容"
             onChange={handleChange}
             sx={{ width: "100%", marginTop: "0.5em" }}
           >
-            <MenuItem value={"read/general"}>readonly → general</MenuItem>
-            <MenuItem value={"read/admin"}>readonly → admin</MenuItem>
-            <MenuItem value={"general/readonly"}>general → readonly</MenuItem>
-            <MenuItem value={"general/admin"}>general → admin</MenuItem>
-            <MenuItem value={"admin/readonly"}>admin → readonly</MenuItem>
-            <MenuItem value={"admin/general"}>admin → general</MenuItem>
+            <MenuItem value={"readonly"}>readonlyに変更</MenuItem>
+            <MenuItem value={"general"}>generalに変更</MenuItem>
+            <MenuItem value={"admin"}>adminに変更</MenuItem>
           </Select>
         </Box>
         <ButtonLayout>

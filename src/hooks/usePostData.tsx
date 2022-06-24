@@ -42,39 +42,6 @@ export const usePostData = () => {
       });
   };
 
-  const changeRole = async (role: any, mail: any) => {
-    setPostLoading(true);
-
-    await axios
-      .post(
-        "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/change_role",
-        {
-          e_mail: mail,
-          previousRole: role[0],
-          nextRole: role[1],
-        },
-        options
-      )
-      .then((res) => {
-        setResult({
-          ...result,
-          message: res.data.message,
-          status: res.data.status,
-        });
-      })
-      .catch((err) => {
-        console.log(err, "err");
-      })
-      .finally(() => {
-        setPostLoading(false);
-        // setOpen(true);
-        setComplete(true);
-        setTimeout(() => {
-          setComplete(false);
-        }, 3000);
-      });
-  };
-
   const deleteBook = async (deleteBook: BookType) => {
     setPostLoading(true);
 
@@ -227,41 +194,43 @@ export const usePostData = () => {
         }, 3000);
         // setOpen(false);
       });
+
+    return "成功しました";
   };
 
-  const EditUserName = useCallback(
-    async (user_id: string, username: string) => {
-      setPostLoading(true);
+  // const EditUserName = useCallback(
+  //   async (user_id: string, username: string) => {
+  //     setPostLoading(true);
 
-      await axios
-        .post(
-          "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_username",
-          {
-            user_id: user_id,
-            username: username,
-          },
-          options
-        )
-        .then((result) => {
-          setResult({
-            ...result,
-            message: result.data.message,
-            status: result.data.status,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setPostLoading(false);
-          setComplete(true);
-          setTimeout(() => {
-            setComplete(false);
-          }, 3000);
-        });
-    },
-    []
-  );
+  //     await axios
+  //       .post(
+  //         "https://9qnebu8p5e.execute-api.ap-northeast-1.amazonaws.com/default/LibraryApp/update_username",
+  //         {
+  //           user_id: user_id,
+  //           username: username,
+  //         },
+  //         options
+  //       )
+  //       .then((result) => {
+  //         setResult({
+  //           ...result,
+  //           message: result.data.message,
+  //           status: result.data.status,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       })
+  //       .finally(() => {
+  //         setPostLoading(false);
+  //         setComplete(true);
+  //         setTimeout(() => {
+  //           setComplete(false);
+  //         }, 3000);
+  //       });
+  //   },
+  //   []
+  // );
 
   const deleteReview = useCallback(async (reviews_id: string) => {
     setPostLoading(true);
@@ -295,12 +264,11 @@ export const usePostData = () => {
 
   return {
     returnBook,
-    changeRole,
     deleteBook,
     insertBooks,
     postReview,
     insertReservation,
-    EditUserName,
+    // EditUserName,
     deleteReview,
     postloading,
     open,

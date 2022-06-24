@@ -15,6 +15,7 @@ export type BookContextType = {
   books: BookType[] | undefined;
   loading: boolean;
   deleteStateBooks: (book_id: string) => void;
+  getBooksByBookId: any;
 };
 
 export const BookContext = createContext<BookContextType>(
@@ -78,6 +79,7 @@ export const BookProvider = ({ children }: Props) => {
         books,
         loading,
         deleteStateBooks,
+        getBooksByBookId,
       }}
     >
       {children}

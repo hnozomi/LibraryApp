@@ -7,15 +7,12 @@ import {
   Button as MUIButton,
   IconButton,
   TextField,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { db, collection, doc, updateDoc } from "../../lib/Firebase/firebase";
 
 import { usePageTransition } from "../../hooks/usePageTransition";
-import { usePostData } from "../../hooks/usePostData";
 
 import { UserType } from "../../types/types";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
@@ -33,22 +30,6 @@ export const Profile: FC<Props> = (props) => {
   const [value, setValue] = useState(userinfo.username);
 
   const { pageTransition } = usePageTransition();
-  const { EditUserName, result, complete } = usePostData();
-
-  if (complete) {
-    return (
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={complete}
-        autoHideDuration={1500}
-        sx={{ zIndex: 999 }}
-      >
-        <Alert sx={{ width: "100%" }} severity={result.status}>
-          {result.message}
-        </Alert>
-      </Snackbar>
-    );
-  }
 
   const editUsername = () => {
     const newCityRef = doc(collection(db, "users"), userinfo.documentId);
@@ -60,7 +41,7 @@ export const Profile: FC<Props> = (props) => {
   };
 
   return (
-    <FlexBoxLayout>
+    <FlexBoxLayout css={{ marginTop: "1em" }}>
       {/* 後でアイコンを設定できるようにする */}
       <Avatar alt="アイコン" src="/static/images/avatar/1.jpg" />
       <Box sx={{ marginLeft: "1em" }}>
@@ -75,39 +56,29 @@ export const Profile: FC<Props> = (props) => {
             <MUIButton variant="text" onClick={() => setEdit(false)}>
               閉じる
             </MUIButton>
-            <MUIButton
-              onClick={editUsername}
-              // onClick={() => {
-              //   EditUserName(userinfo.user_id, value).finally(() => {
-              //     setEdit(false);
-              //   });
-              // }}
-              variant="text"
-            >
+            <MUIButton onClick={editUsername} variant="text">
               変更
             </MUIButton>
           </FlexBoxLayout>
         ) : (
-          <FlexBoxLayout>
-            <Typography>{`ユーザー名: ${value}`}</Typography>
-            <IconButton
-              sx={{ p: 0, ml: "0.2em" }}
-              onClick={() => setEdit(true)}
-            >
-              <EditIcon />
-            </IconButton>
+          <FlexBoxLayout
+            css={{ justifyContent: "space-around", flexFlow: "column" }}
+          >
+            <FlexBoxLayout css={{ width: "100%" }}>
+              <Typography>{`${value}`}</Typography>
+              <IconButton
+                sx={{ p: 0, ml: "0.2em" }}
+                onClick={() => setEdit(true)}
+              >
+                <EditIcon />
+              </IconButton>
+            </FlexBoxLayout>
+            <Typography
+              sx={{ fontSize: "0.5em" }}
+            >{`${userinfo.user_id}`}</Typography>
+            {/* <Typography>{`ユーザー名: ${value}`}</Typography>
+            <Typography>{`ユーザーid: ${userinfo.user_id}`}</Typography> */}
           </FlexBoxLayout>
-          // <Typography
-          //   sx={{ mb: "0.1em", display: "flex", alignItems: "center" }}
-          // >
-          //   {`ユーザー名: ${value}`}
-          //   <IconButton
-          //     sx={{ p: 0, ml: "0.2em" }}
-          //     onClick={() => setEdit(true)}
-          //   >
-          //     <EditIcon />
-          //   </IconButton>
-          // </Typography>
         )}
 
         <Box>
