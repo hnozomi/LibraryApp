@@ -21,7 +21,6 @@ type Props = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleClose: () => void;
   setValue: Dispatch<SetStateAction<string>>;
-  // setValue: any;
 };
 
 export const SearchBox: FC<Props> = (props) => {

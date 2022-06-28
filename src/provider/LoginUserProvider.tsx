@@ -7,8 +7,6 @@ import {
   useState,
 } from "react";
 
-import { onAuthStateChanged, User } from "firebase/auth";
-
 import {
   auth,
   db,
@@ -17,9 +15,13 @@ import {
   addDoc,
   query,
   where,
+  onAuthStateChanged,
 } from "../lib/Firebase/firebase";
-import { UserType } from "../types/types";
+
+import { User } from "firebase/auth";
 import { DocumentData, QuerySnapshot } from "firebase/firestore";
+
+import { UserType } from "../types/types";
 
 export type LoginUserContextType = {
   userinfo: UserType | null;

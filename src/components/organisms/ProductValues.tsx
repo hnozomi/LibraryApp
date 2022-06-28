@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Theme } from "@mui/material/styles";
 import { SxProps } from "@mui/system";
 import Box from "@mui/material/Box";
@@ -13,7 +12,7 @@ const item: SxProps<Theme> = {
   px: 5,
 };
 
-function ProductValues() {
+export const ProductValues = () => {
   return (
     <Box
       component="section"
@@ -73,6 +72,6 @@ function ProductValues() {
       </Container>
     </Box>
   );
-}
+};
 
 export default ProductValues;

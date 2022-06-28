@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
-import ProductHeroLayout from "../../layout/ProductHeroLayout";
-import { Copyright } from "../../organisms/Copyright";
 
-import ProductValues from "../../organisms/ProductValues";
+import { ProductHeroLayout } from "../../layout/ProductHeroLayout";
+import { ProductValues } from "../../organisms/ProductValues";
+import { Copyright } from "../../organisms/Copyright";
 import { ToppageHeader } from "../../organisms/ToppageHeader";
 
 export const Toppage = () => {

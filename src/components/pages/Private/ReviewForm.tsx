@@ -9,16 +9,7 @@ import { BoxLayout } from "../../layout/BoxLayout";
 import { ButtonLayout } from "../../layout/ButtonLayout";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ResultDialog } from "../../organisms/ResultDialog";
-
-type Rare = number | null;
-
-type LocationState = {
-  book_id?: string;
-  reviews_id?: string;
-  review_user_id?: string;
-  rate?: number;
-  text?: string;
-};
+import { LocationState, Rare } from "../../../types/types";
 
 export const ReviewForm = () => {
   console.log("ReviewForm実行");

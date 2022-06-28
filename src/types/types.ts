@@ -75,3 +75,13 @@ export type FormNotification = {
     status: string | undefined;
     message: string | undefined;
   };
+
+export type Rare = number | null;
+
+export type LocationState = {
+  book_id?: string;
+  reviews_id?: string;
+  review_user_id?: string;
+  rate?: number;
+  text?: string;
+};

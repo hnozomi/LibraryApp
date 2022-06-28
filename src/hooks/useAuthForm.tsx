@@ -34,7 +34,6 @@ export const useAuthForm = () => {
     const email = data.get("email")?.toString()!;
     const password = data.get("password")?.toString()!;
 
-    console.log("funcを実行します");
     const res = await func(email, password);
     setOpen({
       ...open,

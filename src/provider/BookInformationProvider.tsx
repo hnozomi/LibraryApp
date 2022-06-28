@@ -1,15 +1,8 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 import axios from "axios";
 
 import { BookType } from "../types/types";
-import AuthContext from "./LoginUserProvider";
 
 export type BookContextType = {
   books: BookType[] | undefined;
@@ -35,8 +28,6 @@ export const BookProvider = ({ children }: Props) => {
   // 初期値入れないとundefinedになるのはどうすればよい？
   const [books, setBooks] = useState<BookType[]>();
   const [loading, setLoading] = useState(false);
-
-  const { userinfo } = useContext(AuthContext);
 
   useEffect(() => {
     console.log("BookProviderのuseEffect実行");
