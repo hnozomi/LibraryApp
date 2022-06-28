@@ -53,7 +53,7 @@ set COMMIT_MESSAGE=
 set COMMIT_MESSAGE=%PREFIX%: %MESSAGE%
 
 IF %TRUE_FALSE%==TRUE (
-    echo "%COMMIT_MESSAGE%"
+    echo commit start
     git commit -m "%COMMIT_MESSAGE%"
     echo %errorlevel%
     
@@ -76,12 +76,21 @@ IF %TRUE_FALSE%==TRUE (
 :pushstart
 for /f "usebackq tokens=2" %%t in (`git branch --contains`) do set CURRENT_BRANCH=%%t
 
-if %CURRENT_BRANCH%==main (
+if %CURRENT_BRANCH%==main1 (
     echo [ERROR]: Don't push to main and develop
     goto exitlabel
 ) else (
-    echo "push start"
-    rem git push origin main
+    echo push start
+    git push origin main
+    
+    echo %errorlevel%
+    if %errorlevel%==1 (
+     echo [ERROR]: push failed
+     goto exitlabel
+    ) else (
+     echo [INFORMATION]: push success
+     goto exitlabel
+    )
 )
 
 :pushcheck
