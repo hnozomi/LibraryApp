@@ -55,12 +55,15 @@ set COMMIT_MESSAGE=%PREFIX%: %MESSAGE%
 IF %TRUE_FALSE%==TRUE (
     echo commit start
     git commit -m "%COMMIT_MESSAGE%"
-    echo %errorlevel%
     
-    if %errorlevel%==1 (
+    if errorlevel 1 (
+    echo %errorlevel%failed
+    echo !errorlevel!failed
      echo [ERROR]: commit failed
      goto exitlabel
     ) else (
+     echo %errorlevel%success
+     echo !errorlevel!success
      echo [INFORMATION]: commit success
      goto pushcheck
     )
@@ -83,8 +86,7 @@ if %CURRENT_BRANCH%==main1 (
     echo push start
     git push origin main
     
-    echo %errorlevel%
-    if %errorlevel%==1 (
+    if %errorlevel% GEQ 1 (
      echo [ERROR]: push failed
      goto exitlabel
     ) else (
