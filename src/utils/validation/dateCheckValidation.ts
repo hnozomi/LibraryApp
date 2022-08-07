@@ -1,4 +1,4 @@
-import { DateType, ReservationDate, ReservationType } from "../../types/types";
+import { DateType, ReservationDate, ReservationType } from "@/types";
 import { getNowYMD } from "../getNowYMD";
 
 

@@ -17,7 +17,7 @@ import { usePostData } from "../../hooks/usePostData";
 import { ResultDialog } from "./ResultDialog";
 import { LoadingScreen } from "./LoadingScreen";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
-import { ReviewType } from "../../types/types";
+import { ReviewType } from "@/types";
 
 type Props = {
   reviews: Array<ReviewType>;

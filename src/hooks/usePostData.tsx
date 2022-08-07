@@ -7,7 +7,7 @@ import {
   NewBookType,
   ReservationDate,
   Result,
-} from "../types/types";
+} from "@/types";
 import { useCallback } from "react";
 
 export const usePostData = () => {

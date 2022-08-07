@@ -19,7 +19,7 @@ import { ResultDialog } from "../../../organisms/ResultDialog";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { GridLayout } from "../../../layout/GridLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
-import { BookType } from "../../../../types/types";
+import { BookType } from "@/types";
 import { Button } from "../../../parts/Button";
 
 export const BookDelete: FC = memo(() => {

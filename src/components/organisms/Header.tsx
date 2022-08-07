@@ -23,9 +23,9 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 
-import AuthContext from "../../provider/LoginUserProvider";
-import { useAuth } from "../../hooks/useAuth";
-import { usePageTransition } from "../../hooks/usePageTransition";
+import { AuthContext } from "../../provider";
+import { useAuth } from "../../hooks";
+import { usePageTransition } from "../../hooks";
 
 export const Header: FC = memo(() => {
   console.log("Headerが実行");

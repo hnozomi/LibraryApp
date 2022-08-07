@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import { Result } from "../../types/types";
+import { Result } from "@/types";
 
 type Props = {
   result: Result;

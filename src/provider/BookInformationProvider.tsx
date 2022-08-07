@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 import axios from "axios";
 
-import { BookType } from "../types/types";
+import { BookType } from "../types";
 
 export type BookContextType = {
   books: BookType[] | undefined;

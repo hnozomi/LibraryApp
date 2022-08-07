@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { FormNotification } from "../types/types";
+import { FormNotification } from "../types/review-types";
 
 export const useAuthForm = () => {
   const [open, setOpen] = useState<FormNotification>({

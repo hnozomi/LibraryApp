@@ -26,7 +26,7 @@ import { usePageTransition } from "../../../../hooks/usePageTransition";
 import { BoxLayout } from "../../../layout/BoxLayout";
 import { ButtonLayout } from "../../../layout/ButtonLayout";
 import { DocumentData } from "firebase/firestore";
-import { FormNotification } from "../../../../types/types";
+import { FormNotification } from "@/types";
 
 export const RoleChange: FC = memo(() => {
   console.log("RoleChange実行");

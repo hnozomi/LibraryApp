@@ -9,7 +9,7 @@ import { BoxLayout } from "../../layout/BoxLayout";
 import { ButtonLayout } from "../../layout/ButtonLayout";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { ResultDialog } from "../../organisms/ResultDialog";
-import { LocationState, Rare } from "../../../types/types";
+import { LocationState, Rare } from "@/types";
 
 export const ReviewForm = () => {
   console.log("ReviewForm実行");

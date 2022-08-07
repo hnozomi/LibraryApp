@@ -1,5 +1,5 @@
 import { Alert, Snackbar } from "@mui/material";
-import { FormNotification } from "../../types/types";
+import { FormNotification } from "@/types";
 
 type Props = {
   open: FormNotification;

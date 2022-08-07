@@ -14,7 +14,7 @@ import {
 import { ReservationCulensder } from "../../organisms/ReservationCulender";
 import { Review } from "../../organisms/Review";
 import AuthContext from "../../../provider/LoginUserProvider";
-import { BookType } from "../../../types/types";
+import { BookType } from "@/types";
 import { BoxLayout } from "../../layout/BoxLayout";
 import { FlexBoxLayout } from "../../layout/FlexBoxLayout";
 

@@ -15,7 +15,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 
 import { usePostData } from "../../hooks/usePostData";
-import { DateType, ReservationType } from "../../types/types";
+import { DateType, ReservationType } from "@/types";
 import { LoadingScreen } from "./LoadingScreen";
 import { ButtonLayout } from "../layout/ButtonLayout";
 import { ResultDialog } from "./ResultDialog";

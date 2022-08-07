@@ -5,7 +5,7 @@ import { BookCard } from "../../organisms/BookCard";
 import AuthContext from "../../../provider/LoginUserProvider";
 import { usePageTransition } from "../../../hooks/usePageTransition";
 import { useGetData } from "../../../hooks/usegetData";
-import { BookType } from "../../../types/types";
+import { BookType } from "@/types";
 import { LoadingScreen } from "../../organisms/LoadingScreen";
 import { GridLayout } from "../../layout/GridLayout";
 import { Button } from "../../parts/Button";

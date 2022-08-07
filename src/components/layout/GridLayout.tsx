@@ -1,6 +1,6 @@
 import { cloneElement, FC, ReactElement } from "react";
 import { Grid } from "@mui/material";
-import { BookReservationType, BookType } from "../../types/types";
+import { BookReservationType, BookType } from "@/types";
 
 type Props = {
   GridItems: Array<BookType> | undefined;

@@ -21,7 +21,7 @@ import {
 import { User } from "firebase/auth";
 import { DocumentData, QuerySnapshot } from "firebase/firestore";
 
-import { UserType } from "../types/types";
+import { UserType } from "../types";
 
 export type LoginUserContextType = {
   userinfo: UserType | null;
@@ -37,12 +37,12 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  console.log("AuthProvider実行");
   const [userinfo, setUserInfo] = useState<UserType | null>(null);
   const [screenLoading, setScreenLoading] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
+      console.log(user);
       if (user) {
         await checkUser(user);
       } else {
@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }: Props) => {
     });
   }, []);
 
+  // idが存在するかチェックする
   const checkUser = async (user: User) => {
     const querySnapshot = await queryUserInfo(user);
 
@@ -77,6 +78,7 @@ export const AuthProvider = ({ children }: Props) => {
       where("user_id", "==", user.uid)
     );
     const querySnapshot = await getDocs(queryResult);
+
     return querySnapshot;
   };
 

@@ -14,7 +14,7 @@ import { db, collection, doc, updateDoc } from "../../lib/Firebase/firebase";
 
 import { usePageTransition } from "../../hooks/usePageTransition";
 
-import { UserType } from "../../types/types";
+import { UserType } from "@/types";
 import { FlexBoxLayout } from "../layout/FlexBoxLayout";
 
 type Props = {

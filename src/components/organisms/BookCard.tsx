@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import { BookReservationType, BookType } from "../../types/types";
-import { usePageTransition } from "../../hooks/usePageTransition";
+import { BookReservationType, BookType } from "@/types";
+import { usePageTransition } from "../../hooks";
 
 type Props = {
   book?: BookType | BookReservationType;

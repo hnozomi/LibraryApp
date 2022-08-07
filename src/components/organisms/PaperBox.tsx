@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Box, Paper, Typography } from "@mui/material";
-import { BookType } from "../../types/types";
+import { BookType } from "@/types";
 
 type Props = {
   children: ReactNode;
